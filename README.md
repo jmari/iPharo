@@ -11,6 +11,7 @@ TO-DO:
 - Tests...
 
 This project is holded on Smalltalkhub repository http://smalltalkhub.com/#!/~jmari/JupyterTalk because OSSubprocess/GitFileTree doesn't work on Pharo 64 bits.
+![JupyterTalk in Action](/jup3.png)
 
 ### install JupyterTalk
 ```Smalltalk
@@ -33,3 +34,8 @@ Create the folder	'/usr/local/share/jupyter/kernels/pharo'. Create file	'kernel.
 }'
 ```
 Optional, copy an icon with file name logo-64x64.png.
+
+![Starting JupyterTalk](/jup1.png)
+![JupyterTalk in Action](/jup2.png)
+
+
