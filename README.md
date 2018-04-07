@@ -10,11 +10,13 @@ TO-DO:
 - 32 bits version? ZMQ is 64 a bits library on Mac Os.
 - Tests...
 
-### install Solar
+This project is holded on Smalltalkhub repository http://smalltalkhub.com/#!/~jmari/JupyterTalk because OSSubprocess/GitFileTree doesn't work on Pharo 64 bits.
+
+### install JupyterTalk
 ```Smalltalk
 Metacello new 
 	baseline: 'JupyterTalk';
-	repository: 'github://jmari/JupyterTalk';
+	repository: 'http://smalltalkhub.com/mc/jmari/JupyterTalk/main';
 	load:'all'
 ```
 Create the folder	'/usr/local/share/jupyter/kernels/pharo'. Create file	'kernel.json' with contents
