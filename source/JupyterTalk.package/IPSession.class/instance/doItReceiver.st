@@ -1,5 +1,0 @@
-adding
-doItReceiver
-
-	^  self
-	

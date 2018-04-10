@@ -1,3 +1,0 @@
-system startup
-zmqApi 
-	^ api

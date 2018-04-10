@@ -1,3 +1,0 @@
-visitor
-visitDiamondShape: diamondShape
-	"TODO"

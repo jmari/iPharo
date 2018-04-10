@@ -1,3 +1,0 @@
-system startup
-reinitialize
-	^ self

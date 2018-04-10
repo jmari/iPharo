@@ -1,3 +1,0 @@
-*JupyterTalk-Roassal
-jupyterHtmlClass
-	^ '"document"'

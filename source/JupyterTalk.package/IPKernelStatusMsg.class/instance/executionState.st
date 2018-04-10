@@ -1,3 +1,0 @@
-accessing
-executionState
-	self subclassResponsibility 	

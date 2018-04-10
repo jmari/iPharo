@@ -1,3 +1,0 @@
-accessing
-threadName
-	self subclassResponsibility 
