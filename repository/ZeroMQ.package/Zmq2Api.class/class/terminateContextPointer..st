@@ -1,0 +1,3 @@
+as yet unclassified
+terminateContextPointer: aZmqApiContextPointer
+	self apiZmqTerm: aZmqApiContextPointer

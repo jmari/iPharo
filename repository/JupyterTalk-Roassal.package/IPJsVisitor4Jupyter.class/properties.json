@@ -1,0 +1,18 @@
+{
+	"commentStamp" : "",
+	"super" : "RTVisitor",
+	"category" : "JupyterTalk-Roassal",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"view",
+		"stream",
+		"validInteractions",
+		"exportFixedShapes",
+		"maxSize",
+		"uuid"
+	],
+	"name" : "IPJsVisitor4Jupyter",
+	"type" : "normal"
+}

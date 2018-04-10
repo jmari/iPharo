@@ -1,0 +1,3 @@
+defaults
+defaultRoassalJSfile
+	^ 'roassal.js'.

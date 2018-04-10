@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "ZmqApi",
+	"category" : "ZeroMQ-Api",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "Zmq2Api",
+	"type" : "normal"
+}

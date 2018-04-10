@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "IPCommMsg",
+	"category" : "JupyterTalk-Messages-Comm",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "IPCommCloseMsg",
+	"type" : "normal"
+}

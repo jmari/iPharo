@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "ZmqResource",
+	"category" : "ZeroMQ",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"pollerProcess",
+		"poller"
+	],
+	"name" : "ZmqGlobalPoller",
+	"type" : "normal"
+}

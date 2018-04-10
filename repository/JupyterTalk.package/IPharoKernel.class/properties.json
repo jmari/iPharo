@@ -1,0 +1,26 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "JupyterTalk-Core",
+	"classinstvars" : [
+		"instance"
+	],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"heartbeat",
+		"shell",
+		"control",
+		"stdin",
+		"ioPub",
+		"port",
+		"stop",
+		"processors",
+		"sharedKey",
+		"config",
+		"commChanels",
+		"commMsgHandlers"
+	],
+	"name" : "IPharoKernel",
+	"type" : "normal"
+}

@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "CommandLineHandler",
+	"category" : "JupyterTalk-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "IPharoCommandLineHandler",
+	"type" : "normal"
+}

@@ -1,0 +1,23 @@
+{
+	"commentStamp" : "",
+	"super" : "RTObject",
+	"category" : "JupyterTalk-Roassal",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"stream",
+		"directory",
+		"fileName",
+		"title",
+		"exportFixedShapes",
+		"roassalJSfile",
+		"marginScale",
+		"jsrefenrece",
+		"shouldCreateJS",
+		"maxSizeForString",
+		"uuid"
+	],
+	"name" : "IPRoassal",
+	"type" : "normal"
+}

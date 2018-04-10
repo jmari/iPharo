@@ -1,0 +1,3 @@
+visitor
+visitDiamondShape: diamondShape
+	"TODO"

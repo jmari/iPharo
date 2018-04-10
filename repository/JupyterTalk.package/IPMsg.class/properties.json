@@ -1,0 +1,20 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "JupyterTalk-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"header",
+		"msg_id",
+		"msg_type",
+		"parentHeader",
+		"content",
+		"metadata",
+		"uuid",
+		"msgUUID"
+	],
+	"name" : "IPMsg",
+	"type" : "normal"
+}

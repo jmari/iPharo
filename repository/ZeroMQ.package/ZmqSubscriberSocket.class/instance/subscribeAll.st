@@ -1,0 +1,3 @@
+operations
+subscribeAll
+	self subscribe: ''.

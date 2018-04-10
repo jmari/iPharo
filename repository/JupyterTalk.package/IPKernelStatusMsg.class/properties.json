@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "IPMsg",
+	"category" : "JupyterTalk-Messages-IOPub",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"sequenceNumber"
+	],
+	"name" : "IPKernelStatusMsg",
+	"type" : "normal"
+}

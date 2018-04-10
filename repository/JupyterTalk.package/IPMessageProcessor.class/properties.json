@@ -1,0 +1,15 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "JupyterTalk-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"zmqSocket",
+		"stop",
+		"wireMessage"
+	],
+	"name" : "IPMessageProcessor",
+	"type" : "normal"
+}

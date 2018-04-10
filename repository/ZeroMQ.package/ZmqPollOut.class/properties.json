@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "ZmqEventFilter",
+	"category" : "ZeroMQ",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "ZmqPollOut",
+	"type" : "normal"
+}
