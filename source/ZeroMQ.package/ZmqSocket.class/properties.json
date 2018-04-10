@@ -1,0 +1,19 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "ZeroMQ",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"socketPointer",
+		"context",
+		"associations",
+		"parked",
+		"monitor",
+		"resultHandler",
+		"dataAvailable"
+	],
+	"name" : "ZmqSocket",
+	"type" : "normal"
+}

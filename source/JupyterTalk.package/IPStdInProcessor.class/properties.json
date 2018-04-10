@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "IPMessageProcessor",
+	"category" : "JupyterTalk-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "IPStdInProcessor",
+	"type" : "normal"
+}

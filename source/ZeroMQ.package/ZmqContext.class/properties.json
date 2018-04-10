@@ -1,0 +1,20 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "ZeroMQ",
+	"classinstvars" : [
+		"instance"
+	],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"api",
+		"parked",
+		"contextPointer",
+		"resources",
+		"monitor",
+		"globalPoller"
+	],
+	"name" : "ZmqContext",
+	"type" : "normal"
+}

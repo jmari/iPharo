@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "ZmqSocket",
+	"category" : "ZeroMQ",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"subscriptions"
+	],
+	"name" : "ZmqSubscriberSocket",
+	"type" : "normal"
+}

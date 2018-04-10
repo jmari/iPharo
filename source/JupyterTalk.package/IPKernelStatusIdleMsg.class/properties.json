@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "IPKernelStatusMsg",
+	"category" : "JupyterTalk-Messages-IOPub",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "IPKernelStatusIdleMsg",
+	"type" : "normal"
+}

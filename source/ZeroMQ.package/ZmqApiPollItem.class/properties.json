@@ -1,0 +1,16 @@
+{
+	"commentStamp" : "",
+	"super" : "FFIExternalStructure",
+	"category" : "ZeroMQ-Api",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [
+		"OFFSET_EVENTS",
+		"OFFSET_FILEDESCRIPTOR",
+		"OFFSET_REVENTS",
+		"OFFSET_ZMQSOCKET"
+	],
+	"instvars" : [ ],
+	"name" : "ZmqApiPollItem",
+	"type" : "normal"
+}

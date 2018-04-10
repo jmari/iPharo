@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "JupyterTalk-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"wireMessage",
+		"currentProperty"
+	],
+	"name" : "IPWireMessage",
+	"type" : "normal"
+}

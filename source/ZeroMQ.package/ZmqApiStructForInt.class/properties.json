@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "FFIExternalStructure",
+	"category" : "ZeroMQ-Api",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [
+		"OFFSET_VALUE"
+	],
+	"instvars" : [ ],
+	"name" : "ZmqApiStructForInt",
+	"type" : "normal"
+}

@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "TestCase",
+	"category" : "ZeroMQ-Tests",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"createdSockets"
+	],
+	"name" : "ZmqBaseTest",
+	"type" : "normal"
+}

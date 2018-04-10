@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "IPDisplayDataMsg",
+	"category" : "JupyterTalk-Messages-IOPub",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "IPExecuteResultMsg",
+	"type" : "normal"
+}

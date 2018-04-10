@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "ZeroMQ-Tests",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"workers",
+		"createdSockets"
+	],
+	"name" : "ZmqTaskVentTest",
+	"type" : "normal"
+}
