@@ -10,7 +10,8 @@ TO-DO:
 - 32 bits version? ZMQ is 64 a bits library on Mac Os.
 - Tests...
 
-This project is hosted in Smalltalkhub repository <a href="http://smalltalkhub.com/#!/~jmari/JupyterTalk">JupyterTalk</a> because OSSubprocess/GitFileTree doesn't work on Pharo 64 bits.
+This project is also hosted in Smalltalkhub repository <a href="http://smalltalkhub.com/#!/~jmari/JupyterTalk">JupyterTalk</a>.
+
 ![JupyterTalk in Action](/jup3.png)
 
 ### install JupyterTalk
