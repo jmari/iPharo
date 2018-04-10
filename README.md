@@ -18,7 +18,7 @@ This project is also hosted in Smalltalkhub repository <a href="http://smalltalk
 ```Smalltalk
 Metacello new 
 	baseline: 'JupyterTalk';
-	repository: 'http://smalltalkhub.com/mc/jmari/JupyterTalk/main';
+	repository: 'https://github.com/jmari/JupyterTalk/';
 	load:'all'
 ```
 Create the folder	'/usr/local/share/jupyter/kernels/pharo'. Create file	'kernel.json' with contents
