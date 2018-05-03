@@ -1,3 +1,7 @@
 *JupyterTalk-Roassal
 asJupyterDataWithExtent: size
-	^ self canvas buildMorph asJupyterDataWithExtent: size 
+	| morph |
+	morph:=self canvas 
+			color:Color transparent;
+			buildMorph.
+	^ morph asJupyterDataWithExtent: size 
