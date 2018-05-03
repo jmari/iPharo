@@ -1,5 +1,5 @@
 *JupyterTalk-Core
-asJupyterDataSize:aPoint
+asJupyterDataWithExtent:aPoint
 	|htmlStream start end|
 	end := aPoint y > self size ifTrue:[self size] ifFalse:[aPoint y].
 	start := aPoint x > end ifTrue:[end] ifFalse:[aPoint x].

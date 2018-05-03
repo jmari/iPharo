@@ -1,0 +1,17 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "JupyterTalk-Display",
+	"classinstvars" : [
+		"cachedObjects"
+	],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"jupyterData",
+		"interaction",
+		"extent"
+	],
+	"name" : "IPDisplay",
+	"type" : "normal"
+}

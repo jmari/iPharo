@@ -1,3 +1,3 @@
 *JupyterTalk-Core
-asJupyterDataSize: size
+asJupyterDataWithExtent: size
 	^ 'image/png' -> (self asBase64PNGSize:size  )

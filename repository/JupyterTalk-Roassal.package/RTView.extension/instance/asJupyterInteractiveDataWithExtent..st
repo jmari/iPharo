@@ -1,5 +1,5 @@
 *JupyterTalk-Roassal
-asJupyterHTMLDataSize: size
+asJupyterInteractiveDataWithExtent: size
 	| aStream |
 	self build.
 	self view canvas buildMorph .

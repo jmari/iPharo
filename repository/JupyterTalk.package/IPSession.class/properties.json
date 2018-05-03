@@ -3,7 +3,7 @@
 	"super" : "Object",
 	"category" : "JupyterTalk-Core",
 	"classinstvars" : [
-		"sessions"
+		"currentSession"
 	],
 	"pools" : [ ],
 	"classvars" : [ ],
@@ -17,7 +17,8 @@
 		"executionProcess",
 		"bindings",
 		"jupyterData",
-		"cachedObjects"
+		"cachedObjects",
+		"display"
 	],
 	"name" : "IPSession",
 	"type" : "normal"

@@ -1,4 +1,4 @@
-enumerating
+compilation
 compileAndEvaluate: aMessage
 
 	| result rcvr ctxt source|
@@ -17,6 +17,6 @@ compileAndEvaluate: aMessage
 			failBlock:  [:err| ZmqLog logError:err msg . ^ nil];
 			evaluate] on:Exception do:[:e| result := e] ] forkAndWait.		
 	(result isKindOf: Exception ) ifTrue:[ result signal].
-	^  jupyterData 
+	^  self jupyterData 
 			
 	

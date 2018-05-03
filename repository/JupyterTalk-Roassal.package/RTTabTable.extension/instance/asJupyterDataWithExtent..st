@@ -1,5 +1,5 @@
 *JupyterTalk-Roassal
-asJupyterDataSize: aPoint
+asJupyterDataWithExtent: aPoint
 	|htmlStream start end|
 	
 	end := aPoint y > self value size ifTrue:[self value size] ifFalse:[aPoint y].

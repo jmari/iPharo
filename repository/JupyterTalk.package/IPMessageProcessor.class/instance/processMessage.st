@@ -7,8 +7,7 @@ processMessage
 												ifTrue:[self execute:wireMessage]
 												ifFalse:[IPHMACException signal:'Wrong HMAC'].
 
-	wireMessage := IPWireMessage new
-	].
+	wireMessage := IPWireMessage new].
 
 
 						

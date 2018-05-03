@@ -1,0 +1,3 @@
+removing
+resetCache
+	cachedObjects :=nil

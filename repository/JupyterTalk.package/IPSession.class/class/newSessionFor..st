@@ -1,11 +1,11 @@
-instance creation
+accessing
 newSessionFor: aHeader
 
-	^ self sessions 
-			at: aHeader session
-			put:(self new 
+	currentSession :=
+			(aHeader session) -> (self new 
 							username: aHeader username;
 							id: aHeader session;
 							startTime: aHeader timestamp).
+	^ currentSession value
 		
 									

@@ -1,3 +1,3 @@
 comm handlers
-commMsgHandlersFor: commID
+commMsgHandlerFor: commID
 	^ self commMsgHandlers at:commID ifAbsent:[Array new]

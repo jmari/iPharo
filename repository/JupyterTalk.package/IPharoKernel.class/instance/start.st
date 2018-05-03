@@ -5,4 +5,5 @@ start
 	self processors at:#ctrl put: (IPControlProcessor new:control).
 	self processors at:#stdin put: (IPStdInProcessor new:stdin).
 	self processors at:#iopub put: (IPIOPubProcessor new:ioPub).
-	self heartbeatThread
+	self heartbeatThread.
+	IPSession finalizeSession

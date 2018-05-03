@@ -1,8 +1,8 @@
 instance creation
 session: sessionId
 
-	^ self sessions 
-			at: sessionId 
-			ifAbsent:[ ZmqLog logDebug: 'Session ', sessionId,' not found'. nil ]
+	^ self currentSession id = sessionId
+			ifTrue:[self currentSession value]
+			ifFalse:[ ZmqLog logDebug: 'Session ', sessionId,' not found'. nil ]
 
 									

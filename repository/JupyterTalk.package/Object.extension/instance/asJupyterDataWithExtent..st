@@ -1,3 +1,3 @@
 *JupyterTalk-Core
-asJupyterDataSize: size
+asJupyterDataWithExtent: size
 	^ 'text/plain'-> self asString  

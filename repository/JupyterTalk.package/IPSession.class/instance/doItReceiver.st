@@ -1,4 +1,4 @@
-adding
+compilation
 doItReceiver
 
 	^  self

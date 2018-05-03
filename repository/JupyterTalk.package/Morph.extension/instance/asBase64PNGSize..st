@@ -1,9 +1,8 @@
 *JupyterTalk-Core
-asBase64PNGSize: scale  
-	| aStream exporter|
+asBase64PNGSize: size  
+	| aStream |
 	aStream := ReadWriteStream on: ByteArray new. 
-	exporter := RTPNGExporter new. 
-	exporter viewExtent closeTo:scale. 
+	self color:Color white.
 	PNGReadWriter putForm: self imageForm  onStream: aStream.
 	aStream reset.
 	^ (Base64MimeConverter mimeEncode: aStream multiLine:false) contents
