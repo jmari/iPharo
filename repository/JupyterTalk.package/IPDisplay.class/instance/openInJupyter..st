@@ -14,9 +14,10 @@ openInJupyter: data
  														 	} asSCJsonObject.
 														} asSCJsonObject.
 	uuid:= UUID new hex asString asUppercase.
-	self jupyterData at: #transient put: {#display_id -> uuid} asSCJsonObject.
-	self class cachedObjects at:uuid put: { #data-> data.
-												#interactive-> false.
+	self jupyterData transient: {#display_id -> uuid} asSCJsonObject.
+	self class cachedObjects 
+						at:uuid put: {    #data-> data.
+												#interactive-> interaction.
 												#extent->self extent.
 												#metadata ->self jupyterData metadata} asDictionary. 
 	^ uuid
