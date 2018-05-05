@@ -11,6 +11,6 @@ newFromMessage: anIPMessage
 	"parent_header must be exactly the same header, this won't be serialized/paterialized"
 	instance push: anIPMessage parentHeader.
 	instance push: (serializer serialize: anIPMessage metadata) asByteArray.
-	instance push: (serializer serialize: anIPMessage content) asByteArray.
+	instance push: (serializer serialize: anIPMessage content) utf8Encoded.
 	instance hmac: instance calculateHMAC hex asByteArray.
 	^instance

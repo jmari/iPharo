@@ -4,4 +4,5 @@ SystemOrganization addCategory: 'JupyterTalk-Display'!
 SystemOrganization addCategory: 'JupyterTalk-Messages-Comm'!
 SystemOrganization addCategory: 'JupyterTalk-Messages-IOPub'!
 SystemOrganization addCategory: 'JupyterTalk-Messages-Shell'!
+SystemOrganization addCategory: 'JupyterTalk-Tests'!
 SystemOrganization addCategory: 'JupyterTalk-Widgets-experimental'!

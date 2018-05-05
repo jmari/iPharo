@@ -1,9 +1,14 @@
 *JupyterTalk-Roassal
 asJupyterInteractiveDataWithExtent: size
-	| aStream |
+	| aStream morph |
 	self build.
-	self view canvas buildMorph .
+	morph := self view canvas 			
+				color:Color transparent;
+				buildMorph .
 	aStream := ReadWriteStream on: String new. 
+	morph 	extent:size.
+	self canvas camera focusOnCenterScaled:size.
 	IPRoassal new export:self view toStream:aStream.
+	
 	aStream reset.
 	^ 'text/html' -> aStream contents
