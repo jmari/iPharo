@@ -10,7 +10,6 @@ TO-DO:
 - Installation procedure.
 - 32 bits version? ZMQ is 64 a bits library on Mac Os.
 
-
 This project is also hosted in Smalltalkhub repository <a href="http://smalltalkhub.com/#!/~jmari/JupyterTalk">JupyterTalk</a>.
 
 ![JupyterTalk in Action](/jup3.png)
