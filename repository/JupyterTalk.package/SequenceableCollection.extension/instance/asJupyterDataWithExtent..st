@@ -1,8 +1,7 @@
 *JupyterTalk-Core
 asJupyterDataWithExtent:aPoint
-	|htmlStream start end|
-	end := self size.
-	start := 1.
+	|htmlStream  |
+
 	htmlStream := ReadWriteStream on:String new.
 	htmlStream 
 			nextPutAll:'<table>';cr;
@@ -12,7 +11,7 @@ asJupyterDataWithExtent:aPoint
 						htmlStream nextPutAll:'<th>';	nextPutAll:each asString;nextPutAll:'</th>']]
 		ifFalse:[htmlStream nextPutAll:'<th>';	nextPutAll:self first asString;nextPutAll:'</th>'].	
 			
-	(self allButFirst copyFrom:start  to:(end - 1)) do:[ :eachRow|
+	self allButFirst do:[ :eachRow|
 		htmlStream nextPutAll:'<tr>'.
 		(eachRow isKindOf: SequenceableCollection) ifTrue:[
 			eachRow do:[:eachElement| htmlStream nextPutAll:'<td>';	nextPutAll:eachElement asString;nextPutAll:'</td>']].	
