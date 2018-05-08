@@ -1,4 +1,4 @@
-accessing
+initialization
 initializeBindings
 	
 	bindings := Dictionary new
