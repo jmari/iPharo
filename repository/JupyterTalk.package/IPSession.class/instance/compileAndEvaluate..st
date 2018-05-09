@@ -15,15 +15,12 @@ compileAndEvaluate: aMessage
 			receiver: rcvr;
 			requestor: self;
 			failBlock:  [:err| ZmqLog logError:err msg . ^ nil];
-			evaluate] on:Exception do:[:e| 
-				"I don't know if it is a bug in opal compiler or what
-				semantic analyzer doesn't know anything about workspace variables, compiling a block inside the compile process... 
-				by now it's solved in that way"
-				(e isKindOf: OCUndeclaredVariableWarning  ) ifTrue:[ e resume: (OCUndeclaredVariable new name: e node name) ].
+			evaluate] on:Error do:[:e| 
+				"We just need to chech for Error not Exception"
 				result := e.
 			] ] forkAndWait.		
-
-	(result isKindOf: Exception ) ifTrue:[ result signal].
+		
+	(result isKindOf: Error ) ifTrue:[ result signal].
 	^  self jupyterData 
 			
 	
