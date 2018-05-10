@@ -1,7 +1,7 @@
 initialization
 initialize
 "by now we need to stop the kernel each time the image is stopped or saved"
-	Smalltalk addToShutDownList:  self.
+	SessionManager default registerUserClassNamed: self name  atPriority: 100.
 "build a link in your image/Pluggings folder to"
 	'libzmq.dylib'.
 "create folder"

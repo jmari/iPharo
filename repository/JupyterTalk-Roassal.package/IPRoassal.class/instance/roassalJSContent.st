@@ -969,7 +969,6 @@ var TRCanvas = TRAnnouceableObject.extend({
 		$(this.svg).attr("unselectable","on").bind("selectstart", function(){ return false; });
 		this.shapes = [];
 		this.fixedShapes = [];
-		this.addInteraction(RTZoomableView);
 	
 	},
 	color: function (c){
