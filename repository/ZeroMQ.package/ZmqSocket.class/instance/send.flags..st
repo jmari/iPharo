@@ -7,4 +7,4 @@ send: aByteArray flags: aZmqFlags
 			messagePointer := self context zmqApi messageFromByteArray: aByteArray.
 			self context zmqApi executeApiCall: [ self context zmqApi apiZmqSendToSocket: self socketPointer message: messagePointer withFlags: aZmqFlags]. 
 			self context zmqApi executeApiCall: [ self context zmqApi apiZmqMsgClose: messagePointer ]].
-			self logDebug: 'Sended ' , aByteArray asString 
+			self logDebug: 'Sent ' , aByteArray asString 

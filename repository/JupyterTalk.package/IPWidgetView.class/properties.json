@@ -1,7 +1,7 @@
 {
 	"commentStamp" : "",
 	"super" : "SCJsonObject",
-	"category" : "JupyterTalk-Widgets-experimental",
+	"category" : "JupyterTalk-Widgets-Experimental",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],

@@ -1,4 +1,4 @@
 comm handlers
-commMsgHandlers
+msgHandler
 
 	^ commMsgHandlers ifNil:[ commMsgHandlers := Dictionary new]

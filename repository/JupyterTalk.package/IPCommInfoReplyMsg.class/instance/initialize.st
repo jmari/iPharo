@@ -4,4 +4,4 @@ initialize
 	self msgType: #comm_info_reply.
 	self parentHeader: '{}' asByteArray .
 	self metadata: SCJsonObject new.
-	self content: IPharoKernel instance commChanels asSCJsonObject. 
+	self content: IPharoKernel instance commManager commChanels asSCJsonObject. 

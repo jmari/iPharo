@@ -13,8 +13,10 @@ asJupyterDataWithExtent:aPoint
 			
 	self allButFirst do:[ :eachRow|
 		htmlStream nextPutAll:'<tr>'.
-		(eachRow isKindOf: SequenceableCollection) ifTrue:[
-			eachRow do:[:eachElement| htmlStream nextPutAll:'<td>';	nextPutAll:eachElement asString;nextPutAll:'</td>']].	
+		(eachRow isKindOf: SequenceableCollection) 
+		ifTrue:[
+			eachRow do:[:eachElement| htmlStream nextPutAll:'<td>';	nextPutAll:eachElement asString;nextPutAll:'</td>']]
+		ifFalse:[htmlStream nextPutAll:'<td>';	nextPutAll: eachRow  asString;nextPutAll:'</td>'].
 		htmlStream nextPutAll:'</tr>'].
 	htmlStream nextPutAll:'</table>'.
 	

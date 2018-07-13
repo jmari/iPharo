@@ -18,8 +18,7 @@
 		"processors",
 		"sharedKey",
 		"config",
-		"commChanels",
-		"commMsgHandlers"
+		"commManager"
 	],
 	"name" : "IPharoKernel",
 	"type" : "normal"

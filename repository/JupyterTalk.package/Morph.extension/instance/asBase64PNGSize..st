@@ -2,7 +2,7 @@
 asBase64PNGSize: size  
 	| aStream |
 
-	self extent:size.
+	size ifNotNil:[self extent:size].
 	aStream := ReadWriteStream on: ByteArray new. 
 	PNGReadWriter putForm: self imageForm  onStream: aStream.
 	aStream reset.

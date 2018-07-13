@@ -20,7 +20,8 @@ compileAndEvaluate: aMessage
 				result := e.
 			] ] forkAndWait.		
 		
-	(result isKindOf: Error ) ifTrue:[ result signal].
+	(result isKindOf: Error ) ifTrue:[ 
+		result signal].
 	^  self jupyterData 
 			
 	

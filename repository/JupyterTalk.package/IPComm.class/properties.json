@@ -1,0 +1,15 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "JupyterTalk-Comm-experimental",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"uuid",
+		"commMsgHandlers",
+		"targetName"
+	],
+	"name" : "IPComm",
+	"type" : "normal"
+}

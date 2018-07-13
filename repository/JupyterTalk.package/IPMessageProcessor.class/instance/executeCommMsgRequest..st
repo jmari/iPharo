@@ -1,7 +1,7 @@
-running
+widgetMessages
 executeCommMsgRequest: aMessage 
 	| response |
 	                       
-	(IPharoKernel instance commMsgHandlerFor:aMessage commID) do:[:aMsgHandler|
+	(IPharoKernel instance msgHandlerFor:aMessage commID) do:[:aMsgHandler|
 		response := aMsgHandler value:self value:aMessage.
 		response ifNotNil:[self publish: response]].

@@ -18,7 +18,9 @@
 		"bindings",
 		"jupyterData",
 		"cachedObjects",
-		"display"
+		"display",
+		"widgetsFactory",
+		"tasks"
 	],
 	"name" : "IPSession",
 	"type" : "normal"

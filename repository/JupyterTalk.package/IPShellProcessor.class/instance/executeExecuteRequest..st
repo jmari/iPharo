@@ -19,8 +19,8 @@ executeExecuteRequest: aMessage
 									respondsToWireMessage: wireMessage;
 									yourself)].
 					
-	aMessage content silent = false
-	ifTrue:[
+	aMessage content silent
+	ifFalse:[
 		response ifNil:[
 			result ifNotNil:[		
 				executionResult := session executeResultMessage 

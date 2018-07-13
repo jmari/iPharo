@@ -1,11 +1,11 @@
 {
 	"commentStamp" : "",
-	"super" : "Object",
-	"category" : "JupyterTalk-Widgets-experimental",
+	"super" : "IPWidget",
+	"category" : "JupyterTalk-Widgets-Experimental",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [ ],
-	"name" : "IPWidgetRegistry",
+	"name" : "IPWidgetVersion",
 	"type" : "normal"
 }
