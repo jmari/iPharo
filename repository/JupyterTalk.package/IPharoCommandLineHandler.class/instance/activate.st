@@ -11,7 +11,7 @@ activate
 			 	ZmqLog logDebug: content.	
 			 	kernelConfig := SCMaterializer materializeFromString:content]
 			ensure: [ stream ifNotNil: [ stream close ]]].
-	ZmqContext new.
+	ZmqContext current.
 	IPharoKernel new 
 						configKernel: kernelConfig;
 						start;

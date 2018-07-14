@@ -1,7 +1,7 @@
 initialization
 initialize
 	super initialize.
-	ZmqContext new.
+	ZmqContext current.
 	heartbeat := ZmqRequestSocket new.
 	shell := ZmqRouterSocket new. 
 	control := ZmqRouterSocket new. 

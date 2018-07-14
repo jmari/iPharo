@@ -1,6 +1,5 @@
 accessing
 start
-	ZmqContext new.
  	self processors at:#shell put: (IPShellProcessor new: shell).
 	self processors at:#ctrl put: (IPControlProcessor new:control).
 	self processors at:#stdin put: (IPStdInProcessor new:stdin).
