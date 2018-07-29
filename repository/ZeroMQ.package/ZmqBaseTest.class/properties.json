@@ -6,7 +6,8 @@
 	"pools" : [ ],
 	"classvars" : [ ],
 	"instvars" : [
-		"createdSockets"
+		"createdSockets",
+		"context"
 	],
 	"name" : "ZmqBaseTest",
 	"type" : "normal"

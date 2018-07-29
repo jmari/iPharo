@@ -1,4 +1,4 @@
 initialization
 setUp
-	ZmqContext new.
+	ZmqContext current.
 	createdSockets := OrderedCollection new.

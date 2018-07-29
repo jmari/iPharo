@@ -1,4 +1,4 @@
 initialization
-initialize 
+initialize
 	super initialize.
-	poller := ZmqPoller new.
+	poller := ZmqPoller onContext: self context.

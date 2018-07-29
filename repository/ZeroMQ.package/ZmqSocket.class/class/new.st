@@ -1,3 +1,3 @@
 as yet unclassified
 new
-	^ZmqContext new newSocket: self.
+	^ZmqContext current newSocket: self.

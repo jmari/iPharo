@@ -1,3 +1,3 @@
 public api
 context
-	^ZmqContext new
+	^ZmqContext current

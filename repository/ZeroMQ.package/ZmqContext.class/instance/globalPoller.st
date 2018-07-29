@@ -1,3 +1,3 @@
 as yet unclassified
 globalPoller
-	^ globalPoller ifNil:[	globalPoller := ZmqGlobalPoller new ]
+	^ globalPoller ifNil:[	globalPoller := ZmqGlobalPoller onContext:self ]
