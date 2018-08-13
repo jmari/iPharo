@@ -22,7 +22,7 @@ There you are a few examples on using jupiterTalk.
 ```Smalltalk
 Metacello new 
 	baseline: 'JupyterTalk';
-	repository: 'github://jmari/JupyterTalk';
+	repository: 'github://jmari/JupyterTalk/repository/';
 	load:'all'
 ```
 Create the folder	'/usr/local/share/jupyter/kernels/pharo'. Create file	'kernel.json' with contents
