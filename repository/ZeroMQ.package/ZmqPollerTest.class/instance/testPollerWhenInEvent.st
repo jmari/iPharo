@@ -1,7 +1,7 @@
-as yet unclassified
+tests
 testPollerWhenInEvent
 	| poller req rep |
-	poller := ZmqPoller new.
+	poller := ZmqPoller onContext: ZmqContext current.
 	rep := self newRepSocket.
 	req := self newReqSocket.
 	rep bind: 'inproc://#1'.	
