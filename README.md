@@ -1,16 +1,17 @@
 # JupyterTalk
-Basic Pharo Smaltalk kernel for Jupyter. This project is implemented on Pharo 6.1 64 bits and Mac Os X. 
+Basic Pharo Smaltalk kernel for Jupyter. This project is implemented on Pharo 6.1 64 bits and test it on Ubuntu Linux and Mac Os X. 
 It uses ZeroMQ ported from <a href="http://smalltalkhub.com/#!/~panuw/zeromq">zeromq</a> project to uFFI.
 Roassal integration supported. Main branch in this repository is in active development.
 TO-DO:
 - Review display API. Done
-- Widgets support.
+- Autocomplete...in progress
+- Widgets support...
 - Tests...
 - Improve ZeroMQ API.
 - Installation procedure.
 - 32 bits version? ZMQ is 64 a bits library on Mac Os.
 
-This project is also hosted in Smalltalkhub repository <a href="http://smalltalkhub.com/#!/~jmari/JupyterTalk">JupyterTalk</a>.<br/>
+This project is also hosted in Smalltalkhub repository <a href="http://smalltalkhub.com/#!/~jmari/JupyterTalk">JupyterTalk</a> but it's out of date<br/>
 There you are a few examples on using jupiterTalk.
  - <a href="http://htmlpreview.github.com/?https://github.com/jmari/JupyterTalk/blob/master/Tutorial1_BasicStatistics.html"> Tutorial  1 - basic statistics</a>
   - <a href="http://htmlpreview.github.com/?https://github.com/jmari/JupyterTalk/blob/master/tensorflow.html"> Tutorial 2 - tensorflow </a>
@@ -29,8 +30,8 @@ Create the folder	'/usr/local/share/jupyter/kernels/pharo'. Create file	'kernel.
 ```JSON
 '{
   "argv": [
-    "/Applications/Pharo6.1-64_ZeroMQ.app/Contents/MacOS/Pharo",
-    "/Applications/Pharo6.1-64_ZeroMQ.app/Contents/Resources/Pharo6.1-64.image",
+    "/Path/To/Your/vm/Pharo",
+    "/Path/to/your/image/Pharo6.1-64.image",
     "ipharo",
     "{connection_file}"
   ],
