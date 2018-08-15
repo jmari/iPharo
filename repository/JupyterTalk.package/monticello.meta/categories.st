@@ -1,5 +1,6 @@
 SystemOrganization addCategory: #JupyterTalk!
 SystemOrganization addCategory: 'JupyterTalk-Comm-experimental'!
+SystemOrganization addCategory: 'JupyterTalk-Completer'!
 SystemOrganization addCategory: 'JupyterTalk-Core'!
 SystemOrganization addCategory: 'JupyterTalk-Display'!
 SystemOrganization addCategory: 'JupyterTalk-Messages-Comm'!

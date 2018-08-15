@@ -1,0 +1,19 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "JupyterTalk-Completer",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"objectStartPos",
+		"previousCodePos",
+		"lastSpace",
+		"cursorPos",
+		"previousCode",
+		"codeForOjectType",
+		"messagePart"
+	],
+	"name" : "IPCompleter",
+	"type" : "normal"
+}

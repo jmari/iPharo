@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "IPMsg",
+	"category" : "JupyterTalk-Messages-Shell",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "IPCompleteReplyMsg",
+	"type" : "normal"
+}

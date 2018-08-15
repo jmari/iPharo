@@ -14,5 +14,4 @@ activate
 	ZmqContext current.
 	IPharoKernel new 
 						configKernel: kernelConfig;
-						start;
-						inspect.
+						start.

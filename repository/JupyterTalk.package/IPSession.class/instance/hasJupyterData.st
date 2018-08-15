@@ -1,0 +1,3 @@
+accessing
+hasJupyterData
+	^ jupyterData notNil
