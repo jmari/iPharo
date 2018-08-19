@@ -1,5 +1,5 @@
 tests
-testRespondsTo
+testResponseHeader
 	|wm executeMessage wmResp |
 	"parentHeader field in a response message must have exactly the same header than the request message
 	normally we create response message instance using the session object (IPSession currentSession, it has factory methods for each kind of message
