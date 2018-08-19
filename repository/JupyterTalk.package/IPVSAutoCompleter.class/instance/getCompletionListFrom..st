@@ -7,5 +7,5 @@ getCompletionListFrom: aMessage
 	self parseObjectAndPartOfMessage: codeString.
 	session := (IPSession session: aMessage header session) veryDeepCopy.
 
-	^ self evaluateTypeOfObjectOnSession: session
+	^ self evaluateTypeOfObjectInSession: session
 	

@@ -1,8 +1,8 @@
 tests
-testAutocompletePartOfMsgInsideMultipleParameters
+testAutocompleteNoType
 
 	| list list2 methods |
-	list := self testAutocomplete: 'a:= OrderedCollection new.Transcript show:a so'  pos: 46. 
+	list := self testAutocomplete: 'a:= (Smalltalk at:#OrderedCollection) new so'  pos: 44. 
 	
 	methods :=((OrderedCollection allSuperclasses 
 					flatCollect:[:aClass| aClass selectors]) 

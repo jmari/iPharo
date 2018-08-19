@@ -1,3 +1,3 @@
 accessing
 completer
-	^ completer ifNil:[completer := IPCompleter new]
+	^ completer ifNil:[completer := IPVSAutoCompleter new]

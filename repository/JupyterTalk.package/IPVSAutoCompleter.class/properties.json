@@ -1,5 +1,5 @@
 {
-	"commentStamp" : "",
+	"commentStamp" : "JesusMariAguirre 8/19/2018 13:29",
 	"super" : "Object",
 	"category" : "JupyterTalk-Completer",
 	"classinstvars" : [ ],
@@ -12,8 +12,9 @@
 		"cursorPos",
 		"previousCode",
 		"codeForOjectType",
-		"messagePart"
+		"messagePart",
+		"objectType"
 	],
-	"name" : "IPCompleter",
+	"name" : "IPVSAutoCompleter",
 	"type" : "normal"
 }
