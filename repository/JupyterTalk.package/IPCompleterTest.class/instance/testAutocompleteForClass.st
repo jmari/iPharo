@@ -2,7 +2,7 @@ tests
 testAutocompleteForClass
 
 	| list list2 methods |
-	list := self testAutocomplete: 'OrderedCollection'  pos: 17. 
+	list := self testAutocomplete: 'OrderedCollection '  pos: 18. 
 	
 	methods :=((OrderedCollection class allSuperclasses 
 					flatCollect:[:aClass| aClass selectors]) 

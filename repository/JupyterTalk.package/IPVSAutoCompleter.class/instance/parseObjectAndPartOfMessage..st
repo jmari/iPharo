@@ -1,6 +1,6 @@
 parsing
 parseObjectAndPartOfMessage: codeString 
-	| balanced trail interestingCode  object  followLoop |
+	| balanced trail interestingCode followLoop |
 	
 	objectStartPos := cursorPos.	
 	balanced := 0.	
@@ -20,15 +20,15 @@ parseObjectAndPartOfMessage: codeString
 	lastSpace := interestingCode findLastOccurrenceOfString: ' ' startingAt: 1.
 	lastSpace >0 
 		ifTrue:[
-			object := (interestingCode copyFrom: 1 to: lastSpace). 
-			balanced <0 ifTrue:[ object := object , trail].
+			objectPart := (interestingCode copyFrom: 1 to: lastSpace). 
+			balanced <0 ifTrue:[ objectPart := objectPart , trail].
 			messagePart  := (interestingCode copyFrom: lastSpace to: interestingCode size) trimBoth.
 		] ifFalse:[
-			object := interestingCode.
+			objectPart := interestingCode.
 			messagePart  := ''].
 	previousCodePos := objectStartPos.
 
 	[ previousCodePos>1 and:[ ($.= (codeString at:previousCodePos)) not ]] whileTrue:[previousCodePos := previousCodePos - 1].
 	previousCode := codeString copyFrom:1 to: previousCodePos.
-	codeForOjectType  :=  self guessObjectCode: object
+	codeForOjectType  :=  self guessObjectCode: objectPart
 	

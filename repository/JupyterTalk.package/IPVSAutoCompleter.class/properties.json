@@ -13,7 +13,8 @@
 		"previousCode",
 		"codeForOjectType",
 		"messagePart",
-		"objectType"
+		"objectType",
+		"objectPart"
 	],
 	"name" : "IPVSAutoCompleter",
 	"type" : "normal"
