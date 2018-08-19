@@ -15,7 +15,7 @@ evaluateTypeOfObjectInSession: session
 			list :=(result allSuperclasses 
 									flatCollect:[:aClass| 
 															aClass selectors]) addAll:(result selectors);yourself].
-			
+		
 	^ {(list select:[:element|  (messagePart ,'*') match: element ] ) asSet asArray sort.
 		(objectStartPos + lastSpace).
 		cursorPos}.

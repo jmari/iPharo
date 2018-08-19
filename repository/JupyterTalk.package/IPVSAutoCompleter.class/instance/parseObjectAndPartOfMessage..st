@@ -11,6 +11,12 @@ parseObjectAndPartOfMessage: codeString
 												balanced := balanced -1.
 												trail := trail , ')'].
 		(codeString at:objectStartPos) =$) ifTrue:[balanced := balanced +1].
+		
+		(codeString at:objectStartPos) =$[ ifTrue:[
+												balanced := balanced -1.
+												trail := trail , '] value'].
+		(codeString at:objectStartPos) =$] ifTrue:[balanced := balanced +1.].
+		
 		objectStartPos := objectStartPos - 1.
 		followLoop := (objectStartPos >=1 and:[(codeString at:objectStartPos) =$: and:[balanced <= 0]]) not.
 		].
