@@ -4,8 +4,7 @@ getCompletionListFrom: aMessage
 	
 	codeString := (aMessage content at:#code). 
 	cursorPos := (aMessage content at:#cursor_pos).
-	self parseObjectAndPartOfMessage: codeString.
 	session := (IPSession session: aMessage header session) veryDeepCopy.
-
+	self parseObjectAndPartOfMessage: codeString.
 	^ self evaluateTypeOfObjectInSession: session
 	

@@ -5,18 +5,18 @@ executeExecuteRequest: aMessage
 	
 	session := IPSession session: aMessage header session.
 	self publish: (session executeInputMessage
-										respondsToWireMessage: wireMessage;
+										respondsToWireMessage: self wireMessage;
 										code:aMessage content code;
 										yourself ).	
 	[result :=session compileAndEvaluate: aMessage] 
 		on:Exception do:[:e| 
 			response := (session executionErrorMessage 
-									respondsToWireMessage: wireMessage;
+									respondsToWireMessage: self wireMessage;
 									exceptionObject: e;
 									yourself).
 			self publish: (session executeErrorMessage    
 									content: response content;
-									respondsToWireMessage: wireMessage;
+									respondsToWireMessage: self wireMessage;
 									yourself)].
 					
 	aMessage content silent
@@ -29,7 +29,7 @@ executeExecuteRequest: aMessage
 				executionResult content addAll:result.				
 				self publish:  executionResult].
 			response:= session executionOkMessage.
-			response respondsToWireMessage: wireMessage ]].
+			response respondsToWireMessage: self wireMessage ]].
 
 	session increaseExecutionCounter.	
 	^ response

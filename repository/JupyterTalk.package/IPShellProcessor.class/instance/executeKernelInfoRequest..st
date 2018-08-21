@@ -5,7 +5,7 @@ executeKernelInfoRequest: aMessage
 	session := IPSession newSessionFor: aMessage header.
 	response := session kernelInfoReplayMessage.
 	"must be exactly the same header"
-	response respondsToWireMessage: wireMessage.
+	response respondsToWireMessage: self wireMessage.
 
 	^  response
 	

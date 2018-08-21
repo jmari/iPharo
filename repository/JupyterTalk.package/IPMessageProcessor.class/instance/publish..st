@@ -1,3 +1,7 @@
-as yet unclassified
+comm handlers
 publish: aResult
-	(IPharoKernel instance processors at:#iopub) publish:  aResult
+	| iopub |
+	iopub := (IPharoKernel instance processors at:#iopub ifAbsent:[nil]). 
+	iopub 
+			ifNil:[ self debug: aResult asString ]
+			ifNotNil:[ iopub publish:  aResult ]

@@ -9,6 +9,6 @@ executeCompleteRequest: aMessage
 	response content at:#cursor_end put: (completionList at:3).
 	response content at:#status put:#ok. 
 	"parent_header must be exactly the same header"
-	response respondsToWireMessage: wireMessage.
+	response respondsToWireMessage: self wireMessage.
 	^ response
 	

@@ -1,3 +1,3 @@
 hooks
 debug: anError
-	ZmqLog logDebug: anError asString;cr
+	ZmqLog logDebug: anError asString 
