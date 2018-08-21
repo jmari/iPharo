@@ -1,13 +1,13 @@
 as yet unclassified
 processMessage
 	|response|
-	wireMessage isFull ifTrue:[
+	self wireMessage isFull ifTrue:[
 
-	response := wireMessage hmacIsValid 
-												ifTrue:[self execute:wireMessage]
+	response := self wireMessage hmacIsValid 
+												ifTrue:[self execute: self wireMessage]
 												ifFalse:[IPHMACException signal:'Wrong HMAC'].
 
-	wireMessage := IPWireMessage new].
+	self wireMessage: IPWireMessage new].
 
 
 						
