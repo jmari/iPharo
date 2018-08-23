@@ -13,7 +13,7 @@ unix64ModuleName
 			(((OSEnvironment current getEnv: 'LD_LIBRARY_PATH') ifNil: [ '' ]) substrings: ':'))
 		do: [ :path | 
 			| libraryPath |
-			libNames:= (path asFileReference select:[:each| each basename beginsWith:'libzmq.so']). 
+			libNames:= (path asFileReference allChildren select:[:each| each basename beginsWith:'libzmq.so']). 
 			
 			libraryPath := path asFileReference / (libNames size>0) ifTrue:[libNames first] ifFalse:['libzmq.so'].
 			libraryPath exists
