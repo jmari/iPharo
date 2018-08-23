@@ -2,4 +2,4 @@ accessing platform
 unixModuleName
 	"Kept for backward compatibility. 
 	 Users should use unix32* or unix64*"
-	^ 'libzmq.so.3'
+	^ self unix64ModuleName 
