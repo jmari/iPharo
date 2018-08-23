@@ -12,10 +12,11 @@ unix64ModuleName
 	(#('/lib/x86_64-linux-gnu' '/usr/lib'),
 			(((OSEnvironment current getEnv: 'LD_LIBRARY_PATH') ifNil: [ '' ]) substrings: ':'))
 		do: [ :path | 
-			| libraryPath |
-			libNames:= (path asFileReference allChildren select:[:each| each basename beginsWith:'libzmq.so']). 
-			
-			libraryPath := path asFileReference / (libNames size>0) ifTrue:[libNames first] ifFalse:['libzmq.so'].
-			libraryPath exists
-				ifTrue: [ ^ libraryPath fullName ] ].
+			| libraryPath fr|
+			fr := path asFileReference.
+			(fr exists and:[fr isReadable]) ifTrue:[ 
+				libNames:= (fr childNames select:[:each| each  beginsWith:'libzmq.so']). 
+				libraryPath := fr / (libNames size>0) ifTrue:[libNames first] ifFalse:['libzmq.so'].
+				libraryPath exists
+					ifTrue: [ ^ libraryPath fullName ] ] ].
 	self error: 'Cannot locate ZeroMQ library (libzmp.so). Please check if it installed on your system'
