@@ -1,5 +1,5 @@
 Accessing
-commChanels
+commChannels
 
 	^ commChanels ifNil:[commChanels := Dictionary new]
 	

@@ -1,3 +1,3 @@
 comm handlers
 registerComm: aComm
-	self commChanels at:aComm uuid put: aComm
+	self commChannels at:aComm uuid put: aComm

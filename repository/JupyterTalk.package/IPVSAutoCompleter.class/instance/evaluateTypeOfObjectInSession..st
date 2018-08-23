@@ -1,6 +1,6 @@
 as yet unclassified
 evaluateTypeOfObjectInSession: session  
-	| result list|
+	| result list tmp |
 	"evaluate previous lines of code"
 	[session evaluate: previousCode] on:Error do:[:e| Transcript show: e asString;cr].
 	"evaluate the code to guess the object class "
@@ -10,7 +10,7 @@ evaluateTypeOfObjectInSession: session
 	on:Error do:[:e| result := Object].
 
 	self shouldBeAClass 
-		ifTrue:[messagePart := objectPart]
+		ifTrue:[ messagePart trimBoth ='' ifTrue:[messagePart := objectPart]]
 		ifFalse:[
 			objectType := result.
 			list :=(result allSuperclasses 
