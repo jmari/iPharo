@@ -16,7 +16,7 @@ unix64ModuleName
 			fr := path asFileReference.
 			(fr exists and:[fr isReadable]) ifTrue:[ 
 				libNames:= (fr childNames select:[:each| each  beginsWith:'libzmq.so']). 
-				libraryPath := fr / (libNames size>0) ifTrue:[libNames first] ifFalse:['libzmq.so'].
+				libraryPath := fr / ((libNames size>0) ifTrue:[libNames first] ifFalse:['libzmq.so']).
 				libraryPath exists
 					ifTrue: [ ^ libraryPath fullName ] ] ].
 			
