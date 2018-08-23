@@ -19,4 +19,5 @@ unix64ModuleName
 				libraryPath := fr / (libNames size>0) ifTrue:[libNames first] ifFalse:['libzmq.so'].
 				libraryPath exists
 					ifTrue: [ ^ libraryPath fullName ] ] ].
+			
 	self error: 'Cannot locate ZeroMQ library (libzmp.so). Please check if it installed on your system'
