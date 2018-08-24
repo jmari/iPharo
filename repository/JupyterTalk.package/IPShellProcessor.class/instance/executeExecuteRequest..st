@@ -2,7 +2,7 @@ running
 executeExecuteRequest: aMessage
 	| response session result executionResult |
 	"parent_header must be exactly the same header"
-	
+
 	[session := IPSession session: aMessage header session]
 	on: Error do:[session := IPSession newSessionFor: aMessage header].
 	
