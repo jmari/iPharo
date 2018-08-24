@@ -10,7 +10,8 @@ executeExecuteRequest: aMessage
 										respondsToWireMessage: self wireMessage;
 										code:aMessage content code;
 										yourself ).	
-	[result :=session compileAndEvaluate: aMessage] 
+	[[result :=session compileAndEvaluate: aMessage] 
+		on:OCUndeclaredVariableWarning do:["Nothing"]]
 		on:Exception do:[:e| 
 			response := (session executionErrorMessage 
 									respondsToWireMessage: self wireMessage;
