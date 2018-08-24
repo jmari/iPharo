@@ -8,13 +8,16 @@ unix64ModuleName
 	Packages such as snapcraft can also change the path.
 	Look in a number of known locations, or LD_LIBRARY_PATH."
 
-	| libNames anacondaLibs|
-	anacondaLibs := {	((OSEnvironment current getEnv: 'HOME'),'/anaconda3/lib/').
-							((OSEnvironment current getEnv: 'HOME'),'/anaconda2/lib/')}.
-	
-	({'/lib/x86_64-linux-gnu'. '/usr/lib' }, anacondaLibs ,
-			(((OSEnvironment current getEnv: 'LD_LIBRARY_PATH') ifNil: [ '' ]) substrings: ':'))
-			
+	| libNames libZmqPaths|
+	libZmqPaths := {	((OSEnvironment current getEnv: 'HOME'),'/anaconda3/lib/').
+							((OSEnvironment current getEnv: 'HOME'),'/anaconda2/lib/').
+							'/usr/lib'.
+							'/lib/x86_64-linux-gnu'.
+							},
+						(((OSEnvironment current 
+												getEnv: 'LD_LIBRARY_PATH') 
+												ifNil: [ '' ]) substrings: ':').
+	libZmqPaths		
 		do: [ :path | 
 			| libraryPath fr|
 			fr := path asFileReference.
