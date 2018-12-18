@@ -17,6 +17,6 @@ newInstance
 				#icon -> ''.
 				#layout -> nil.
 				#msg_throttle -> 1.
-				#tooltips -> ''.
+				#tooltip -> ''.
 				#value -> false
 					} asSCJsonObject }.
