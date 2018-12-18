@@ -4,7 +4,9 @@ visitMultiCompositeShape: aShape
 		{id: "';
 		nextPutAll: (self nameFor: aShape);
 		nextPutAll: '", type:"multi", shapes:['.
-	aShape shapes do: [ :s| s accept: self].
+	aShape shapes do: [ :s| 
+		s element: aShape element.
+		s accept: self].
 	stream nextPutAll: '], offsets: ['.
 	aShape offsets do: [ :o | 
 		stream nextPutAll: '{x: ';

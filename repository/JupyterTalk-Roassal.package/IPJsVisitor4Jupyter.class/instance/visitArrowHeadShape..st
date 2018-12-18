@@ -15,10 +15,11 @@ visitArrowHeadShape: arrowShape
 		nextPutAll: (self number: arrowShape width);
 		nextPutAll: ', size: ';
 		nextPutAll: (self number: arrowShape mySize).
-	self visitAttachPoint: e.
+	self visitAttachPoint: e trShape: arrowShape.
 	stream 
 		nextPutAll: ', base: ';
 		nextPutAll: (self number: arrowShape baseSize);
 		nextPutAll: '},'.
+	
 	
 	

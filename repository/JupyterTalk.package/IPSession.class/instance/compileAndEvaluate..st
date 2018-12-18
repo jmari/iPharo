@@ -1,7 +1,9 @@
 compilation
 compileAndEvaluate: aMessage
 	| result |
+	self display reset.
 	result := self evaluate: aMessage content code.
-	self hasJupyterData  ifFalse:[self display openInJupyter: result asString].
-	^ self jupyterData.
+	self display hasJupyterData 
+								ifFalse:[self display openInJupyter: result asString].
+	
 	

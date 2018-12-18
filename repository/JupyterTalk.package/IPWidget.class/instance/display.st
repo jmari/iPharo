@@ -1,3 +1,3 @@
+state-accessors
 display
-display
-	self comm send: { 'method'->'display' } asSCJsonObject
+	^ self getProperty: #display

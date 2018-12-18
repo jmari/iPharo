@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "IPCoreWidgetModelGenerator",
+	"category" : "JupyterTalk-Widgets",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "IPControllerModel",
+	"type" : "normal"
+}

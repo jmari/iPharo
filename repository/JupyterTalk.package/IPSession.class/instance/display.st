@@ -1,3 +1,3 @@
 accessing
 display
-	^ display := IPDisplay new
+	^ display ifNil:[display := IPDisplay new]

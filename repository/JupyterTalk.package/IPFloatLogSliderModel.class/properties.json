@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "IPFloatSliderModel",
+	"category" : "JupyterTalk-Widgets",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "IPFloatLogSliderModel",
+	"type" : "normal"
+}

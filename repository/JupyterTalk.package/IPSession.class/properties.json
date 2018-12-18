@@ -15,7 +15,6 @@
 		"executionCounter",
 		"executionProcess",
 		"bindings",
-		"jupyterData",
 		"cachedObjects",
 		"display",
 		"widgetsFactory",

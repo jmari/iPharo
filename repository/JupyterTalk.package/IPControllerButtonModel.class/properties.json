@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "IPDOMWidgetModel",
+	"category" : "JupyterTalk-Widgets",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "IPControllerButtonModel",
+	"type" : "normal"
+}

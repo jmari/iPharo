@@ -2,8 +2,9 @@ initialization
 initialize
 "by now we need to stop the kernel each time the image is stopped or saved"
 	SessionManager default registerUserClassNamed: self name  atPriority: 100.
-"build a link in your image/Pluggings folder to"
-	'libzmq.dylib'.
+self flag: #todo.
+"installation script"
+
 "create folder"
 	'/usr/local/share/jupyter/kernels/pharo'.
 "create file"
@@ -18,5 +19,7 @@ initialize
   ],
   "display_name": "Pharo Smalltalk",
   "language": "smalltalk"
-}'
-"copy an icon with file name logo-64x64.png"
+}'.
+"copy an icon with file name logo-64x64.png in the same folder"
+
+'jupyter kernelspec install /path/to/kernel.json'

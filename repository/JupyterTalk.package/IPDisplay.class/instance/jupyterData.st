@@ -1,4 +1,6 @@
 accessing
 jupyterData
-	"Uses Session jupyterData to write the anwer"
-	^ IPSession currentSession jupyterData 
+	^ jupyterData ifNil:[
+		jupyterData := SCJsonObject new.
+		jupyterData at:#data put:SCJsonObject new.
+		jupyterData].

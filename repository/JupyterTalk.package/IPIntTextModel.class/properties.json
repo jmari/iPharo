@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "IPLabeledDOMWidgetModel",
+	"category" : "JupyterTalk-Widgets",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "IPIntTextModel",
+	"type" : "normal"
+}

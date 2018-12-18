@@ -1,0 +1,3 @@
+instance creation
+modelName
+	^ 'ColorPickerModel'

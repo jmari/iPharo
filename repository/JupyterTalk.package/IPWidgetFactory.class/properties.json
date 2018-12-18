@@ -1,7 +1,7 @@
 {
 	"commentStamp" : "",
 	"super" : "Object",
-	"category" : "JupyterTalk-Widgets-Experimental",
+	"category" : "JupyterTalk-Widgets",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],

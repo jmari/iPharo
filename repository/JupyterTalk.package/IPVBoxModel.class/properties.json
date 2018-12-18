@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "IPBoxModel",
+	"category" : "JupyterTalk-Widgets",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "IPVBoxModel",
+	"type" : "normal"
+}

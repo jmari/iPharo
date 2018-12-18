@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "IPWidgetModel",
+	"category" : "JupyterTalk-Widgets",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "IPLinkModel",
+	"type" : "normal"
+}

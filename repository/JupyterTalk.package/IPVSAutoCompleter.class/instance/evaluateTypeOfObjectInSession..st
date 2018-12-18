@@ -1,6 +1,6 @@
 as yet unclassified
 evaluateTypeOfObjectInSession: session  
-	| result list tmp |
+	| result list |
 	"evaluate previous lines of code"
 	[session evaluate: previousCode] on:Error do:[:e| Transcript show: e asString;cr].
 	"evaluate the code to guess the object class "

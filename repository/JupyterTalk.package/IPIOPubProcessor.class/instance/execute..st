@@ -8,5 +8,7 @@ execute: aWireMessage
 	message msgType = #comm_open ifTrue:[ self executeCommOpenRequest: message].	
 	message msgType = #comm_close ifTrue:[ self executeCommCloseRequest: message].	
 	message msgType = #comm_msg ifTrue:[ self executeCommMsgRequest: message].	
-
+	message msgType = #update_state ifTrue:[ self executeUpdateState: message].	
+	message msgType = #request_state ifTrue:[ self executeUpdateState: message].
+		
 	self publish:  (IPKernelStatusIdleMsg new respondsToWireMessage: aWireMessage).

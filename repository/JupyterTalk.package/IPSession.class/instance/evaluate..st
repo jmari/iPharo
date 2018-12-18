@@ -2,11 +2,9 @@ compilation
 evaluate: source
 
 	| result rcvr ctxt |
-	
-	self resetJupyterData.
+
 	rcvr := self doItReceiver.
 	ctxt := self doItContext. 
-
 
 	[
 	[result := rcvr class compiler
