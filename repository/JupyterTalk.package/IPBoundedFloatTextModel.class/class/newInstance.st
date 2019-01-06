@@ -11,11 +11,13 @@ newInstance
 				#_view_module_version -> self version.
 				#_view_name -> self viewName.
 				#_dom_classes -> {}.
+				#continuous_update -> false.
 				#description -> ''.
+				#description_tooltip -> nil.
 				#disabled -> false.
 				#layout -> nil.
 				#max -> 100.0.
 				#min -> 0.0.
-				#msg_throttle -> 1.
-				#step -> 0.1.
+				#step -> nil.
+				#style -> nil.
 				#value -> 0.0} asSCJsonObject }.
