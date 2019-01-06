@@ -7,13 +7,9 @@ baseline: spec
 			package: 'ZeroMQ';
 			package: 'JupyterTalk' with: [ spec requires: #('ZeroMQ') ];
 			package: 'JupyterTalk-Roassal' with: [
-				(Smalltalk includesKey:#RTBuilder )
-				ifTrue:[spec requires: #('JupyterTalk') ]
-				ifFalse:[
-					(UIManager default questionWithoutCancel: 'Roassal is required, do you want to Install Roassal 2 in your Image?')
-					ifTrue:[
-						self installRoassal.
-						spec requires: #('JupyterTalk') ]]
+				spec 
+					requires: #('JupyterTalk');
+					preLoadDoIt: #installRoassal
 				].
 		self groups: spec
 	]
