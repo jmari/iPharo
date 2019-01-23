@@ -11,7 +11,10 @@ newInstance
 				#_view_module_version -> self version.
 				#_view_name -> self viewName.
 				#_dom_classes -> {}.
-				#box_style -> ''. "'success', 'info', 'warning', 'danger', ''"
-				#children -> {}.
+				#autoplay -> true.
+				#controls -> true.
+				#format -> 'mp3'.
 				#layout -> nil.
+				#loop -> true.
+				#value -> 'b''''' 	
 				} asSCJsonObject }.

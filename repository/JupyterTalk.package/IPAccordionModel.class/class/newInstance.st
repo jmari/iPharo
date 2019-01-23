@@ -15,6 +15,5 @@ newInstance
 				#box_style -> ''. "'success', 'info', 'warning', 'danger', ''"
 				#children -> {}.
 				#layout -> nil.
-				#msg_throttle -> 1.
 				#selected_index -> 0.	
 				} asSCJsonObject }.
