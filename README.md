@@ -3,13 +3,11 @@ Basic Pharo Smaltalk kernel for Jupyter. This project is implemented on Pharo 6.
 It uses ZeroMQ ported from <a href="http://smalltalkhub.com/#!/~panuw/zeromq">zeromq</a> project to uFFI.
 Roassal integration supported. Main branch in this repository is in active development.
 TO-DO:
-- Review display API. Done
-- Autocomplete...in progress
-- Widgets support...
+
 - Tests...
 - Improve ZeroMQ API.
 - Installation procedure.
-- 32 bits version? ZMQ is 64 a bits library on Mac Os.
+
 
 This project is also hosted in Smalltalkhub repository <a href="http://smalltalkhub.com/#!/~jmari/JupyterTalk">JupyterTalk</a><br/>
 There you are a few examples on using jupiterTalk.
