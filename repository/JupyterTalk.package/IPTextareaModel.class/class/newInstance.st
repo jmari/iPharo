@@ -12,9 +12,11 @@ newInstance
 				#_view_name -> self viewName.
 				#_dom_classes -> {}.
 				#description -> ''.
+				#description_tooltip -> nil.
 				#disabled -> false.
 				#layout -> nil.
 				#msg_throttle -> 1.
 				#placeholder ->  '\u200b'.
-				#rows ->nil.
+				#rows -> nil.
+				#style -> nil.
 				#value -> ''	} asSCJsonObject }.

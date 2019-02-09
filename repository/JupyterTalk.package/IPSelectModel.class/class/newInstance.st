@@ -13,8 +13,11 @@ newInstance
 				#_dom_classes -> {}.
 				#_options_labels -> {}.
 				#description -> ''.
+				#description_tooltip -> nil.
 				#disabled -> false.
 				#index -> nil.
 				#layout -> nil.
 				#msg_throttle -> 1.
+				#rows -> 5.
+				#style -> nil.
 				#value -> nil } asSCJsonObject }.

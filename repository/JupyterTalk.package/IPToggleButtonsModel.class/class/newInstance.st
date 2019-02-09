@@ -14,10 +14,13 @@ newInstance
 				#_options_labels -> {}.		
 				#button_style -> ''.	"'primary', 'success', 'info', 'warning', 'danger', ''"
 				#description -> ''.
+				#descriptnio_tooltip -> nil.
 				#disabled -> false.
 				#icons -> {}.
+				#index -> nil.
 				#layout -> nil.	
 				#msg_throttle -> 1.
-				#tooltips -> {}.
 				#icons -> {}.
+				#style -> nil.
+				#tooltips -> {}.
 				#value -> nil	} asSCJsonObject }.

@@ -1,3 +1,3 @@
 as yet unclassified
 viewName
-	^self subclassResponsibility 
+	^ nil.

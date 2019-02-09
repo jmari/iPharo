@@ -10,6 +10,7 @@ newInstance
 				#_view_module -> self moduleName.
 				#_view_module_version -> self version.
 				#_view_name -> self viewName.
+				#description_width -> ''.
 				#handle_color -> nil.
 				#msg_throttle -> 1.
 				} asSCJsonObject }.

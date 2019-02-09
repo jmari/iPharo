@@ -12,4 +12,5 @@ newInstance
 				#_view_name -> self viewName.
 				#layout -> nil.
 				#msg_id -> ''.	
+				#outputs -> ''.
 				#msg_throttle -> 1} asSCJsonObject }.

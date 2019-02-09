@@ -14,6 +14,7 @@ newInstance
 				#_dom_classes -> {}.
 				#continuous_update -> false.
 				#description -> ''.
+				#description_tooltip -> nil.
 				#disabled ->  false.
 				#layout -> nil.
 				#max -> 100.0.
@@ -24,5 +25,6 @@ newInstance
 				#readout_format ->'.2f'.
 				#slider_color -> nil.	
 				#step -> 0.1.
+				#style -> nil.
 				#value -> 0.0. 
 			} asSCJsonObject }.

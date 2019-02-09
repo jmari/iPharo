@@ -16,16 +16,18 @@ newInstance
 				#_dom_classes -> {}.
 				#continuous_update -> false.
 				#description -> ''.
+				#description_tooltip -> nil.
 				#disabled ->  false.
+				#index -> { 0. 0}.
 				#layout -> nil.
 				#max -> 0.
 				#min -> 0.
-				#index -> {}.
 				#msg_throttle -> 1.
 				#orientation -> 'horizontal'.
 				#readout -> true.
 				#readout_format -> 'd'.
 				#slider_color -> nil.	
 				#step -> 1.
+				#style -> nil.
 				#value -> {}
 				} asSCJsonObject }.

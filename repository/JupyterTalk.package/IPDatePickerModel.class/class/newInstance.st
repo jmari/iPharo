@@ -12,8 +12,10 @@ newInstance
 				#_view_name -> self viewName.
 				#_dom_classes -> {}.
 				#description -> ''.
+				#description_tooltip ->nil.
 				#layout -> nil.
 				#disabled -> false.
+				#style -> nil.
 				#msg_throttle -> 1.
 				#value -> Date today
 			} asSCJsonObject }.

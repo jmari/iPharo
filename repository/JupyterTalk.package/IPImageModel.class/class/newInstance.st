@@ -15,5 +15,6 @@ newInstance
 				#height -> ''.
 				#layout -> nil.
 				#msg_throttle -> 1.
+				#value -> 'b'''''.
 				#width -> ''} asSCJsonObject }.
 				

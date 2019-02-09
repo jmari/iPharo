@@ -13,6 +13,7 @@ newInstance
 				#_dom_classes -> {}.
 				#bar_style -> ''.	"'success', 'info', 'warning', 'danger', ''"
 				#description -> ''.
+				#description_tooltip -> nil.
 				#disabled -> false.
 				#layout -> nil.
 				#max -> 100.

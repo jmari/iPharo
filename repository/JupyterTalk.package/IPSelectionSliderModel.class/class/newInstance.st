@@ -15,10 +15,12 @@ newInstance
 				#_dom_classes -> {}.
 				#continuous_update -> true.
 				#description -> ''.
+				#description_tooltip -> nil.
 				#disabled -> false.
 				#layout -> nil.
 				#index -> nil.
 				#msg_throttle -> 1.
 				#orientation -> 'horizontal'.
 				#readout -> true.
+				#style -> nil.
 				#value -> nil	} asSCJsonObject }.

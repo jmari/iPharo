@@ -11,5 +11,6 @@ newInstance
 				#_view_module_version -> self version.
 				#_view_name -> self viewName.
 				#msg_throttle -> 1.
-				#bar_color ->nil
+				#bar_color ->nil.
+				#description_width -> ''.
 				} asSCJsonObject }.

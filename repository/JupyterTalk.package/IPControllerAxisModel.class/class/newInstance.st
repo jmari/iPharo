@@ -12,5 +12,6 @@ newInstance
 				#_view_name -> self viewName.
 				#_dom_classes -> {}.
 				#msg_throttle -> 1.
+				#layout -> nil.
 				#value -> 0.0} asSCJsonObject }.
 				

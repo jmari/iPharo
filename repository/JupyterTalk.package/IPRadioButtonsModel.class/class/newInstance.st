@@ -14,8 +14,10 @@ newInstance
 				#_options_labels -> {}.	
 				#_options_values -> {}.
 				#description -> ''.
+				#description_tooltip -> nil.
 				#disabled -> false.
 				#index -> nil.
 				#layout -> nil.
+				#style -> nil.
 				#msg_throttle -> 1.
 				#value -> nil } asSCJsonObject }.

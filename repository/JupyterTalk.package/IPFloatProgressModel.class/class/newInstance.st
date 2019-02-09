@@ -13,13 +13,13 @@ newInstance
 				#_dom_classes -> {}.
 				#bar_style -> ''.	"'success', 'info', 'warning', 'danger', ''"
 				#description -> ''.
+				#description_tooltip -> nil.
 				#disabled -> false.
 				#layout -> nil.
 				#max -> 100.0.
 				#min -> 0.0.
 				#msg_throttle -> 1.
 				#orientation -> 'horizontal'. "'horizontal', 'vertical'"
-				#step ->  0.1.
 				#style ->  nil. "reference to ProgressStyle widget"
 				#value -> 0.0.
 			} asSCJsonObject }.

@@ -13,7 +13,9 @@ newInstance
 				#_dom_classes -> {}.
 				#concise -> false.
 				#description -> ''.
-				#layout -> nil.
+				#description_tooltip -> nil.
 				#disabled -> false.
+				#layout -> nil.
 				#msg_throttle -> 1.
+				#style -> nil.
 				#value -> 'black'} asSCJsonObject }.

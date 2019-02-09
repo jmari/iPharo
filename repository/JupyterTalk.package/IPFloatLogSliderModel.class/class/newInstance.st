@@ -15,6 +15,7 @@ newInstance
 				#base -> 10.
 				#continuous_update -> false.
 				#description -> ''.
+				#description_tooltip -> nil.
 				#disabled ->  false.
 				#layout -> nil.
 				#max -> 100.0.

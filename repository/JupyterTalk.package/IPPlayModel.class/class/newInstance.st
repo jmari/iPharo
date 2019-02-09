@@ -12,12 +12,16 @@ newInstance
 				#_view_name -> self viewName.
 				#_dom_classes -> {}.
 				#_playing->false.
+				#_repeat -> false.
 				#description -> ''.
+				#description_tooltip -> nil.
 				#disabled	-> false.
 				#interval	 -> 100.
  				#layout	-> nil.
 				#max	-> 100.
 				#min -> 0.
+				#show_repeat -> true.
 				#msg_throttle -> 1.
 				#step	-> 1.
+				#style -> nil.
 				#value	 -> 0} asSCJsonObject }

@@ -13,10 +13,12 @@ newInstance
 				#_dom_classes -> {}.
 				#button_style -> ''.	"'primary', 'success', 'info', 'warning', 'danger', ''"
 				#description -> ''.
+				#description_tooltip -> nil.
 				#disabled -> false.
 				#icon -> ''.
 				#layout -> nil.
 				#msg_throttle -> 1.
+				#style -> nil.
 				#tooltip -> ''.
 				#value -> false
 					} asSCJsonObject }.

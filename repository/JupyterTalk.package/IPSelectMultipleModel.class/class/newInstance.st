@@ -14,9 +14,11 @@ newInstance
 				#_view_name -> self viewName.
 				#_dom_classes -> {}.
 				#description -> ''.
+				#description_tooltip -> nil.
 				#disabled -> false.
 				#layout -> nil.
 				#index -> {}.
 				#rows -> nil.
 				#msg_throttle -> 1.
+				#style -> nil.
 				#value -> {} } asSCJsonObject }.

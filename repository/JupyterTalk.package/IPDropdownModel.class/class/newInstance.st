@@ -14,8 +14,10 @@ newInstance
 				#_options_values -> {}.
 				#_dom_classes -> {}.
 				#description -> ''.
+				#description_tooltip ->  nil.
 				#disabled ->  false.
 				#layout -> nil.
+				#style -> nil.
 				#msg_throttle -> 1.
 				#value -> nil.
 				#label -> nil.
