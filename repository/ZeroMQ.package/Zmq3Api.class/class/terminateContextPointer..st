@@ -1,3 +1,0 @@
-as yet unclassified
-terminateContextPointer: aZmqApiContextPointer
-	self apiZmqContextDestroy: aZmqApiContextPointer

@@ -1,3 +1,0 @@
-accessing
-hasJupyterData
-	^ jupyterData notNil

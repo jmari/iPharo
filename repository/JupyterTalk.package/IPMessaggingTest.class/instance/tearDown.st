@@ -1,3 +1,0 @@
-initialization
-tearDown
-	IPSession finalizeSession

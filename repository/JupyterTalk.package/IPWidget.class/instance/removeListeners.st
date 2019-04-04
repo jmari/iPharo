@@ -1,3 +1,0 @@
-removing
-removeListeners
-	self listeners removeAll

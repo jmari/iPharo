@@ -1,3 +1,0 @@
-accessing
-widgetClass
-	^'jupyter.widget'

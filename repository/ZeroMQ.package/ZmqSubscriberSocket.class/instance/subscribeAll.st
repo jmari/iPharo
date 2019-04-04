@@ -1,3 +1,0 @@
-operations
-subscribeAll
-	self subscribe: ''.

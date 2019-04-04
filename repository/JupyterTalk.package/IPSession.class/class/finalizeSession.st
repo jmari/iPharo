@@ -1,3 +1,0 @@
-accessing
-finalizeSession
-	currentSession := nil

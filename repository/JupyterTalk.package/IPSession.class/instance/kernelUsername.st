@@ -1,3 +1,0 @@
-accessing
-kernelUsername
-	^#kernel

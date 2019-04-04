@@ -1,3 +1,0 @@
-helpers
-validInteractions
-	^ validInteractions
