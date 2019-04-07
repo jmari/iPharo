@@ -44,9 +44,16 @@ BaselineOfJupyterTalk >> installRoassal [
 		ifFalse:[
 			(UIManager default questionWithoutCancel: 'Roassal is required, do you want to Install Roassal 2 in your Image?')
 					ifTrue:[
-						Gofer it
+						SystemVersion current major >= 7
+						ifTrue:[
+							Metacello new
+    						baseline: 'Roassal2';
+    						repository: 'github://ObjectProfile/Roassal2/src';
+    						load]
+						ifFalse:[
+							Gofer it
 							smalltalkhubUser: 'ObjectProfile' project: 'Roassal2';
 							configurationOf: 'Roassal2';
-							loadStable.
+							loadStable]
 					]]
 ]
