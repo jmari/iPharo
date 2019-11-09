@@ -11,7 +11,7 @@ TO-DO:
 
 This project is also hosted in Smalltalkhub repository <a href="http://smalltalkhub.com/#!/~jmari/JupyterTalk">JupyterTalk</a><br/>
 There you are a few examples on using jupiterTalk.
- - <a href="https://rawcdn.githack.com/jmari/JupyterTalk/blob/master/Tutorial1_BasicStatistics.html"> Tutorial  1 - basic statistics</a>
+ - <a href="https://rawcdn.githack.com/jmari/JupyterTalk/master/Tutorial1_BasicStatistics.html"> Tutorial  1 - basic statistics</a>
   - <a href="http://htmlpreview.github.com/?https://github.com/jmari/JupyterTalk/blob/master/tensorflow.html"> Tutorial 2 - tensorflow </a>
    - <a href="http://htmlpreview.github.com/?https://github.com/jmari/JupyterTalk/blob/master/Tutorial4_Linear+Regression.html"> Tutorial 3 - Linear regression with tensorflow and polymath </a>
   
