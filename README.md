@@ -24,6 +24,15 @@ Metacello new
 	repository: 'github://jmari/JupyterTalk:master/repository';
 	load:'all'
 ```
+
+If you are interested in ZeroMQ Binding, please do-it
+```Smalltalk
+Metacello new 
+	baseline: 'JupyterTalk';
+	repository: 'github://jmari/JupyterTalk:master/repository';
+	load:'zmq'
+```
+
 Create the folder	'/usr/local/share/jupyter/kernels/pharo'. Create file	'kernel.json' with contents
 ```JSON
 '{
