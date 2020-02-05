@@ -1,7 +1,7 @@
 Class {
 	#name : #IPCoreWidgetModelGenerator,
 	#superclass : #SCJsonObject,
-	#category : 'JupyterTalk-Widgets'
+	#category : #'JupyterTalk-Widgets'
 }
 
 { #category : #versions }

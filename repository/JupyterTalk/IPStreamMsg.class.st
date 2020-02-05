@@ -1,7 +1,7 @@
 Class {
 	#name : #IPStreamMsg,
 	#superclass : #IPMsg,
-	#category : 'JupyterTalk-Messages-IOPub'
+	#category : #'JupyterTalk-Messages-IOPub'
 }
 
 { #category : #initialization }

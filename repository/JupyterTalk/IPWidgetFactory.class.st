@@ -1,10 +1,10 @@
 Class {
 	#name : #IPWidgetFactory,
 	#superclass : #Object,
-	#category : 'JupyterTalk-Widgets'
+	#category : #'JupyterTalk-Widgets'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 IPWidgetFactory >> accordion [
 	|i|
 	i := IPWidget new model: IPAccordionModel newInstance.
@@ -13,14 +13,14 @@ IPWidgetFactory >> accordion [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 IPWidgetFactory >> boundedFloatText [
 	|i|
 	i := IPWidget new model: IPBoundedFloatTextModel newInstance.
 	^ self openCommFor:i.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 IPWidgetFactory >> boundedIntText [
 	|i|
 	i := IPWidget new model: IPBoundedIntTextModel newInstance.
@@ -87,6 +87,21 @@ IPWidgetFactory >> controllerButton [
 IPWidgetFactory >> datePicker [
 	|i|
 	i := IPWidget new model: IPDatePickerModel newInstance.
+	^ self openCommFor:i.
+]
+
+{ #category : #accessing }
+IPWidgetFactory >> debugger [
+	|i stepIn stepOver sourceArea |
+	i := IPWidget new model: IPDebuggerModel  newInstance.
+	stepIn := IPWidget new model: IPButtonModel newInstance.
+	stepOver := IPWidget new model: IPButtonModel newInstance.
+	sourceArea := IPWidget new model: IPTextareaModel newInstance.
+	
+	i items:{stepIn. stepOver. sourceArea}.
+	self openCommFor:stepIn.
+	self openCommFor:stepOver.
+	self openCommFor:sourceArea.
 	^ self openCommFor:i.
 ]
 
@@ -373,7 +388,7 @@ IPWidgetFactory >> valid [
 	^ self openCommFor: i
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 IPWidgetFactory >> video [
 	|i|
 	i := IPWidget new model: IPVideoModel  newInstance.

@@ -1,7 +1,7 @@
 Class {
 	#name : #IPExecuteInputMsg,
 	#superclass : #IPMsg,
-	#category : 'JupyterTalk-Messages-IOPub'
+	#category : #'JupyterTalk-Messages-IOPub'
 }
 
 { #category : #accessing }

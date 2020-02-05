@@ -1,7 +1,7 @@
 Class {
 	#name : #IPLinkModel,
 	#superclass : #IPWidgetModel,
-	#category : 'JupyterTalk-Widgets'
+	#category : #'JupyterTalk-Widgets'
 }
 
 { #category : #'instance creation' }

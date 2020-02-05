@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'completer'
 	],
-	#category : 'JupyterTalk-Core'
+	#category : #'JupyterTalk-Core'
 }
 
 { #category : #accessing }

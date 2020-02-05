@@ -17,7 +17,7 @@ Class {
 	#classInstVars : [
 		'instance'
 	],
-	#category : 'JupyterTalk-Core'
+	#category : #'JupyterTalk-Core'
 }
 
 { #category : #'as yet unclassified' }

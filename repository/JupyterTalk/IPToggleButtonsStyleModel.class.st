@@ -1,7 +1,7 @@
 Class {
 	#name : #IPToggleButtonsStyleModel,
 	#superclass : #IPStyleModel,
-	#category : 'JupyterTalk-Widgets'
+	#category : #'JupyterTalk-Widgets'
 }
 
 { #category : #'as yet unclassified' }

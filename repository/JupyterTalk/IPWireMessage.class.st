@@ -5,7 +5,7 @@ Class {
 		'wireMessage',
 		'currentProperty'
 	],
-	#category : 'JupyterTalk-Core'
+	#category : #'JupyterTalk-Core'
 }
 
 { #category : #'instance creation' }

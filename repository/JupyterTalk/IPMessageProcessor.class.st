@@ -6,7 +6,7 @@ Class {
 		'stop',
 		'wireMessage'
 	],
-	#category : 'JupyterTalk-Core'
+	#category : #'JupyterTalk-Core'
 }
 
 { #category : #'instance creation' }

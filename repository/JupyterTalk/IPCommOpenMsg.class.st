@@ -1,7 +1,7 @@
 Class {
 	#name : #IPCommOpenMsg,
 	#superclass : #IPCommMsg,
-	#category : 'JupyterTalk-Messages-Comm'
+	#category : #'JupyterTalk-Messages-Comm'
 }
 
 { #category : #initialization }

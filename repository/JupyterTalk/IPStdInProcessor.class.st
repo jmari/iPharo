@@ -1,7 +1,7 @@
 Class {
 	#name : #IPStdInProcessor,
 	#superclass : #IPMessageProcessor,
-	#category : 'JupyterTalk-Core'
+	#category : #'JupyterTalk-Core'
 }
 
 { #category : #hooks }

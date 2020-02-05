@@ -1,7 +1,7 @@
 Class {
 	#name : #IPDOMWidgetModel,
 	#superclass : #IPWidgetModel,
-	#category : 'JupyterTalk-Widgets'
+	#category : #'JupyterTalk-Widgets'
 }
 
 { #category : #'as yet unclassified' }

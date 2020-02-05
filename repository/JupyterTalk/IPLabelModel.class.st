@@ -1,7 +1,7 @@
 Class {
 	#name : #IPLabelModel,
 	#superclass : #IPLabeledDOMWidgetModel,
-	#category : 'JupyterTalk-Widgets'
+	#category : #'JupyterTalk-Widgets'
 }
 
 { #category : #'instance creation' }

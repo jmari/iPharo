@@ -6,7 +6,7 @@ Class {
 		'commMsgHandlers',
 		'targetClasses'
 	],
-	#category : 'JupyterTalk-Comm'
+	#category : #'JupyterTalk-Comm'
 }
 
 { #category : #Accessing }

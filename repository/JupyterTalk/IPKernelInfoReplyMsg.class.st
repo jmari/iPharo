@@ -1,7 +1,7 @@
 Class {
 	#name : #IPKernelInfoReplyMsg,
 	#superclass : #IPMsg,
-	#category : 'JupyterTalk-Messages-Shell'
+	#category : #'JupyterTalk-Messages-Shell'
 }
 
 { #category : #accessing }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'sequenceNumber'
 	],
-	#category : 'JupyterTalk-Messages-Shell'
+	#category : #'JupyterTalk-Messages-Shell'
 }
 
 { #category : #'instance creation' }

@@ -1,7 +1,7 @@
 Class {
 	#name : #IPAccordionModel,
 	#superclass : #IPLabeledDOMWidgetModel,
-	#category : 'JupyterTalk-Widgets'
+	#category : #'JupyterTalk-Widgets'
 }
 
 { #category : #'as yet unclassified' }

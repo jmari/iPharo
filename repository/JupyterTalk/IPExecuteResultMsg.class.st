@@ -1,7 +1,7 @@
 Class {
 	#name : #IPExecuteResultMsg,
 	#superclass : #IPDisplayDataMsg,
-	#category : 'JupyterTalk-Messages-IOPub'
+	#category : #'JupyterTalk-Messages-IOPub'
 }
 
 { #category : #'as yet unclassified' }

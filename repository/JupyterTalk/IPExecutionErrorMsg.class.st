@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'exceptionObject'
 	],
-	#category : 'JupyterTalk-Messages-Shell'
+	#category : #'JupyterTalk-Messages-Shell'
 }
 
 { #category : #'instance creation' }

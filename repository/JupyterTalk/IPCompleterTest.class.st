@@ -1,7 +1,7 @@
 Class {
 	#name : #IPCompleterTest,
 	#superclass : #TestCase,
-	#category : 'JupyterTalk-Tests'
+	#category : #'JupyterTalk-Tests'
 }
 
 { #category : #initialization }

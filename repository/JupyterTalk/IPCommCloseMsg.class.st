@@ -1,7 +1,7 @@
 Class {
 	#name : #IPCommCloseMsg,
 	#superclass : #IPCommMsg,
-	#category : 'JupyterTalk-Messages-Comm'
+	#category : #'JupyterTalk-Messages-Comm'
 }
 
 { #category : #accessing }

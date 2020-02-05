@@ -9,7 +9,7 @@ Class {
 	#classInstVars : [
 		'cachedObjects'
 	],
-	#category : 'JupyterTalk-Display'
+	#category : #'JupyterTalk-Display'
 }
 
 { #category : #accessing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #IPStyleModel,
 	#superclass : #IPCoreWidgetModelGenerator,
-	#category : 'JupyterTalk-Widgets'
+	#category : #'JupyterTalk-Widgets'
 }
 
 { #category : #'as yet unclassified' }

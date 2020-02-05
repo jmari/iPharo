@@ -1,7 +1,7 @@
 Class {
 	#name : #IPControlProcessor,
 	#superclass : #IPShellProcessor,
-	#category : 'JupyterTalk-Core'
+	#category : #'JupyterTalk-Core'
 }
 
 { #category : #accessing }

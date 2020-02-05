@@ -1,7 +1,7 @@
 Class {
 	#name : #IPFloatLogSliderModel,
 	#superclass : #IPFloatSliderModel,
-	#category : 'JupyterTalk-Widgets'
+	#category : #'JupyterTalk-Widgets'
 }
 
 { #category : #'as yet unclassified' }

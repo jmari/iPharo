@@ -1,7 +1,7 @@
 Class {
 	#name : #IPTextModel,
 	#superclass : #IPLabelModel,
-	#category : 'JupyterTalk-Widgets'
+	#category : #'JupyterTalk-Widgets'
 }
 
 { #category : #'instance creation' }

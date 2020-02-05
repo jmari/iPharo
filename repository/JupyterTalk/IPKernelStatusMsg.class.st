@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'sequenceNumber'
 	],
-	#category : 'JupyterTalk-Messages-IOPub'
+	#category : #'JupyterTalk-Messages-IOPub'
 }
 
 { #category : #accessing }

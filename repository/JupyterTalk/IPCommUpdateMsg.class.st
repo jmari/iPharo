@@ -1,7 +1,7 @@
 Class {
 	#name : #IPCommUpdateMsg,
 	#superclass : #IPMsg,
-	#category : 'JupyterTalk-Messages-Comm'
+	#category : #'JupyterTalk-Messages-Comm'
 }
 
 { #category : #'as yet unclassified' }

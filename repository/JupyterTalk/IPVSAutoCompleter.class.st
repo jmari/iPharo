@@ -15,7 +15,7 @@ Class {
 		'objectType',
 		'objectPart'
 	],
-	#category : 'JupyterTalk-Completer'
+	#category : #'JupyterTalk-Completer'
 }
 
 { #category : #'to clean later' }

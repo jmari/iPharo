@@ -1,7 +1,7 @@
 Class {
 	#name : #IPharoCommandLineHandler,
 	#superclass : #CommandLineHandler,
-	#category : 'JupyterTalk-Core'
+	#category : #'JupyterTalk-Core'
 }
 
 { #category : #accessing }

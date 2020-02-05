@@ -6,7 +6,7 @@ Class {
 		'newValue',
 		'sender'
 	],
-	#category : 'JupyterTalk-Widgets'
+	#category : #'JupyterTalk-Widgets'
 }
 
 { #category : #accessing }

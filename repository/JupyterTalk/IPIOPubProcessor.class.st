@@ -1,7 +1,7 @@
 Class {
 	#name : #IPIOPubProcessor,
 	#superclass : #IPMessageProcessor,
-	#category : 'JupyterTalk-Core'
+	#category : #'JupyterTalk-Core'
 }
 
 { #category : #running }

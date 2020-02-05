@@ -1,5 +1,5 @@
 Class {
 	#name : #IPHMACException,
 	#superclass : #Error,
-	#category : 'JupyterTalk-Core'
+	#category : #'JupyterTalk-Core'
 }

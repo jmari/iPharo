@@ -6,7 +6,7 @@ Class {
 		'targetName',
 		'commMsgListener'
 	],
-	#category : 'JupyterTalk-Comm'
+	#category : #'JupyterTalk-Comm'
 }
 
 { #category : #'instance creation' }

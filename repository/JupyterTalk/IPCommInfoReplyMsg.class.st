@@ -1,7 +1,7 @@
 Class {
 	#name : #IPCommInfoReplyMsg,
 	#superclass : #IPMsg,
-	#category : 'JupyterTalk-Messages-Shell'
+	#category : #'JupyterTalk-Messages-Shell'
 }
 
 { #category : #initialization }

@@ -7,7 +7,7 @@ Class {
 		'comm',
 		'listeners'
 	],
-	#category : 'JupyterTalk-Widgets'
+	#category : #'JupyterTalk-Widgets'
 }
 
 { #category : #'instance creation' }

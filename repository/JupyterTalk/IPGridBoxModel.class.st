@@ -1,7 +1,7 @@
 Class {
 	#name : #IPGridBoxModel,
 	#superclass : #IPBoxModel,
-	#category : 'JupyterTalk-Widgets'
+	#category : #'JupyterTalk-Widgets'
 }
 
 { #category : #'as yet unclassified' }

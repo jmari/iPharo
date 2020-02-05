@@ -11,7 +11,7 @@ Class {
 		'uuid',
 		'msgUUID'
 	],
-	#category : 'JupyterTalk-Core'
+	#category : #'JupyterTalk-Core'
 }
 
 { #category : #'instance creation' }

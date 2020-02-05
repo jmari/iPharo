@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'session'
 	],
-	#category : 'JupyterTalk-Tests'
+	#category : #'JupyterTalk-Tests'
 }
 
 { #category : #accessing }

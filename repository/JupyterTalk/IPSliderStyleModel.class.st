@@ -1,7 +1,7 @@
 Class {
 	#name : #IPSliderStyleModel,
 	#superclass : #IPStyleModel,
-	#category : 'JupyterTalk-Widgets'
+	#category : #'JupyterTalk-Widgets'
 }
 
 { #category : #'as yet unclassified' }
