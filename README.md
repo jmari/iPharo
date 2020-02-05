@@ -25,7 +25,7 @@ Metacello new
 	load:'all'
 ```
 
-If you are interested in ZeroMQ Binding, please do-it
+If you are only interested in ZeroMQ Binding, please do:
 ```Smalltalk
 Metacello new 
 	baseline: 'JupyterTalk';
