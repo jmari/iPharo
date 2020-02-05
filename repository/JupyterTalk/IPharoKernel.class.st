@@ -100,7 +100,7 @@ IPharoKernel >> config: kernelConfig [
 ]
 
 { #category : #initialization }
-IPharoKernel >> configKernel: kernelConfig [
+IPharoKernel >> configureKernel: kernelConfig [
 	sharedKey := (kernelConfig at:#key).
 	heartbeat bind: (self connectionStringFor:(kernelConfig at:#transport)
 								ip: (kernelConfig at:#ip)

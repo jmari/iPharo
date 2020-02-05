@@ -29,7 +29,7 @@ IPharoCommandLineHandler >> activate [
 			ensure: [ stream ifNotNil: [ stream close ]]].
 	ZmqContext current.
 	IPharoKernel new 
-						configKernel: kernelConfig;
+						configureKernel: kernelConfig;
 						start.
 
 ]
