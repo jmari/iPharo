@@ -10,7 +10,7 @@ Class {
 		'resultHandler',
 		'dataAvailable'
 	],
-	#category : 'ZeroMQ'
+	#category : #ZeroMQ
 }
 
 { #category : #'as yet unclassified' }
@@ -180,17 +180,6 @@ ZmqSocket >> receive [
 ]
 
 { #category : #'as yet unclassified' }
-ZmqSocket >> receiveAndWait [
-	|msg|
-	msg := nil.
-	[ msg notNil and:[msg size > 0] ] whileFalse:[ 
-							msg := self receiveIfAvailable.
-							Processor yield ].
-	^ msg
-		
-]
-
-{ #category : #'as yet unclassified' }
 ZmqSocket >> receiveIfAvailable [
 	monitor
 		critical: [ 
@@ -288,6 +277,22 @@ ZmqSocket >> wait [
 { #category : #'as yet unclassified' }
 ZmqSocket >> waitForUnpark [
 	[ parked ] whileTrue: [ monitor wait ].
+]
+
+{ #category : #'as yet unclassified' }
+ZmqSocket >> waitTilReceive [
+	|msg|
+	msg := nil.
+	[ msg notNil and:[msg size > 0] ] whileFalse:[ 
+							self receiveIfAvailable: [ :messageData|  
+							messageData size > 0 
+							ifTrue:[msg := messageData]
+							ifFalse:[							
+									Processor yield.
+									(Delay forMilliseconds: 500) wait].
+							]].
+	^ msg
+		
 ]
 
 { #category : #'as yet unclassified' }

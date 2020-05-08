@@ -126,9 +126,11 @@ IPMessageProcessor >> receiveWireMessage [
 	|more|
 	self zmqSocket receiveIfAvailable: [ :messageData|  
 							more:= self zmqSocket getOption: ZmqApiConstants zmqRcvMore.
-							messageData size > 0 ifTrue:[self pushMessageFrame:messageData].
-							Processor yield.
-							(Delay forMilliseconds: 500) wait.
+							messageData size > 0 
+							ifTrue:[self pushMessageFrame:messageData]
+							ifFalse:[							
+									Processor yield.
+									(Delay forMilliseconds: 500) wait].
 							more = 0 ifTrue: [ self processMessage ]].	
 ]
 
