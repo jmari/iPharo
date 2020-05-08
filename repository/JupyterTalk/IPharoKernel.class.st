@@ -136,6 +136,8 @@ IPharoKernel >> heartbeatThread [
 	[
 		[ self isStopping ] whileFalse:[
 			echoData := heartbeat receiveAndWait. 
+			Processor yield.
+			(Delay forMilliseconds: 5000) wait.
 			heartbeat send: echoData asByteArray]
 	]on:Error do:[:e| self debug:e]
 	] forkNamed:'ipharo-echo' 
