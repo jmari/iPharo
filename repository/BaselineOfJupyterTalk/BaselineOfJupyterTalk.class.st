@@ -9,6 +9,8 @@ BaselineOfJupyterTalk >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ 
 		self installJson.
+		self installOSSubprocess.
+		self createKernelFile.
 		spec
 			package: 'ZeroMQ';
 			package: 'JupyterTalk' with: [ spec requires: #('ZeroMQ') ];
@@ -19,6 +21,47 @@ BaselineOfJupyterTalk >> baseline: spec [
 				].
 		self groups: spec
 	]
+]
+
+{ #category : #'as yet unclassified' }
+BaselineOfJupyterTalk >> createKernelFile [
+	
+	| contents kernelFile stream |
+	contents := '{
+  "argv": [
+  "', FileLocator vmBinary fullName,'",
+  "', FileLocator image fullName,'",
+  "ipharo",
+  "{connection_file}"
+	],
+	"display_name": "Pharo Smalltalk",
+	"language": "smalltalk"
+	}'.
+	kernelFile := self getKernelFileReference.
+	stream := kernelFile writeStream.
+	stream nextPutAll: contents.
+	stream close.
+]
+
+{ #category : #'as yet unclassified' }
+BaselineOfJupyterTalk >> getKernelFileReference [
+	| listOfKernels first last  kernelPath kernelsDir fileRef |
+	OSSUnixSubprocess new
+		command: 'jupyter';
+		arguments: #('kernelspec' 'list');
+		redirectStdout;
+		runAndWaitOnExitDo: [ :process :outString  | 
+				listOfKernels := outString findTokens: Character lf.
+				first := (listOfKernels at:2) findString: ' ' startingAt:12.
+				last := (listOfKernels at:2) findString: 'kernels'. 
+				kernelPath := (listOfKernels at:2) copyFrom: first +2 to: last + 7
+				].
+		kernelsDir := (FileSystem root / kernelPath / 'pharo') createDirectory.  
+		fileRef := kernelsDir / 'kernel.json'.  
+		fileRef := fileRef ensureCreateFile.
+		^ fileRef
+		
+
 ]
 
 { #category : #protocol }
@@ -39,10 +82,21 @@ BaselineOfJupyterTalk >> installJson [
 ]
 
 { #category : #'as yet unclassified' }
+BaselineOfJupyterTalk >> installOSSubprocess [
+	Metacello new
+ 	baseline: 'OSSubprocess';
+ 	repository: 'github://pharo-contributions/OSSubprocess:master/repository';
+	load.
+]
+
+{ #category : #'as yet unclassified' }
 BaselineOfJupyterTalk >> installRoassal [
+	"ROASSAL 3 is not supported"
+	| installRoassal |
 	(Smalltalk includesKey:#RTBuilder )
 		ifFalse:[
-			(UIManager default questionWithoutCancel: 'Roassal is required, do you want to Install Roassal 2 in your Image?')
+			installRoassal :=(UIManager default questionWithoutCancel: 'Roassal is required, do you want to Install Roassal 2 in your Image?').
+			(installRoassal = true)
 					ifTrue:[
 						SystemVersion current major >= 7
 						ifTrue:[
