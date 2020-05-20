@@ -9,8 +9,10 @@ BaselineOfJupyterTalk >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ 
 		self installJson.
-		self installOSSubprocess.
-		self createKernelFile.
+		Smalltalk os isWindows ifFalse:[ 
+			"OSSubprocess does not support Windows"
+			self installOSSubprocess.
+			self createKernelFile].
 		spec
 			package: 'ZeroMQ';
 			package: 'JupyterTalk' with: [ spec requires: #('ZeroMQ') ];
