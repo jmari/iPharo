@@ -98,8 +98,8 @@ BaselineOfJupyterTalk >> installRoassal [
 	(Smalltalk includesKey:#RTBuilder )
 		ifFalse:[
 			installRoassal :=(UIManager default questionWithoutCancel: 'Roassal is required, do you want to Install Roassal 2 in your Image?').
-			(installRoassal = true)
-					ifTrue:[
+			(installRoassal = false)
+					ifFalse:[
 						SystemVersion current major >= 7
 						ifTrue:[
 							Metacello new
