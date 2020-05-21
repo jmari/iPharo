@@ -1,7 +1,7 @@
 Class {
 	#name : #ZmqApiConstants,
 	#superclass : #Object,
-	#category : 'ZeroMQ-Api'
+	#category : #'ZeroMQ-Api'
 }
 
 { #category : #'errno codes' }

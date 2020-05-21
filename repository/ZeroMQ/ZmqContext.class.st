@@ -12,7 +12,7 @@ Class {
 	#classInstVars : [
 		'instance'
 	],
-	#category : 'ZeroMQ'
+	#category : #'ZeroMQ-Core'
 }
 
 { #category : #'instance creation' }

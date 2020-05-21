@@ -1,7 +1,7 @@
 Class {
 	#name : #ZmqTerminatedContext,
 	#superclass : #Object,
-	#category : 'ZeroMQ'
+	#category : #'ZeroMQ-Core'
 }
 
 { #category : #'error handling' }

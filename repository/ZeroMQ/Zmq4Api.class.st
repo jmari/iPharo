@@ -1,7 +1,7 @@
 Class {
 	#name : #Zmq4Api,
 	#superclass : #Zmq3Api,
-	#category : 'ZeroMQ-Api'
+	#category : #'ZeroMQ-Api'
 }
 
 { #category : #'private-library api' }

@@ -1,7 +1,7 @@
 Class {
 	#name : #ZmqPollIn,
 	#superclass : #ZmqEventFilter,
-	#category : 'ZeroMQ'
+	#category : #'ZeroMQ-Core'
 }
 
 { #category : #'as yet unclassified' }

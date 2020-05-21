@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'eventMask'
 	],
-	#category : 'ZeroMQ'
+	#category : #'ZeroMQ-Core'
 }
 
 { #category : #'as yet unclassified' }

@@ -1,7 +1,7 @@
 Class {
 	#name : #ZmqVersionTest,
 	#superclass : #TestCase,
-	#category : 'ZeroMQ-Tests'
+	#category : #'ZeroMQ-Tests'
 }
 
 { #category : #'as yet unclassified' }

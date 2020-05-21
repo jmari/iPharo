@@ -4,7 +4,7 @@ Class {
 	#classVars : [
 		'OFFSET_SIZE'
 	],
-	#category : 'ZeroMQ-Api'
+	#category : #'ZeroMQ-Api'
 }
 
 { #category : #'field definition' }

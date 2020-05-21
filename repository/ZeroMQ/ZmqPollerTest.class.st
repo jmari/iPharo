@@ -1,7 +1,7 @@
 Class {
 	#name : #ZmqPollerTest,
 	#superclass : #ZmqBaseTest,
-	#category : 'ZeroMQ-Tests'
+	#category : #'ZeroMQ-Tests'
 }
 
 { #category : #tests }

@@ -1,7 +1,7 @@
 Class {
 	#name : #LibZeroMQ,
 	#superclass : #FFILibrary,
-	#category : 'ZeroMQ-Api'
+	#category : #'ZeroMQ-Api'
 }
 
 { #category : #'accessing platform' }
@@ -20,13 +20,13 @@ LibZeroMQ >> unix64ModuleName [
 	Look in a number of known locations, or LD_LIBRARY_PATH."
 
 	| libNames libZmqPaths|
-	libZmqPaths := {	((OSEnvironment current getEnv: 'HOME'),'/anaconda3/lib/').
-							((OSEnvironment current getEnv: 'HOME'),'/anaconda2/lib/').
+	libZmqPaths := {	((OSEnvironment current at: 'HOME'),'/anaconda3/lib/').
+							((OSEnvironment current at: 'HOME'),'/anaconda2/lib/').
 							'/usr/lib'.
 							'/lib/x86_64-linux-gnu'.
 							},
 						(((OSEnvironment current 
-												getEnv: 'LD_LIBRARY_PATH') 
+												at: 'LD_LIBRARY_PATH') 
 												ifNil: [ '' ]) substrings: ':').
 	libZmqPaths		
 		do: [ :path | 
@@ -34,7 +34,7 @@ LibZeroMQ >> unix64ModuleName [
 			fr := path asFileReference.
 			(fr exists and:[fr isReadable]) ifTrue:[ 
 				libNames:= (fr childNames select:[:each| each  beginsWith:'libzmq.so']). 
-				libraryPath := fr / ((libNames size>0) ifTrue:[libNames first] ifFalse:['libzmq.so']).
+				libraryPath := fr / ((libNames isEmpty) ifTrue:['libzmq.so'] ifFalse:[libNames first]).
 				libraryPath exists
 					ifTrue: [ ^ libraryPath fullName ] ] ].
 			
@@ -53,23 +53,21 @@ LibZeroMQ >> unixModuleName [
 LibZeroMQ >> win32ModuleName [
 | libNames libZmqPaths|
 	libZmqPaths := (((OSEnvironment current 
-												getEnv: 'PROGRAMFILES') 
+												at: 'PROGRAMFILES') 
 												ifNil: [ '' ]) substrings: ';').
 						(((OSEnvironment current 
-												getEnv: 'PROGRAMFILES(X86)') 
+												at: 'PROGRAMFILES(X86)') 
 												ifNil: [ '' ]) substrings: ';').
 	libZmqPaths		
 		do: [ :path | 
 			| libraryPath fr|
 			fr := path asFileReference.
 			(fr exists and:[fr isReadable]) ifTrue:[ 
-				libNames:= (fr childNames select:[:each| each  beginsWith:'ZeroMQ']). 
-				
-				libraryPath := fr / ((libNames size>0) ifTrue:[libNames first] ifFalse:['nothing']).
+				libNames:= (fr childNames select:[:each| each  beginsWith:'ZeroMQ']). 				
+				libraryPath := fr / ((libNames isEmpty) ifTrue:['nothing'] ifFalse:[libNames first] ).
 				libraryPath exists ifTrue:[libraryPath := libraryPath / 'bin'].
 				libNames:=	libraryPath childNames select:[:each| each  beginsWith:'libzmq-v100'].
-				libraryPath := libraryPath / ((libNames size>0) ifTrue:[libNames first ] ).
-				
+				libraryPath := libraryPath / ((libNames isEmpty) ifFalse:[libNames first ] ).
 				libraryPath exists
 					ifTrue: [ ^ libraryPath  fullName ] ] ].
 			

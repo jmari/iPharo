@@ -1,7 +1,7 @@
 Class {
 	#name : #ZmqDealerSocket,
 	#superclass : #ZmqSocket,
-	#category : 'ZeroMQ'
+	#category : #'ZeroMQ-Core'
 }
 
 { #category : #'as yet unclassified' }

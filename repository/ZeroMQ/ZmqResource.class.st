@@ -6,7 +6,7 @@ Class {
 		'parked',
 		'context'
 	],
-	#category : 'ZeroMQ'
+	#category : #'ZeroMQ-Core'
 }
 
 { #category : #'instance creation' }

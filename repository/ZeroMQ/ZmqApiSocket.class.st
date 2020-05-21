@@ -1,7 +1,7 @@
 Class {
 	#name : #ZmqApiSocket,
 	#superclass : #FFIExternalStructure,
-	#category : 'ZeroMQ-Api'
+	#category : #'ZeroMQ-Api'
 }
 
 { #category : #'field definition' }

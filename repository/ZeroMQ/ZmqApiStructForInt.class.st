@@ -4,7 +4,7 @@ Class {
 	#classVars : [
 		'OFFSET_VALUE'
 	],
-	#category : 'ZeroMQ-Api'
+	#category : #'ZeroMQ-Api'
 }
 
 { #category : #'field definition' }
@@ -20,12 +20,12 @@ ZmqApiStructForInt >> printOn: aStream [
 
 { #category : #'accessing structure variables' }
 ZmqApiStructForInt >> value [
-	"This method was automatically generated"
-	^handle platformUnsignedLongAt: OFFSET_VALUE
+	^ handle signedLongAt: OFFSET_VALUE  
+
 ]
 
 { #category : #'accessing structure variables' }
 ZmqApiStructForInt >> value: anObject [
 	"This method was automatically generated"
-	^handle platformUnsignedLongAt: OFFSET_VALUE put: anObject
+	handle signedLongAt: OFFSET_VALUE put: anObject.
 ]

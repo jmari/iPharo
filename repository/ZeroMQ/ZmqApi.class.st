@@ -1,7 +1,7 @@
 Class {
 	#name : #ZmqApi,
 	#superclass : #Object,
-	#category : 'ZeroMQ-Api'
+	#category : #'ZeroMQ-Api'
 }
 
 { #category : #'private-library api' }
@@ -48,7 +48,7 @@ ZmqApi class >> apiZmqSocketInContext: context socketType: type [
 
 { #category : #'private-library api' }
 ZmqApi class >> apiZmqVersion: major minor: minor patch: patch [
-	self ffiCall: #(  void zmq_version (ZmqApiStructForInt* major, ZmqApiStructForInt* minor, ZmqApiStructForInt* patch) ) module: LibZeroMQ
+	self ffiCall: #(  void zmq_version (ZmqApiStructForInt* major, int* minor, int* patch) ) module: LibZeroMQ
 	
 ]
 
@@ -226,12 +226,6 @@ ZmqApi class >> zmqErrnoAsString: errno [
 
 { #category : #'public api' }
 ZmqApi class >> zmqVersion [
-	| major minor patch version |
-	major := ZmqApiStructForInt externalNew.
-	minor := ZmqApiStructForInt externalNew.
-	patch := ZmqApiStructForInt externalNew.
-	self apiZmqVersion:  major minor:  minor patch:  patch.
-	version := ZmqVersion major: major value minor: minor value patch: patch value.
-	^version.
+	^ self version
 
 ]

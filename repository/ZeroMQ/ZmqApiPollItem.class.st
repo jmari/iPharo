@@ -7,7 +7,7 @@ Class {
 		'OFFSET_REVENTS',
 		'OFFSET_ZMQSOCKET'
 	],
-	#category : 'ZeroMQ-Api'
+	#category : #'ZeroMQ-Api'
 }
 
 { #category : #'field definition' }

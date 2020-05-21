@@ -1,7 +1,7 @@
 Class {
 	#name : #ZmqLog,
 	#superclass : #Object,
-	#category : #ZeroMQ
+	#category : #'ZeroMQ-Core'
 }
 
 { #category : #'as yet unclassified' }

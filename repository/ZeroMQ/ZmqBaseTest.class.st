@@ -5,7 +5,7 @@ Class {
 		'createdSockets',
 		'context'
 	],
-	#category : 'ZeroMQ-Tests'
+	#category : #'ZeroMQ-Tests'
 }
 
 { #category : #convenience }

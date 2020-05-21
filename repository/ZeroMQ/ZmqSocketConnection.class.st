@@ -1,7 +1,7 @@
 Class {
 	#name : #ZmqSocketConnection,
 	#superclass : #ZmqSocketAssociation,
-	#category : 'ZeroMQ'
+	#category : #'ZeroMQ-Core'
 }
 
 { #category : #operations }

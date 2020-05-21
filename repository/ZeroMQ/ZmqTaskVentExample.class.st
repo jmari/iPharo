@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'workers'
 	],
-	#category : 'ZeroMQ-Tests'
+	#category : #'ZeroMQ-Tests'
 }
 
 { #category : #'instance creation' }

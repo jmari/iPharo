@@ -7,7 +7,7 @@ Class {
 		'socketToPositionLookup',
 		'pollItemExternalAddress'
 	],
-	#category : 'ZeroMQ'
+	#category : #'ZeroMQ-Core'
 }
 
 { #category : #'as yet unclassified' }

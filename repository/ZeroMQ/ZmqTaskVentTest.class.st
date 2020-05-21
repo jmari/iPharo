@@ -5,7 +5,7 @@ Class {
 		'workers',
 		'createdSockets'
 	],
-	#category : 'ZeroMQ-Tests'
+	#category : #'ZeroMQ-Tests'
 }
 
 { #category : #convenience }
