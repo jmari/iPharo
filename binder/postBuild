@@ -5,5 +5,6 @@ script_home=$(cd $script_home && pwd)
 # sudo apt-get install unzip 
 #64 bits version
 curl -L https://get.pharo.org/64/80+vm | bash
-
+pwd
+ls -R
 ./pharo ./Pharo.image eval --save "Metacello new baseline: 'JupyterTalk';repository: 'github://jmari/JupyterTalk:master/repository';load:'all'" 
