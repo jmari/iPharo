@@ -7,3 +7,4 @@ script_home=$(cd $script_home && pwd)
 #curl -L https://get.pharo.org/64/80+vm | bash
 pwd
 ls -all 
+/home/jovyan/pharo-vm/lib/pharo/5.0-202002121043/pharo /home/jovyan/Pharo.image eval "365 * 10"
