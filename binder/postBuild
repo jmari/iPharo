@@ -6,11 +6,5 @@ script_home=$(cd $script_home && pwd)
 #64 bits version
 curl -L https://get.pharo.org/64  | bash
 rm $script_home/pharo-ui
-mkdir ~/jupyterTalk
-mkdir ~/jupyterTalk/bin
-mkdir ~/jupyterTalk/build
-mv $script_home/Pharo.image ~/jupyterTalk/build
-mv $script_home/Pharo.changes ~/jupyterTalk/build
-mv $script_home/pharo ~/jupyterTalk/bin
-mv $script_home/pharo-vm ~/jupyterTalk/bin
-~/jupyterTalk/bin/pharo ~/jupyterTalk/build/Pharo.image eval --save "Metacello new baseline: 'JupyterTalk';repository: 'github://jmari/JupyterTalk:master/repository';load:'all'" 
+
+$script_home/pharo $script_home/Pharo.image eval --save "Metacello new baseline: 'JupyterTalk';repository: 'github://jmari/JupyterTalk:master/repository';load:'all'" 
