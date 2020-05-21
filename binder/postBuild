@@ -6,6 +6,9 @@ script_home=$(cd $script_home && pwd)
 #64 bits version
 curl -L https://get.pharo.org/64/80+vm | bash
 pwd
-ls -all
-chmod -R +w *
+
+docker-machine create default
+docker-machine regenerate-certs default
+eval "$(docker-machine env default)"
+
 ./pharo Pharo.image eval --save "Metacello new baseline: 'JupyterTalk';repository: 'github://jmari/JupyterTalk:master/repository';load:'all'" 
