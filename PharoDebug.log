@@ -1,0 +1,1431 @@
+THERE_BE_DRAGONS_HERE
+TestFailure: Assertion failed
+20 May 2020 5:45:26.419466 pm
+
+VM: unix - x86_64 - linux-gnu - CoInterpreter VMMaker.oscog-eem.2509 uuid: 91e81f64-95de-4914-a960-8f842be3a194 Feb  6 2019
+StackToRegisterMappingCogit VMMaker.oscog-eem.2509 uuid: 91e81f64-95de-4914-a960-8f842be3a194 Feb  6 2019
+VM: 201902062351 https://github.com/OpenSmalltalk/opensmalltalk-vm.git Date: Wed Feb 6 15:51:18 2019 CommitHash: a838346b Plugins: 201902062351 https://github.com/OpenSmalltalk/opensmalltalk-vm.git
+
+Image: Pharo8.0.0 [Build information: Pharo-8.0.0+build.1124.sha.0932da82f08175e906b0e2a8052120c823374e9f (64 Bit)]
+
+IPMessaggingTest(TestAsserter)>>assert:description:resumable:
+	Receiver: IPMessaggingTest>>#testIPWireMessageHMAC
+	Arguments and temporary variables: 
+		aBooleanOrBlock: 	false
+		aStringOrBlock: 	'Assertion failed'
+		resumableBoolean: 	false
+		exception: 	TestFailure
+		aString: 	'Assertion failed
+	Receiver's instance variables: 
+		testSelector: 	#testIPWireMessageHMAC
+		expectedFails: 	nil
+		session: 	an IPSession
+
+
+IPMessaggingTest(TestAsserter)>>assert:description:
+	Receiver: IPMessaggingTest>>#testIPWireMessageHMAC
+	Arguments and temporary variables: 
+		aBooleanOrBlock: 	false
+		aStringOrBlock: 	'Assertion failed
+	Receiver's instance variables: 
+		testSelector: 	#testIPWireMessageHMAC
+		expectedFails: 	nil
+		session: 	an IPSession
+
+
+IPMessaggingTest(Object)>>assert:
+	Receiver: IPMessaggingTest>>#testIPWireMessageHMAC
+	Arguments and temporary variables: 
+		aBlock: 	fals
+	Receiver's instance variables: 
+		testSelector: 	#testIPWireMessageHMAC
+		expectedFails: 	nil
+		session: 	an IPSession
+
+
+IPMessaggingTest>>testIPWireMessageHMAC
+	Receiver: IPMessaggingTest>>#testIPWireMessageHMAC
+	Arguments and temporary variables: 
+		wm: 	an IPWireMessag
+	Receiver's instance variables: 
+		testSelector: 	#testIPWireMessageHMAC
+		expectedFails: 	nil
+		session: 	an IPSession
+
+
+IPMessaggingTest(TestCase)>>performTest
+	Receiver: IPMessaggingTest>>#testIPWireMessageHMAC
+	Arguments and temporary variables: 
+
+	Receiver's instance variables: 
+		testSelector: 	#testIPWireMessageHMAC
+		expectedFails: 	nil
+		session: 	an IPSession
+
+
+[ self setUp.
+self performTest ] in IPMessaggingTest(TestCase)>>runCase
+	Receiver: IPMessaggingTest>>#testIPWireMessageHMAC
+	Arguments and temporary variables: 
+
+	Receiver's instance variables: 
+		testSelector: 	#testIPWireMessageHMAC
+		expectedFails: 	nil
+		session: 	an IPSession
+
+
+BlockClosure>>ensure:
+	Receiver: [ self setUp.
+self performTest ]
+	Arguments and temporary variables: 
+		aBlock: 	[ self tearDown.
+self cleanUpInstanceVariables ]
+		complete: 	nil
+		returnValue: 	ni
+	Receiver's instance variables: 
+		outerContext: 	IPMessaggingTest(TestCase)>>runCase
+		startpc: 	97
+		numArgs: 	0
+
+
+IPMessaggingTest(TestCase)>>runCase
+	Receiver: IPMessaggingTest>>#testIPWireMessageHMAC
+	Arguments and temporary variables: 
+
+	Receiver's instance variables: 
+		testSelector: 	#testIPWireMessageHMAC
+		expectedFails: 	nil
+		session: 	an IPSession
+
+
+[ aTestCase runCase ] in [ [ aTestCase runCase ]
+	on: Halt
+	do: [ :halt | 
+		"if test was halted we should resume all background failures 
+			to debug all of them together with test process"
+		failedProcesses keysDo: #resume.
+		halt pass ] ] in TestExecutionEnvironment>>runTestCaseSafelly:
+	Receiver: a TestExecutionEnvironment
+	Arguments and temporary variables: 
+		aTestCase: 	IPMessaggingTest>>#testIPWireMessageHMA
+	Receiver's instance variables: 
+		watchDogProcess: 	a Process in [ self schedule.
+"It is critical that the followi...etc...
+		watchDogSemaphore: 	a Semaphore(a Process in [ self schedule.
+"It is critical th...etc...
+		testCase: 	IPMessaggingTest>>#testIPWireMessageHMAC
+		maxTimeForTest: 	0:00:00:10
+		forkedProcesses: 	a WeakSet(a Process in [ delaySemaphore wait ] in Delay>>wait)...etc...
+		failedProcesses: 	an OrderedIdentityDictionary()
+		testCompleted: 	false
+
+
+BlockClosure>>on:do:
+	Receiver: [ aTestCase runCase ]
+	Arguments and temporary variables: 
+		exception: 	Halt
+		handlerAction: 	[ :halt | 
+"if test was halted we should resume all background f...etc..
+	Receiver's instance variables: 
+		outerContext: 	[ [ aTestCase runCase ]
+	on: Halt
+	do: [ :halt | 
+		"if test was ...etc...
+		startpc: 	115
+		numArgs: 	0
+
+
+[ [ aTestCase runCase ]
+	on: Halt
+	do: [ :halt | 
+		"if test was halted we should resume all background failures 
+			to debug all of them together with test process"
+		failedProcesses keysDo: #resume.
+		halt pass ] ] in TestExecutionEnvironment>>runTestCaseSafelly:
+	Receiver: a TestExecutionEnvironment
+	Arguments and temporary variables: 
+		aTestCase: 	IPMessaggingTest>>#testIPWireMessageHMA
+	Receiver's instance variables: 
+		watchDogProcess: 	a Process in [ self schedule.
+"It is critical that the followi...etc...
+		watchDogSemaphore: 	a Semaphore(a Process in [ self schedule.
+"It is critical th...etc...
+		testCase: 	IPMessaggingTest>>#testIPWireMessageHMAC
+		maxTimeForTest: 	0:00:00:10
+		forkedProcesses: 	a WeakSet(a Process in [ delaySemaphore wait ] in Delay>>wait)...etc...
+		failedProcesses: 	an OrderedIdentityDictionary()
+		testCompleted: 	false
+
+
+BlockClosure>>on:do:
+	Receiver: [ [ aTestCase runCase ]
+	on: Halt
+	do: [ :halt | 
+		"if test was halted we should resume a...etc...
+	Arguments and temporary variables: 
+		exception: 	an ExceptionSet
+		handlerAction: 	[ :err | 
+"error here means that test is failed. So we should ch...etc..
+	Receiver's instance variables: 
+		outerContext: 	TestExecutionEnvironment>>runTestCaseSafelly:
+		startpc: 	110
+		numArgs: 	0
+
+
+TestExecutionEnvironment>>runTestCaseSafelly:
+	Receiver: a TestExecutionEnvironment
+	Arguments and temporary variables: 
+		aTestCase: 	IPMessaggingTest>>#testIPWireMessageHMA
+	Receiver's instance variables: 
+		watchDogProcess: 	a Process in [ self schedule.
+"It is critical that the followi...etc...
+		watchDogSemaphore: 	a Semaphore(a Process in [ self schedule.
+"It is critical th...etc...
+		testCase: 	IPMessaggingTest>>#testIPWireMessageHMAC
+		maxTimeForTest: 	0:00:00:10
+		forkedProcesses: 	a WeakSet(a Process in [ delaySemaphore wait ] in Delay>>wait)...etc...
+		failedProcesses: 	an OrderedIdentityDictionary()
+		testCompleted: 	false
+
+
+[ self runTestCaseSafelly: aTestCase ] in [ [ self runTestCaseSafelly: aTestCase ]
+	ensure: [ testCompleted := true.
+		watchDogSemaphore signal ].	"signal that test case completes"
+self checkForkedProcesses ] in TestExecutionEnvironment>>runTestCase:
+	Receiver: a TestExecutionEnvironment
+	Arguments and temporary variables: 
+		aTestCase: 	IPMessaggingTest>>#testIPWireMessageHMA
+	Receiver's instance variables: 
+		watchDogProcess: 	a Process in [ self schedule.
+"It is critical that the followi...etc...
+		watchDogSemaphore: 	a Semaphore(a Process in [ self schedule.
+"It is critical th...etc...
+		testCase: 	IPMessaggingTest>>#testIPWireMessageHMAC
+		maxTimeForTest: 	0:00:00:10
+		forkedProcesses: 	a WeakSet(a Process in [ delaySemaphore wait ] in Delay>>wait)...etc...
+		failedProcesses: 	an OrderedIdentityDictionary()
+		testCompleted: 	false
+
+
+BlockClosure>>ensure:
+	Receiver: [ self runTestCaseSafelly: aTestCase ]
+	Arguments and temporary variables: 
+		aBlock: 	[ testCompleted := true.
+watchDogSemaphore signal ]
+		complete: 	nil
+		returnValue: 	ni
+	Receiver's instance variables: 
+		outerContext: 	[ [ self runTestCaseSafelly: aTestCase ]
+	ensure: [ testCompleted...etc...
+		startpc: 	101
+		numArgs: 	0
+
+
+[ [ self runTestCaseSafelly: aTestCase ]
+	ensure: [ testCompleted := true.
+		watchDogSemaphore signal ].	"signal that test case completes"
+self checkForkedProcesses ] in TestExecutionEnvironment>>runTestCase:
+	Receiver: a TestExecutionEnvironment
+	Arguments and temporary variables: 
+		aTestCase: 	IPMessaggingTest>>#testIPWireMessageHMA
+	Receiver's instance variables: 
+		watchDogProcess: 	a Process in [ self schedule.
+"It is critical that the followi...etc...
+		watchDogSemaphore: 	a Semaphore(a Process in [ self schedule.
+"It is critical th...etc...
+		testCase: 	IPMessaggingTest>>#testIPWireMessageHMAC
+		maxTimeForTest: 	0:00:00:10
+		forkedProcesses: 	a WeakSet(a Process in [ delaySemaphore wait ] in Delay>>wait)...etc...
+		failedProcesses: 	an OrderedIdentityDictionary()
+		testCompleted: 	false
+
+
+BlockClosure>>ifCurtailed:
+	Receiver: [ [ self runTestCaseSafelly: aTestCase ]
+	ensure: [ testCompleted := true.
+		watchDogSemap...etc...
+	Arguments and temporary variables: 
+		aBlock: 	[ forkedProcesses removeAll.
+failedProcesses removeAll ]
+		complete: 	nil
+		result: 	ni
+	Receiver's instance variables: 
+		outerContext: 	TestExecutionEnvironment>>runTestCase:
+		startpc: 	96
+		numArgs: 	0
+
+
+TestExecutionEnvironment>>runTestCase:
+	Receiver: a TestExecutionEnvironment
+	Arguments and temporary variables: 
+		aTestCase: 	IPMessaggingTest>>#testIPWireMessageHMA
+	Receiver's instance variables: 
+		watchDogProcess: 	a Process in [ self schedule.
+"It is critical that the followi...etc...
+		watchDogSemaphore: 	a Semaphore(a Process in [ self schedule.
+"It is critical th...etc...
+		testCase: 	IPMessaggingTest>>#testIPWireMessageHMAC
+		maxTimeForTest: 	0:00:00:10
+		forkedProcesses: 	a WeakSet(a Process in [ delaySemaphore wait ] in Delay>>wait)...etc...
+		failedProcesses: 	an OrderedIdentityDictionary()
+		testCompleted: 	false
+
+
+[ testEnv runTestCase: aTestCase ] in DefaultExecutionEnvironment>>runTestCase:
+	Receiver: a DefaultExecutionEnvironment
+	Arguments and temporary variables: 
+		aTestCase: 	IPMessaggingTest>>#testIPWireMessageHMAC
+		testEnv: 	a TestExecutionEnvironmen
+	Receiver's instance variables: 
+a DefaultExecutionEnvironment
+
+[ self value: anExecutionEnvironment.
+anExecutionEnvironment activated.
+aBlock value ] in CurrentExecutionEnvironment class>>activate:for:
+	Receiver: CurrentExecutionEnvironment
+	Arguments and temporary variables: 
+		anExecutionEnvironment: 	a TestExecutionEnvironment
+		aBlock: 	[ testEnv runTestCase: aTestCase ]
+		current: 	ni
+	Receiver's instance variables: 
+		superclass: 	ProcessLocalVariable
+		methodDict: 	a MethodDictionary(#default->CurrentExecutionEnvironment>>#default ...etc...
+		format: 	65537
+		layout: 	a FixedLayout
+		organization: 	a ClassOrganization
+		subclasses: 	nil
+		name: 	#CurrentExecutionEnvironment
+		classPool: 	a Dictionary()
+		sharedPools: 	an OrderedCollection()
+		environment: 	a SystemDictionary(lots of globals)
+		category: 	#'Kernel-Processes'
+		soleInstance: 	a CurrentExecutionEnvironment
+
+
+BlockClosure>>ensure:
+	Receiver: [ self value: anExecutionEnvironment.
+anExecutionEnvironment activated.
+aBlock value ]
+	Arguments and temporary variables: 
+		aBlock: 	[ self value: current.
+anExecutionEnvironment deactivated ]
+		complete: 	nil
+		returnValue: 	ni
+	Receiver's instance variables: 
+		outerContext: 	CurrentExecutionEnvironment class>>activate:for:
+		startpc: 	91
+		numArgs: 	0
+
+
+CurrentExecutionEnvironment class>>activate:for:
+	Receiver: CurrentExecutionEnvironment
+	Arguments and temporary variables: 
+		anExecutionEnvironment: 	a TestExecutionEnvironment
+		aBlock: 	[ testEnv runTestCase: aTestCase ]
+		current: 	ni
+	Receiver's instance variables: 
+		superclass: 	ProcessLocalVariable
+		methodDict: 	a MethodDictionary(#default->CurrentExecutionEnvironment>>#default ...etc...
+		format: 	65537
+		layout: 	a FixedLayout
+		organization: 	a ClassOrganization
+		subclasses: 	nil
+		name: 	#CurrentExecutionEnvironment
+		classPool: 	a Dictionary()
+		sharedPools: 	an OrderedCollection()
+		environment: 	a SystemDictionary(lots of globals)
+		category: 	#'Kernel-Processes'
+		soleInstance: 	a CurrentExecutionEnvironment
+
+
+TestExecutionEnvironment(ExecutionEnvironment)>>beActiveDuring:
+	Receiver: a TestExecutionEnvironment
+	Arguments and temporary variables: 
+		aBlock: 	[ testEnv runTestCase: aTestCase 
+	Receiver's instance variables: 
+		watchDogProcess: 	a Process in [ self schedule.
+"It is critical that the followi...etc...
+		watchDogSemaphore: 	a Semaphore(a Process in [ self schedule.
+"It is critical th...etc...
+		testCase: 	IPMessaggingTest>>#testIPWireMessageHMAC
+		maxTimeForTest: 	0:00:00:10
+		forkedProcesses: 	a WeakSet(a Process in [ delaySemaphore wait ] in Delay>>wait)...etc...
+		failedProcesses: 	an OrderedIdentityDictionary()
+		testCompleted: 	false
+
+
+DefaultExecutionEnvironment>>runTestCase:
+	Receiver: a DefaultExecutionEnvironment
+	Arguments and temporary variables: 
+		aTestCase: 	IPMessaggingTest>>#testIPWireMessageHMAC
+		testEnv: 	a TestExecutionEnvironmen
+	Receiver's instance variables: 
+a DefaultExecutionEnvironment
+
+CurrentExecutionEnvironment class>>runTestCase:
+	Receiver: CurrentExecutionEnvironment
+	Arguments and temporary variables: 
+		aTestCase: 	IPMessaggingTest>>#testIPWireMessageHMA
+	Receiver's instance variables: 
+		superclass: 	ProcessLocalVariable
+		methodDict: 	a MethodDictionary(#default->CurrentExecutionEnvironment>>#default ...etc...
+		format: 	65537
+		layout: 	a FixedLayout
+		organization: 	a ClassOrganization
+		subclasses: 	nil
+		name: 	#CurrentExecutionEnvironment
+		classPool: 	a Dictionary()
+		sharedPools: 	an OrderedCollection()
+		environment: 	a SystemDictionary(lots of globals)
+		category: 	#'Kernel-Processes'
+		soleInstance: 	a CurrentExecutionEnvironment
+
+
+IPMessaggingTest(TestCase)>>runCaseManaged
+	Receiver: IPMessaggingTest>>#testIPWireMessageHMAC
+	Arguments and temporary variables: 
+
+	Receiver's instance variables: 
+		testSelector: 	#testIPWireMessageHMAC
+		expectedFails: 	nil
+		session: 	an IPSession
+
+
+[ aTestCase announce: TestCaseStarted withResult: self.
+aTestCase runCaseManaged.
+aTestCase announce: TestCaseEnded withResult: self.
+"To not affect performance of big test suites following logic is not inside addPass: method"
+errors remove: aTestCase ifAbsent: [  ].
+failures remove: aTestCase ifAbsent: [  ].
+self addPass: aTestCase ] in TestResult>>runCaseForDebug:
+	Receiver: 1 ran, 0 passed, 0 skipped, 0 expected failures, 1 failure, 0 errors, 0 passed unexpected
+	Arguments and temporary variables: 
+		aTestCase: 	IPMessaggingTest>>#testIPWireMessageHMA
+	Receiver's instance variables: 
+		timeStamp: 	2020-05-20T17:45:26.38835+02:00
+		failures: 	a Set(IPMessaggingTest>>#testIPWireMessageHMAC)
+		errors: 	an OrderedCollection()
+		passed: 	an OrderedCollection()
+		skipped: 	an OrderedCollection()
+
+
+BlockClosure>>on:do:
+	Receiver: [ aTestCase announce: TestCaseStarted withResult: self.
+aTestCase runCaseManaged.
+aTestCas...etc...
+	Arguments and temporary variables: 
+		exception: 	an ExceptionSet
+		handlerAction: 	[ :ex | 
+ex sunitAnnounce: aTestCase toResult: self.
+ex pass 
+	Receiver's instance variables: 
+		outerContext: 	TestResult>>runCaseForDebug:
+		startpc: 	150
+		numArgs: 	0
+
+
+TestResult>>runCaseForDebug:
+	Receiver: 1 ran, 0 passed, 0 skipped, 0 expected failures, 1 failure, 0 errors, 0 passed unexpected
+	Arguments and temporary variables: 
+		aTestCase: 	IPMessaggingTest>>#testIPWireMessageHMA
+	Receiver's instance variables: 
+		timeStamp: 	2020-05-20T17:45:26.38835+02:00
+		failures: 	a Set(IPMessaggingTest>>#testIPWireMessageHMAC)
+		errors: 	an OrderedCollection()
+		passed: 	an OrderedCollection()
+		skipped: 	an OrderedCollection()
+
+
+[ result runCaseForDebug: self ] in IPMessaggingTest(TestCase)>>debug
+	Receiver: IPMessaggingTest>>#testIPWireMessageHMAC
+	Arguments and temporary variables: 
+		result: 	1 ran, 0 passed, 0 skipped, 0 expected failures, 1 failure, 0 errors, 0...etc..
+	Receiver's instance variables: 
+		testSelector: 	#testIPWireMessageHMAC
+		expectedFails: 	#()
+		session: 	an IPSession
+
+
+BlockClosure>>ensure:
+	Receiver: [ result runCaseForDebug: self ]
+	Arguments and temporary variables: 
+		aBlock: 	[ self classForTestResource resetResources: self resources.
+result upda...etc...
+		complete: 	nil
+		returnValue: 	ni
+	Receiver's instance variables: 
+		outerContext: 	IPMessaggingTest(TestCase)>>debug
+		startpc: 	90
+		numArgs: 	0
+
+
+IPMessaggingTest(TestCase)>>debug
+	Receiver: IPMessaggingTest>>#testIPWireMessageHMAC
+	Arguments and temporary variables: 
+		result: 	1 ran, 0 passed, 0 skipped, 0 expected failures, 1 failure, 0 errors, 0...etc..
+	Receiver's instance variables: 
+		testSelector: 	#testIPWireMessageHMAC
+		expectedFails: 	#()
+		session: 	an IPSession
+
+
+IPMessaggingTest class(TestCase class)>>debug:
+	Receiver: IPMessaggingTest
+	Arguments and temporary variables: 
+		aSymbol: 	#testIPWireMessageHMA
+	Receiver's instance variables: 
+		superclass: 	TestCase
+		methodDict: 	a MethodDictionary(#ipMessage->IPMessaggingTest>>#ipMessage #sessio...etc...
+		format: 	65539
+		layout: 	a FixedLayout
+		organization: 	a ClassOrganization
+		subclasses: 	nil
+		name: 	#IPMessaggingTest
+		classPool: 	a Dictionary()
+		sharedPools: 	an OrderedCollection()
+		environment: 	a SystemDictionary(lots of globals)
+		category: 	#'JupyterTalk-Tests'
+		history: 	a Dictionary(#errors->a Set() #failures->a Set() #passed->a Set(#testE...etc...
+
+
+ClyRunTestsFromMethodsCommand>>runTest:of:
+	Receiver: a ClyRunTestsFromMethodsCommand
+	Arguments and temporary variables: 
+		testSelector: 	#testIPWireMessageHMAC
+		testClass: 	IPMessaggingTest
+		testResult: 	ni
+	Receiver's instance variables: 
+		testItems: 	an Array(a ClyDataSourceItem(testIPWireMessageHMAC))
+		runTestCases: 	{IPMessaggingTest}
+
+
+[ :each | self runTest: testSelector of: each ] in ClyRunTestsFromMethodsCommand>>runTestItem:
+	Receiver: a ClyRunTestsFromMethodsCommand
+	Arguments and temporary variables: 
+		testItem: 	a ClyDataSourceItem(testIPWireMessageHMAC)
+		testSelector: 	#testIPWireMessageHMAC
+		each: 	IPMessaggingTes
+	Receiver's instance variables: 
+		testItems: 	an Array(a ClyDataSourceItem(testIPWireMessageHMAC))
+		runTestCases: 	{IPMessaggingTest}
+
+
+IdentitySet(Set)>>do:
+	Receiver: an IdentitySet(IPMessaggingTest)
+	Arguments and temporary variables: 
+		aBlock: 	[ :each | self runTest: testSelector of: each ]
+		index: 	2
+		each: 	IPMessaggingTes
+	Receiver's instance variables: 
+		tally: 	1
+		array: 	{nil. IPMessaggingTest. nil. nil. nil}
+
+
+ClyRunTestsFromMethodsCommand>>runTestItem:
+	Receiver: a ClyRunTestsFromMethodsCommand
+	Arguments and temporary variables: 
+		testItem: 	a ClyDataSourceItem(testIPWireMessageHMAC)
+		testSelector: 	#testIPWireMessageHMA
+	Receiver's instance variables: 
+		testItems: 	an Array(a ClyDataSourceItem(testIPWireMessageHMAC))
+		runTestCases: 	{IPMessaggingTest}
+
+
+[ :each | self runTestItem: each ] in ClyRunTestsFromMethodsCommand>>execute
+	Receiver: a ClyRunTestsFromMethodsCommand
+	Arguments and temporary variables: 
+		each: 	a ClyDataSourceItem(testIPWireMessageHMAC
+	Receiver's instance variables: 
+		testItems: 	an Array(a ClyDataSourceItem(testIPWireMessageHMAC))
+		runTestCases: 	{IPMessaggingTest}
+
+
+Array(SequenceableCollection)>>do:
+	Receiver: an Array(a ClyDataSourceItem(testIPWireMessageHMAC))
+	Arguments and temporary variables: 
+		aBlock: 	[ :each | self runTestItem: each ]
+		index: 	
+	Receiver's instance variables: 
+an Array(a ClyDataSourceItem(testIPWireMessageHMAC))
+
+
+--- The full stack ---
+IPMessaggingTest(TestAsserter)>>assert:description:resumable:
+IPMessaggingTest(TestAsserter)>>assert:description:
+IPMessaggingTest(Object)>>assert:
+IPMessaggingTest>>testIPWireMessageHMAC
+IPMessaggingTest(TestCase)>>performTest
+[ self setUp.
+self performTest ] in IPMessaggingTest(TestCase)>>runCase
+BlockClosure>>ensure:
+IPMessaggingTest(TestCase)>>runCase
+[ aTestCase runCase ] in [ [ aTestCase runCase ]
+	on: Halt
+	do: [ :halt | 
+		"if test was halted we should resume all background failures 
+			to debug all of them together with test process"
+		failedProcesses keysDo: #resume.
+		halt pass ] ] in TestExecutionEnvironment>>runTestCaseSafelly:
+BlockClosure>>on:do:
+[ [ aTestCase runCase ]
+	on: Halt
+	do: [ :halt | 
+		"if test was halted we should resume all background failures 
+			to debug all of them together with test process"
+		failedProcesses keysDo: #resume.
+		halt pass ] ] in TestExecutionEnvironment>>runTestCaseSafelly:
+BlockClosure>>on:do:
+TestExecutionEnvironment>>runTestCaseSafelly:
+[ self runTestCaseSafelly: aTestCase ] in [ [ self runTestCaseSafelly: aTestCase ]
+	ensure: [ testCompleted := true.
+		watchDogSemaphore signal ].	"signal that test case completes"
+self checkForkedProcesses ] in TestExecutionEnvironment>>runTestCase:
+BlockClosure>>ensure:
+[ [ self runTestCaseSafelly: aTestCase ]
+	ensure: [ testCompleted := true.
+		watchDogSemaphore signal ].	"signal that test case completes"
+self checkForkedProcesses ] in TestExecutionEnvironment>>runTestCase:
+BlockClosure>>ifCurtailed:
+TestExecutionEnvironment>>runTestCase:
+[ testEnv runTestCase: aTestCase ] in DefaultExecutionEnvironment>>runTestCase:
+[ self value: anExecutionEnvironment.
+anExecutionEnvironment activated.
+aBlock value ] in CurrentExecutionEnvironment class>>activate:for:
+BlockClosure>>ensure:
+CurrentExecutionEnvironment class>>activate:for:
+TestExecutionEnvironment(ExecutionEnvironment)>>beActiveDuring:
+DefaultExecutionEnvironment>>runTestCase:
+CurrentExecutionEnvironment class>>runTestCase:
+IPMessaggingTest(TestCase)>>runCaseManaged
+[ aTestCase announce: TestCaseStarted withResult: self.
+aTestCase runCaseManaged.
+aTestCase announce: TestCaseEnded withResult: self.
+"To not affect performance of big test suites following logic is not inside addPass: method"
+errors remove: aTestCase ifAbsent: [  ].
+failures remove: aTestCase ifAbsent: [  ].
+self addPass: aTestCase ] in TestResult>>runCaseForDebug:
+BlockClosure>>on:do:
+TestResult>>runCaseForDebug:
+[ result runCaseForDebug: self ] in IPMessaggingTest(TestCase)>>debug
+BlockClosure>>ensure:
+IPMessaggingTest(TestCase)>>debug
+IPMessaggingTest class(TestCase class)>>debug:
+ClyRunTestsFromMethodsCommand>>runTest:of:
+[ :each | self runTest: testSelector of: each ] in ClyRunTestsFromMethodsCommand>>runTestItem:
+IdentitySet(Set)>>do:
+ClyRunTestsFromMethodsCommand>>runTestItem:
+[ :each | self runTestItem: each ] in ClyRunTestsFromMethodsCommand>>execute
+Array(SequenceableCollection)>>do:
+ - - - - - - - - - - - - - - -  
+			- - - - - - - - - - - - - - - - - -
+ClyRunTestsFromMethodsCommand>>execute
+ClyMethodContextOfFullBrowser(ClySystemBrowserContext)>>executeCommand:by:
+[ self prepareCommandForExecution.
+context executeCommand: command by: self.
+self applyCommandResult ] in CmdCommandActivator>>executeCommand
+BlockClosure>>on:do:
+CmdCommandActivator>>executeCommand
+[ target perform: actionSelector withArguments: arguments ] in IconicButton(SimpleButtonMorph)>>doButtonAction
+BlockClosure>>ensure:
+CursorWithMask(Cursor)>>showWhile:
+IconicButton(SimpleButtonMorph)>>doButtonAction
+IconicButton(SimpleButtonMorph)>>mouseUp:
+IconicButton(Morph)>>handleMouseUp:
+MouseButtonEvent>>sentTo:
+IconicButton(Morph)>>handleEvent:
+IconicButton(Morph)>>handleFocusEvent:
+[ ActiveHand := self.
+ActiveEvent := anEvent.
+result := focusHolder
+	handleFocusEvent: (anEvent transformedBy: (focusHolder transformedFrom: self)) ] in HandMorph>>sendFocusEvent:to:clear:
+BlockClosure>>on:do:
+WorldMorph>>becomeActiveDuring:
+HandMorph>>sendFocusEvent:to:clear:
+HandMorph>>sendEvent:focus:clear:
+HandMorph>>sendMouseEvent:
+HandMorph>>handleEvent:
+HandMorph>>processEventsFromQueue:
+HandMorph>>processEvents
+[ :h | 
+self activeHand: h.
+h processEvents.
+self activeHand: nil ] in WorldState>>doOneCycleNowFor:
+Array(SequenceableCollection)>>do:
+WorldState>>handsDo:
+WorldState>>doOneCycleNowFor:
+WorldState>>doOneCycleFor:
+WorldMorph>>doOneCycle
+WorldMorph class>>doOneCycle
+[ [ WorldMorph doOneCycle.
+Processor yield.
+false ] whileFalse: [  ] ] in MorphicUIManager>>spawnNewProcess
+[ self value.
+Processor terminateActive ] in BlockClosure>>newProcess
+-------------------------------------------------------------------------------
+
+THERE_BE_DRAGONS_HERE
+Warning
+21 May 2020 6:40:09.400027 pm
+
+VM: unix - x86_64 - linux-gnu - CoInterpreter VMMaker.oscog-eem.2509 uuid: 91e81f64-95de-4914-a960-8f842be3a194 Feb  6 2019
+StackToRegisterMappingCogit VMMaker.oscog-eem.2509 uuid: 91e81f64-95de-4914-a960-8f842be3a194 Feb  6 2019
+VM: 201902062351 https://github.com/OpenSmalltalk/opensmalltalk-vm.git Date: Wed Feb 6 15:51:18 2019 CommitHash: a838346b Plugins: 201902062351 https://github.com/OpenSmalltalk/opensmalltalk-vm.git
+
+Image: Pharo8.0.0 [Build information: Pharo-8.0.0+build.1124.sha.0932da82f08175e906b0e2a8052120c823374e9f (64 Bit)]
+
+IceGitCommit(IceCommitish)>>validateCanMerge
+	Receiver: IceGitCommit(160ddba3cf1f6acc71f73be75cc71aba498e1e86)
+	Arguments and temporary variables: 
+		imageCommit: 	nil
+		headCommit: 	nil
+		mergeCommit: 	ni
+	Receiver's instance variables: 
+		repository: 	IceLibgitRepository(JupyterTalk)
+		id: 	'160ddba3cf1f6acc71f73be75cc71aba498e1e86'
+		author: 	'Jesús Marí'
+		datetime: 	2020-05-21T18:19:07+02:00
+		ancestorIds: 	#('ed1de35e5cefc2dcbf0117510769bfeb3e562321')
+		comment: 	'libsodium
+
+'
+
+
+IceMerge>>execute
+	Receiver: an IceMerge
+	Arguments and temporary variables: 
+		commitToAdvance: 	ni
+	Receiver's instance variables: 
+		mergeTree: 	nil
+		repository: 	IceLibgitRepository(JupyterTalk)
+		mergeCommit: 	IceGitCommit(160ddba3cf1f6acc71f73be75cc71aba498e1e86)
+		imageCommit: 	nil
+		changesToWorkingCopyTree: 	nil
+
+
+IceAttachedSingleVersionWorkingCopy>>mergeCommit:
+	Receiver: an IceAttachedSingleVersionWorkingCopy
+	Arguments and temporary variables: 
+		mergeCommit: 	IceGitCommit(160ddba3cf1f6acc71f73be75cc71aba498e1e86
+	Receiver's instance variables: 
+		repository: 	IceLibgitRepository(JupyterTalk)
+
+
+IceWorkingCopy>>mergeCommit:
+	Receiver: an IceWorkingCopy
+	Arguments and temporary variables: 
+		aCommit: 	IceGitCommit(160ddba3cf1f6acc71f73be75cc71aba498e1e86
+	Receiver's instance variables: 
+		repository: 	IceLibgitRepository(JupyterTalk)
+		packages: 	a Dictionary('BaselineOfJupyterTalk'->IcePackage(BaselineOfJupyterTal...etc...
+		referenceCommit: 	IceGitCommit(e9556ac4013ea3763c1fa0c841a5fce75a089c08)
+		shouldIgnoreNotifications: 	false
+		project: 	an IceBasicProject
+		properties: 	an IceRepositoryProperties
+
+
+IceGitLocalBranch(IceLocalBranch)>>pullFrom:
+	Receiver: IceGitLocalBranch(master)
+	Arguments and temporary variables: 
+		aRemote: 	origin (https://github.com/jmari/JupyterTalk.git)
+		remoteBranch: 	IceGitRemoteBranch(origin/master
+	Receiver's instance variables: 
+		repository: 	IceLibgitRepository(JupyterTalk)
+		name: 	'refs/heads/master'
+
+
+IceLibgitRepository(IceRepository)>>pullFrom:
+	Receiver: IceLibgitRepository(JupyterTalk)
+	Arguments and temporary variables: 
+		aRemote: 	origin (https://github.com/jmari/JupyterTalk.git
+	Receiver's instance variables: 
+		name: 	'JupyterTalk'
+		workingCopy: 	an IceWorkingCopy
+		index: 	an IceGitIndex
+		commitsInPackageCache: 	a LRUCache(#1 1/30 [ 1 ] 75%)
+		location: 	{localDirectory}/iceberg/jmari/JupyterTalk
+		commitCache: 	a LRUCache(#2 2/30 [ 1 ] 93%)
+		handle: 	a LGitRepository (/home/jmari/Pharo/images/jupyter/pharo-local/iceberg/...etc...
+
+
+[ self entity pullFrom: self remote ] in IceTipPullModel>>pullThen:
+	Receiver: an IceTipPullModel
+	Arguments and temporary variables: 
+		aBlock: 	[ self window delete 
+	Receiver's instance variables: 
+		entity: 	IceLibgitRepository(JupyterTalk)
+		repositoryModel: 	an IceTipCachedModel(an IceTipRepositoryModel)
+		remote: 	origin (https://github.com/jmari/JupyterTalk.git)
+
+
+[ :bar | 
+bar label: aString.
+aBlock value ] in MorphicUIManager(UIManager)>>informUser:during:
+	Receiver: a MorphicUIManager
+	Arguments and temporary variables: 
+		aString: 	'Pulling from origin'
+		aBlock: 	[ self entity pullFrom: self remote ]
+		bar: 	a Jo
+	Receiver's instance variables: 
+		activeTranscript: 	nil
+
+
+[ :bar | aBlock value: bar ] in MorphicUIManager>>informUserDuring:
+	Receiver: a MorphicUIManager
+	Arguments and temporary variables: 
+		aBlock: 	[ :bar | 
+bar label: aString.
+aBlock value ]
+		bar: 	a Jo
+	Receiver's instance variables: 
+		activeTranscript: 	nil
+
+
+BlockClosure>>cull:
+	Receiver: [ :bar | aBlock value: bar ]
+	Arguments and temporary variables: 
+		anArg: 	a Jo
+	Receiver's instance variables: 
+		outerContext: 	MorphicUIManager>>informUserDuring:
+		startpc: 	58
+		numArgs: 	1
+
+
+[ ^ block cull: self ] in [ self prepareForRunning.
+CurrentJob value: self during: [ ^ block cull: self ] ] in Job>>run
+	Receiver: a Job
+	Arguments and temporary variables: 
+
+	Receiver's instance variables: 
+		block: 	[ :bar | aBlock value: bar ]
+		currentValue: 	1
+		min: 	1
+		max: 	100
+		title: 	'Pulling from origin'
+		children: 	an OrderedCollection()
+		isRunning: 	true
+		parent: 	nil
+		process: 	a Process in nil
+
+
+[ activeProcess psValueAt: index put: anObject.
+aBlock value ] in CurrentJob(DynamicVariable)>>value:during:
+	Receiver: a CurrentJob
+	Arguments and temporary variables: 
+		anObject: 	a Job
+		aBlock: 	[ ^ block cull: self ]
+		activeProcess: 	a Process in nil
+		oldValue: 	ni
+	Receiver's instance variables: 
+		index: 	2
+
+
+BlockClosure>>ensure:
+	Receiver: [ activeProcess psValueAt: index put: anObject.
+aBlock value ]
+	Arguments and temporary variables: 
+		aBlock: 	[ activeProcess psValueAt: index put: oldValue ]
+		complete: 	nil
+		returnValue: 	ni
+	Receiver's instance variables: 
+		outerContext: 	CurrentJob(DynamicVariable)>>value:during:
+		startpc: 	79
+		numArgs: 	0
+
+
+CurrentJob(DynamicVariable)>>value:during:
+	Receiver: a CurrentJob
+	Arguments and temporary variables: 
+		anObject: 	a Job
+		aBlock: 	[ ^ block cull: self ]
+		activeProcess: 	a Process in nil
+		oldValue: 	ni
+	Receiver's instance variables: 
+		index: 	2
+
+
+CurrentJob class(DynamicVariable class)>>value:during:
+	Receiver: CurrentJob
+	Arguments and temporary variables: 
+		anObject: 	a Job
+		aBlock: 	[ ^ block cull: self 
+	Receiver's instance variables: 
+		superclass: 	DynamicVariable
+		methodDict: 	a MethodDictionary()
+		format: 	65537
+		layout: 	a FixedLayout
+		organization: 	a ClassOrganization
+		subclasses: 	nil
+		name: 	#CurrentJob
+		classPool: 	a Dictionary()
+		sharedPools: 	nil
+		environment: 	a SystemDictionary(lots of globals)
+		category: 	#'Jobs-Base'
+		soleInstance: 	a CurrentJob
+
+
+[ self prepareForRunning.
+CurrentJob value: self during: [ ^ block cull: self ] ] in Job>>run
+	Receiver: a Job
+	Arguments and temporary variables: 
+
+	Receiver's instance variables: 
+		block: 	[ :bar | aBlock value: bar ]
+		currentValue: 	1
+		min: 	1
+		max: 	100
+		title: 	'Pulling from origin'
+		children: 	an OrderedCollection()
+		isRunning: 	true
+		parent: 	nil
+		process: 	a Process in nil
+
+
+BlockClosure>>ensure:
+	Receiver: [ self prepareForRunning.
+CurrentJob value: self during: [ ^ block cull: self ] ]
+	Arguments and temporary variables: 
+		aBlock: 	[ self cleanupAfterRunning ]
+		complete: 	nil
+		returnValue: 	ni
+	Receiver's instance variables: 
+		outerContext: 	Job>>run
+		startpc: 	77
+		numArgs: 	0
+
+
+Job>>run
+	Receiver: a Job
+	Arguments and temporary variables: 
+
+	Receiver's instance variables: 
+		block: 	[ :bar | aBlock value: bar ]
+		currentValue: 	1
+		min: 	1
+		max: 	100
+		title: 	'Pulling from origin'
+		children: 	an OrderedCollection()
+		isRunning: 	true
+		parent: 	nil
+		process: 	a Process in nil
+
+
+MorphicUIManager(UIManager)>>displayProgress:from:to:during:
+	Receiver: a MorphicUIManager
+	Arguments and temporary variables: 
+		titleString: 	''
+		minVal: 	1
+		maxVal: 	100
+		workBlock: 	[ :bar | aBlock value: bar 
+	Receiver's instance variables: 
+		activeTranscript: 	nil
+
+
+MorphicUIManager>>informUserDuring:
+	Receiver: a MorphicUIManager
+	Arguments and temporary variables: 
+		aBlock: 	[ :bar | 
+bar label: aString.
+aBlock value 
+	Receiver's instance variables: 
+		activeTranscript: 	nil
+
+
+MorphicUIManager(UIManager)>>informUser:during:
+	Receiver: a MorphicUIManager
+	Arguments and temporary variables: 
+		aString: 	'Pulling from origin'
+		aBlock: 	[ self entity pullFrom: self remote 
+	Receiver's instance variables: 
+		activeTranscript: 	nil
+
+
+IceTipStandardAction>>basicExecute
+	Receiver: an IceTipStandardAction
+	Arguments and temporary variables: 
+
+	Receiver's instance variables: 
+		repository: 	IceLibgitRepository(JupyterTalk)
+		successBlock: 	[ self window delete ]
+		message: 	'Pulling from origin'
+		successAnnounceBlock: 	[ IceRepositoryModified for: self repository ]
+		actionBlock: 	[ self entity pullFrom: self remote ]
+
+
+[ self basicExecute.
+self finishSuccess ] in IceTipStandardAction(IceTipAction)>>execute
+	Receiver: an IceTipStandardAction
+	Arguments and temporary variables: 
+
+	Receiver's instance variables: 
+		repository: 	IceLibgitRepository(JupyterTalk)
+		successBlock: 	[ self window delete ]
+		message: 	'Pulling from origin'
+		successAnnounceBlock: 	[ IceRepositoryModified for: self repository ]
+		actionBlock: 	[ self entity pullFrom: self remote ]
+
+
+BlockClosure>>on:do:
+	Receiver: [ self basicExecute.
+self finishSuccess ]
+	Arguments and temporary variables: 
+		exception: 	an ExceptionSet
+		handlerAction: 	[ :e | e acceptError: (IceTipInteractiveErrorVisitor on: self re...etc..
+	Receiver's instance variables: 
+		outerContext: 	IceTipStandardAction(IceTipAction)>>execute
+		startpc: 	54
+		numArgs: 	0
+
+
+IceTipStandardAction(IceTipAction)>>withErrorHandlingDo:
+	Receiver: an IceTipStandardAction
+	Arguments and temporary variables: 
+		aBlock: 	[ self basicExecute.
+self finishSuccess 
+	Receiver's instance variables: 
+		repository: 	IceLibgitRepository(JupyterTalk)
+		successBlock: 	[ self window delete ]
+		message: 	'Pulling from origin'
+		successAnnounceBlock: 	[ IceRepositoryModified for: self repository ]
+		actionBlock: 	[ self entity pullFrom: self remote ]
+
+
+IceTipStandardAction(IceTipAction)>>execute
+	Receiver: an IceTipStandardAction
+	Arguments and temporary variables: 
+
+	Receiver's instance variables: 
+		repository: 	IceLibgitRepository(JupyterTalk)
+		successBlock: 	[ self window delete ]
+		message: 	'Pulling from origin'
+		successAnnounceBlock: 	[ IceRepositoryModified for: self repository ]
+		actionBlock: 	[ self entity pullFrom: self remote ]
+
+
+IceTipStandardAction>>execute:
+	Receiver: an IceTipStandardAction
+	Arguments and temporary variables: 
+		aBlock: 	[ self entity pullFrom: self remote 
+	Receiver's instance variables: 
+		repository: 	IceLibgitRepository(JupyterTalk)
+		successBlock: 	[ self window delete ]
+		message: 	'Pulling from origin'
+		successAnnounceBlock: 	[ IceRepositoryModified for: self repository ]
+		actionBlock: 	[ self entity pullFrom: self remote ]
+
+
+IceTipPullModel>>pullThen:
+	Receiver: an IceTipPullModel
+	Arguments and temporary variables: 
+		aBlock: 	[ self window delete 
+	Receiver's instance variables: 
+		entity: 	IceLibgitRepository(JupyterTalk)
+		repositoryModel: 	an IceTipCachedModel(an IceTipRepositoryModel)
+		remote: 	origin (https://github.com/jmari/JupyterTalk.git)
+
+
+IceTipCachedModel>>forwardMessage:
+	Receiver: an IceTipCachedModel(an IceTipPullModel)
+	Arguments and temporary variables: 
+		aMessage: 	pullThen: [ self window delete 
+	Receiver's instance variables: 
+		realObject: 	an IceTipPullModel
+		cache: 	an IceTipCache
+
+
+IceTipCachedModel>>doesNotUnderstand: #pullThen:
+	Receiver: an IceTipCachedModel(an IceTipPullModel)
+	Arguments and temporary variables: 
+		aMessage: 	pullThen: [ self window delete 
+	Receiver's instance variables: 
+		realObject: 	an IceTipPullModel
+		cache: 	an IceTipCache
+
+
+IceTipPullBrowser>>doPull
+	Receiver: an IceTipPullBrowser
+	Arguments and temporary variables: 
+
+	Receiver's instance variables: 
+		dependents: 	a DependentsArray(a MorphicContainerAdapter a MorphicContainerAdapt...etc...
+		announcer: 	an Announcer
+		focusOrder: 	an OrderedCollection(an IceTipHistoryBrowser an IceTipActionPanel a...etc...
+		owner: 	nil
+		window: 	a NewValueHolder[ a WindowPresenter ]
+		spec: 	a SpecWrapper
+		extentHolder: 	a NewValueHolder[ nil ]
+		needRebuild: 	a NewValueHolder[ true ]
+		additionalKeyBindings: 	a Dictionary()
+		keyStrokesForNextFocusHolder: 	a CollectionValueHolder[ an Array() ]
+		keyStrokesForPreviousFocusHolder: 	a CollectionValueHolder[ an Array() ]
+		windowIcon: 	a NewValueHolder[ nil ]
+		aboutText: 	a NewValueHolder[ nil ]
+		askOkToClose: 	a NewValueHolder[ false ]
+		titleHolder: 	a CollectionValueHolder[ 'Untitled window' ]
+		model: 	an IceTipCachedModel(an IceTipPullModel)
+		toolbar: 	an IceTipToolbar
+		commitsPanel: 	an IceTipHistoryBrowser
+		actionPanel: 	an IceTipActionPanel
+		button: 	a ButtonPresenter
+		remotePanel: 	an IceTipSelectRemotePresenter
+
+
+[ self doPull ] in IceTipPullBrowser>>newActionButton
+	Receiver: an IceTipPullBrowser
+	Arguments and temporary variables: 
+
+	Receiver's instance variables: 
+		dependents: 	a DependentsArray(a MorphicContainerAdapter a MorphicContainerAdapt...etc...
+		announcer: 	an Announcer
+		focusOrder: 	an OrderedCollection(an IceTipHistoryBrowser an IceTipActionPanel a...etc...
+		owner: 	nil
+		window: 	a NewValueHolder[ a WindowPresenter ]
+		spec: 	a SpecWrapper
+		extentHolder: 	a NewValueHolder[ nil ]
+		needRebuild: 	a NewValueHolder[ true ]
+		additionalKeyBindings: 	a Dictionary()
+		keyStrokesForNextFocusHolder: 	a CollectionValueHolder[ an Array() ]
+		keyStrokesForPreviousFocusHolder: 	a CollectionValueHolder[ an Array() ]
+		windowIcon: 	a NewValueHolder[ nil ]
+		aboutText: 	a NewValueHolder[ nil ]
+		askOkToClose: 	a NewValueHolder[ false ]
+		titleHolder: 	a CollectionValueHolder[ 'Untitled window' ]
+		model: 	an IceTipCachedModel(an IceTipPullModel)
+		toolbar: 	an IceTipToolbar
+		commitsPanel: 	an IceTipHistoryBrowser
+		actionPanel: 	an IceTipActionPanel
+		button: 	a ButtonPresenter
+		remotePanel: 	an IceTipSelectRemotePresenter
+
+
+ButtonPresenter>>performAction
+	Receiver: a ButtonPresenter
+	Arguments and temporary variables: 
+
+	Receiver's instance variables: 
+		dependents: 	a DependentsArray(a MorphicButtonAdapter)
+		announcer: 	an Announcer
+		focusOrder: 	nil
+		owner: 	an IceTipPullBrowser
+		window: 	a NewValueHolder[ nil ]
+		spec: 	a SpecWrapper
+		extentHolder: 	a NewValueHolder[ nil ]
+		needRebuild: 	a NewValueHolder[ true ]
+		additionalKeyBindings: 	a Dictionary(Character space->[ self action ] )
+		keyStrokesForNextFocusHolder: 	a CollectionValueHolder[ an Array() ]
+		keyStrokesForPreviousFocusHolder: 	a CollectionValueHolder[ an Array() ]
+		windowIcon: 	a NewValueHolder[ nil ]
+		aboutText: 	a NewValueHolder[ nil ]
+		askOkToClose: 	a NewValueHolder[ false ]
+		titleHolder: 	a CollectionValueHolder[ 'Button' ]
+		helpHolder: 	a NewValueHolder[ 'Pull new commits from origin/master' ]
+		borderWidth: 	a NewValueHolder[ 0 ]
+		borderColor: 	a NewValueHolder[ Color transparent ]
+		enabledHolder: 	a NewValueHolder[ true ]
+		dragEnabled: 	a NewValueHolder[ false ]
+		dropEnabled: 	a NewValueHolder[ false ]
+		dragTransformationBlock: 	a NewValueHolder[ [ :item :source | item ] ]
+		wantDropBlock: 	a NewValueHolder[ [ :draggedItem :event :source | self dropEnabl...etc...
+		acceptDropBlock: 	a NewValueHolder[ [ :draggedItem :event :source |  ] ]
+		transferBlock: 	a NewValueHolder[ [ :passenger :source | self defaultTransferFor...etc...
+		color: 	a NewValueHolder[ nil ]
+		actionHolder: 	a NewValueHolder[ [ self doPull ] ]
+		labelHolder: 	a CollectionValueHolder[ 'Pull' ]
+		fontHolder: 	a NewValueHolder[ nil ]
+		stateHolder: 	a NewValueHolder[ false ]
+		actionPerformedHolder: 	a NewValueHolder[ nil ]
+		askBeforeChangingHolder: 	a NewValueHolder[ false ]
+		iconHolder: 	a NewValueHolder[ Form(14x14x32) ]
+		menuHolder: 	a NewValueHolder[ a MenuPresenter ]
+		shortcutHolder: 	a NewValueHolder[ nil ]
+
+
+MorphicButtonAdapter>>action
+	Receiver: a MorphicButtonAdapter
+	Arguments and temporary variables: 
+
+	Receiver's instance variables: 
+		dependents: 	a DependentsArray(a PluggableButtonMorph(584676352))
+		announcer: 	nil
+		model: 	a ButtonPresenter
+		widget: 	a PluggableButtonMorph(584676352)
+		selector: 	nil
+
+
+PluggableButtonMorph>>performAction:
+	Receiver: a PluggableButtonMorph(584676352)
+	Arguments and temporary variables: 
+		event: 	[(924@623) mouseUp 13436 nil
+	Receiver's instance variables: 
+		bounds: 	(865.0@608.0) corner: (965.0@635.0)
+		owner: 	a PanelMorph(847512320)
+		submorphs: 	an Array(an AlignmentMorph(251157760))
+		fullBounds: 	nil
+		color: 	(Color r: 0.2903225806451613 g: 0.2883675464320626 b: 0.2883675464320626...etc...
+		extension: 	a MorphExtension (478735360) [balloonText]  [eventHandler = a Morphi...etc...
+		borderWidth: 	1
+		borderColor: 	#simple
+		model: 	a MorphicButtonAdapter
+		label: 	an IconicListItem(774509056)
+		icon: 	nil
+		getIconSelector: 	nil
+		getStateSelector: 	#state
+		actionSelector: 	#action
+		font: 	nil
+		getLabelSelector: 	#label
+		getMenuSelector: 	nil
+		shortcutCharacter: 	nil
+		askBeforeChanging: 	false
+		triggerOnMouseDown: 	false
+		offColor: 	nil
+		onColor: 	nil
+		feedbackColor: 	nil
+		showSelectionFeedback: 	false
+		allButtons: 	nil
+		arguments: 	#()
+		argumentsProvider: 	nil
+		argumentsSelector: 	nil
+		enabled: 	true
+		actionBlock: 	nil
+		getColorSelector: 	nil
+		getEnabledSelector: 	#enabled
+		getFontSelector: 	#font
+		labelMorph: 	an IconicListItem(774509056)
+		iconMorph: 	nil
+		iconPosition: 	#left
+		lastState: 	false
+
+
+[ :m | 
+(m containsPoint: evt cursorPoint)
+	ifTrue: [ m enabled
+			ifTrue: [ m performAction: evt ] ] ] in PluggableButtonMorph>>mouseUp:
+	Receiver: a PluggableButtonMorph(584676352)
+	Arguments and temporary variables: 
+		evt: 	[(924@623) mouseUp 13436 nil]
+		all: 	an Array(a PluggableButtonMorph(584676352))
+		m: 	a PluggableButtonMorph(584676352
+	Receiver's instance variables: 
+		bounds: 	(865.0@608.0) corner: (965.0@635.0)
+		owner: 	a PanelMorph(847512320)
+		submorphs: 	an Array(an AlignmentMorph(251157760))
+		fullBounds: 	nil
+		color: 	(Color r: 0.2903225806451613 g: 0.2883675464320626 b: 0.2883675464320626...etc...
+		extension: 	a MorphExtension (478735360) [balloonText]  [eventHandler = a Morphi...etc...
+		borderWidth: 	1
+		borderColor: 	#simple
+		model: 	a MorphicButtonAdapter
+		label: 	an IconicListItem(774509056)
+		icon: 	nil
+		getIconSelector: 	nil
+		getStateSelector: 	#state
+		actionSelector: 	#action
+		font: 	nil
+		getLabelSelector: 	#label
+		getMenuSelector: 	nil
+		shortcutCharacter: 	nil
+		askBeforeChanging: 	false
+		triggerOnMouseDown: 	false
+		offColor: 	nil
+		onColor: 	nil
+		feedbackColor: 	nil
+		showSelectionFeedback: 	false
+		allButtons: 	nil
+		arguments: 	#()
+		argumentsProvider: 	nil
+		argumentsSelector: 	nil
+		enabled: 	true
+		actionBlock: 	nil
+		getColorSelector: 	nil
+		getEnabledSelector: 	#enabled
+		getFontSelector: 	#font
+		labelMorph: 	an IconicListItem(774509056)
+		iconMorph: 	nil
+		iconPosition: 	#left
+		lastState: 	false
+
+
+Array(SequenceableCollection)>>do:
+	Receiver: an Array(a PluggableButtonMorph(584676352))
+	Arguments and temporary variables: 
+		aBlock: 	[ :m | 
+(m containsPoint: evt cursorPoint)
+	ifTrue: [ m enabled
+			ifTr...etc...
+		index: 	
+	Receiver's instance variables: 
+an Array(a PluggableButtonMorph(584676352))
+
+PluggableButtonMorph>>mouseUp:
+	Receiver: a PluggableButtonMorph(584676352)
+	Arguments and temporary variables: 
+		evt: 	[(924@623) mouseUp 13436 nil]
+		all: 	an Array(a PluggableButtonMorph(584676352)
+	Receiver's instance variables: 
+		bounds: 	(865.0@608.0) corner: (965.0@635.0)
+		owner: 	a PanelMorph(847512320)
+		submorphs: 	an Array(an AlignmentMorph(251157760))
+		fullBounds: 	nil
+		color: 	(Color r: 0.2903225806451613 g: 0.2883675464320626 b: 0.2883675464320626...etc...
+		extension: 	a MorphExtension (478735360) [balloonText]  [eventHandler = a Morphi...etc...
+		borderWidth: 	1
+		borderColor: 	#simple
+		model: 	a MorphicButtonAdapter
+		label: 	an IconicListItem(774509056)
+		icon: 	nil
+		getIconSelector: 	nil
+		getStateSelector: 	#state
+		actionSelector: 	#action
+		font: 	nil
+		getLabelSelector: 	#label
+		getMenuSelector: 	nil
+		shortcutCharacter: 	nil
+		askBeforeChanging: 	false
+		triggerOnMouseDown: 	false
+		offColor: 	nil
+		onColor: 	nil
+		feedbackColor: 	nil
+		showSelectionFeedback: 	false
+		allButtons: 	nil
+		arguments: 	#()
+		argumentsProvider: 	nil
+		argumentsSelector: 	nil
+		enabled: 	true
+		actionBlock: 	nil
+		getColorSelector: 	nil
+		getEnabledSelector: 	#enabled
+		getFontSelector: 	#font
+		labelMorph: 	an IconicListItem(774509056)
+		iconMorph: 	nil
+		iconPosition: 	#left
+		lastState: 	false
+
+
+PluggableButtonMorph(Morph)>>handleMouseUp:
+	Receiver: a PluggableButtonMorph(584676352)
+	Arguments and temporary variables: 
+		anEvent: 	[(924@623) mouseUp 13436 nil]
+		result: 	ni
+	Receiver's instance variables: 
+		bounds: 	(865.0@608.0) corner: (965.0@635.0)
+		owner: 	a PanelMorph(847512320)
+		submorphs: 	an Array(an AlignmentMorph(251157760))
+		fullBounds: 	nil
+		color: 	(Color r: 0.2903225806451613 g: 0.2883675464320626 b: 0.2883675464320626...etc...
+		extension: 	a MorphExtension (478735360) [balloonText]  [eventHandler = a Morphi...etc...
+		borderWidth: 	1
+		borderColor: 	#simple
+		model: 	a MorphicButtonAdapter
+		label: 	an IconicListItem(774509056)
+		icon: 	nil
+		getIconSelector: 	nil
+		getStateSelector: 	#state
+		actionSelector: 	#action
+		font: 	nil
+		getLabelSelector: 	#label
+		getMenuSelector: 	nil
+		shortcutCharacter: 	nil
+		askBeforeChanging: 	false
+		triggerOnMouseDown: 	false
+		offColor: 	nil
+		onColor: 	nil
+		feedbackColor: 	nil
+		showSelectionFeedback: 	false
+		allButtons: 	nil
+		arguments: 	#()
+		argumentsProvider: 	nil
+		argumentsSelector: 	nil
+		enabled: 	true
+		actionBlock: 	nil
+		getColorSelector: 	nil
+		getEnabledSelector: 	#enabled
+		getFontSelector: 	#font
+		labelMorph: 	an IconicListItem(774509056)
+		iconMorph: 	nil
+		iconPosition: 	#left
+		lastState: 	false
+
+
+
+--- The full stack ---
+IceGitCommit(IceCommitish)>>validateCanMerge
+IceMerge>>execute
+IceAttachedSingleVersionWorkingCopy>>mergeCommit:
+IceWorkingCopy>>mergeCommit:
+IceGitLocalBranch(IceLocalBranch)>>pullFrom:
+IceLibgitRepository(IceRepository)>>pullFrom:
+[ self entity pullFrom: self remote ] in IceTipPullModel>>pullThen:
+[ :bar | 
+bar label: aString.
+aBlock value ] in MorphicUIManager(UIManager)>>informUser:during:
+[ :bar | aBlock value: bar ] in MorphicUIManager>>informUserDuring:
+BlockClosure>>cull:
+[ ^ block cull: self ] in [ self prepareForRunning.
+CurrentJob value: self during: [ ^ block cull: self ] ] in Job>>run
+[ activeProcess psValueAt: index put: anObject.
+aBlock value ] in CurrentJob(DynamicVariable)>>value:during:
+BlockClosure>>ensure:
+CurrentJob(DynamicVariable)>>value:during:
+CurrentJob class(DynamicVariable class)>>value:during:
+[ self prepareForRunning.
+CurrentJob value: self during: [ ^ block cull: self ] ] in Job>>run
+BlockClosure>>ensure:
+Job>>run
+MorphicUIManager(UIManager)>>displayProgress:from:to:during:
+MorphicUIManager>>informUserDuring:
+MorphicUIManager(UIManager)>>informUser:during:
+IceTipStandardAction>>basicExecute
+[ self basicExecute.
+self finishSuccess ] in IceTipStandardAction(IceTipAction)>>execute
+BlockClosure>>on:do:
+IceTipStandardAction(IceTipAction)>>withErrorHandlingDo:
+IceTipStandardAction(IceTipAction)>>execute
+IceTipStandardAction>>execute:
+IceTipPullModel>>pullThen:
+IceTipCachedModel>>forwardMessage:
+IceTipCachedModel>>doesNotUnderstand: #pullThen:
+IceTipPullBrowser>>doPull
+[ self doPull ] in IceTipPullBrowser>>newActionButton
+ButtonPresenter>>performAction
+MorphicButtonAdapter>>action
+PluggableButtonMorph>>performAction:
+[ :m | 
+(m containsPoint: evt cursorPoint)
+	ifTrue: [ m enabled
+			ifTrue: [ m performAction: evt ] ] ] in PluggableButtonMorph>>mouseUp:
+Array(SequenceableCollection)>>do:
+PluggableButtonMorph>>mouseUp:
+PluggableButtonMorph(Morph)>>handleMouseUp:
+ - - - - - - - - - - - - - - -  
+			- - - - - - - - - - - - - - - - - -
+MouseButtonEvent>>sentTo:
+PluggableButtonMorph(Morph)>>handleEvent:
+PluggableButtonMorph(Morph)>>handleFocusEvent:
+[ ActiveHand := self.
+ActiveEvent := anEvent.
+result := focusHolder
+	handleFocusEvent: (anEvent transformedBy: (focusHolder transformedFrom: self)) ] in HandMorph>>sendFocusEvent:to:clear:
+BlockClosure>>on:do:
+WorldMorph>>becomeActiveDuring:
+HandMorph>>sendFocusEvent:to:clear:
+HandMorph>>sendEvent:focus:clear:
+HandMorph>>sendMouseEvent:
+HandMorph>>handleEvent:
+HandMorph>>processEventsFromQueue:
+HandMorph>>processEvents
+[ :h | 
+self activeHand: h.
+h processEvents.
+self activeHand: nil ] in WorldState>>doOneCycleNowFor:
+Array(SequenceableCollection)>>do:
+WorldState>>handsDo:
+WorldState>>doOneCycleNowFor:
+WorldState>>doOneCycleFor:
+WorldMorph>>doOneCycle
+WorldMorph class>>doOneCycle
+[ [ WorldMorph doOneCycle.
+Processor yield.
+false ] whileFalse: [  ] ] in MorphicUIManager>>spawnNewProcess
+[ self value.
+Processor terminateActive ] in BlockClosure>>newProcess
+-------------------------------------------------------------------------------
+
