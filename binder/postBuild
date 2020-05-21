@@ -6,4 +6,4 @@ script_home=$(cd $script_home && pwd)
 #64 bits version
 curl -L https://get.pharo.org/64/80+vm | bash
 ls -all
-./pharo ./repository/Pharo.image eval  "BaselineOfJupyterTalk new createKernelFile" 
+./pharo Pharo.image eval  "BaselineOfJupyterTalk new createKernelFile" 
