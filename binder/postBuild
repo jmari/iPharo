@@ -7,5 +7,5 @@ script_home=$(cd $script_home && pwd)
 curl -L https://get.pharo.org/64/80+vm | bash
 pwd
 ls -all
-chmod +w *
+chmod -R +w *
 ./pharo ./Pharo.image eval --save "Metacello new baseline: 'JupyterTalk';repository: 'github://jmari/JupyterTalk:master/repository';load:'all'" 
