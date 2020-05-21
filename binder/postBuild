@@ -4,6 +4,6 @@ script_home=$(cd $script_home && pwd)
 # requirements ....
 # sudo apt-get install unzip 
 #64 bits version
-curl -L https://get.pharo.org/64/80+vm | bash
-ls -all
-./pharo Pharo.image eval  "BaselineOfJupyterTalk new createKernelFile" 
+#curl -L https://get.pharo.org/64/80+vm | bash
+pwd
+ls -all 
