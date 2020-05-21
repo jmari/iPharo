@@ -327,4 +327,4 @@ HTML_HELP
 
 ls -R
 
-$script_home/pharo $script_home/Pharo.image eval --save "Metacello new baseline: 'JupyterTalk';repository: 'github://jmari/JupyterTalk:master/repository';load:'all'" 
+./pharo ./Pharo.image eval --save "Metacello new baseline: 'JupyterTalk';repository: 'github://jmari/JupyterTalk:master/repository';load:'all'" 
