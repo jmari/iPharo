@@ -6,4 +6,5 @@ script_home=$(cd $script_home && pwd)
 #64 bits version
 wget -O- https://get.pharo.org/64/80+vm  | bash 
 #curl -L https://get.pharo.org/64/80+vm | bash
+dir -R $script_home/
 $script_home/pharo $script_home/Pharo.image eval --save "Metacello new baseline: 'JupyterTalk';repository: 'github://jmari/JupyterTalk:master/repository';load:'all'" 
