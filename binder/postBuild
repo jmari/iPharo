@@ -4,7 +4,7 @@ script_home=$(cd $script_home && pwd)
 # requirements ....
 # sudo apt-get install unzip 
 #64 bits version
-curl -L https://get.pharo.org/64/  | bash
+curl -L https://get.pharo.org/64/80  | bash
 rm $script_home/pharo-ui
 mkdir ~/jupyterTalk
 mkdir ~/jupyterTalk/bin
