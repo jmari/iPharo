@@ -20,14 +20,14 @@ LibZeroMQ >> unix64ModuleName [
 	Look in a number of known locations, or LD_LIBRARY_PATH."
 
 	| libNames libZmqPaths|
-	libZmqPaths := {	((OSEnvironment current at: 'HOME'),'/anaconda3/lib/').
-							((OSEnvironment current at: 'HOME'),'/anaconda2/lib/').
+	libZmqPaths := {	((OSEnvironment current at: 'HOME' ifAbsent:['']),'/anaconda3/lib/').
+							((OSEnvironment current at: 'HOME' ifAbsent:['']),'/anaconda2/lib/').
 							'/usr/lib'.
 							'/lib/x86_64-linux-gnu'.
 							},
-						(((OSEnvironment current 
-												at: 'LD_LIBRARY_PATH') 
-												ifNil: [ '' ]) substrings: ':').
+						((OSEnvironment current 
+												at: 'LD_LIBRARY_PATH' 
+												ifAbsent: [ '' ]) substrings: ':').
 	libZmqPaths		
 		do: [ :path | 
 			| libraryPath fr|
@@ -52,12 +52,12 @@ LibZeroMQ >> unixModuleName [
 { #category : #'accessing platform' }
 LibZeroMQ >> win32ModuleName [
 | libNames libZmqPaths|
-	libZmqPaths := (((OSEnvironment current 
-												at: 'PROGRAMFILES') 
-												ifNil: [ '' ]) substrings: ';').
-						(((OSEnvironment current 
-												at: 'PROGRAMFILES(X86)') 
-												ifNil: [ '' ]) substrings: ';').
+	libZmqPaths := ((OSEnvironment current 
+												at: 'PROGRAMFILES' 
+												ifAbsent: [ '' ]) substrings: ';').
+						((OSEnvironment current 
+												at: 'PROGRAMFILES(X86)' 
+												ifAbsent: [ '' ]) substrings: ';').
 	libZmqPaths		
 		do: [ :path | 
 			| libraryPath fr|
