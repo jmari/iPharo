@@ -20,7 +20,7 @@ Class {
 
 { #category : #'to clean later' }
 IPVSAutoCompleter >> allClasses [
-	 ^ Smalltalk keys collect:[:c| c asString]
+	^ Smalltalk globals keys collect: [ :c | c asString ]
 ]
 
 { #category : #'as yet unclassified' }

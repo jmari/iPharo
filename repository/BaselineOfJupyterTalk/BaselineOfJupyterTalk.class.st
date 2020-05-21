@@ -32,7 +32,7 @@ BaselineOfJupyterTalk >> createKernelFile [
 	contents := '{
   "argv": [
   "', FileLocator vmBinary fullName,'",
-  "', FileLocator image fullName,'",
+  "--nodisplay ', FileLocator image fullName, '",
   "ipharo",
   "{connection_file}"
 	],
