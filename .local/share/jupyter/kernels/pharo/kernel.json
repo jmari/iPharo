@@ -1,1 +1,8 @@
-{  "argv": [  "/home/jovyan/pharo-vm/lib/pharo/5.0-202002121043/pharo",  "--nodisplay", "/home/jovyan/Pharo.image",  "ipharo",  "{connection_file}"	],	"display_name": "Pharo Smalltalk",	"language": "smalltalk"	}
+{"argv": [
+  "/home/jovyan/pharo-vm/lib/pharo/5.0-202002121043/pharo",
+  "--nodisplay", "/home/jovyan/Pharo.image",
+  "ipharo",
+  "{connection_file}"],
+ "display_name": "Pharo Smalltalk",
+ "language": "smalltalk"
+}
