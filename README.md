@@ -1,5 +1,5 @@
 # JupyterTalk and ZeroMQ 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jmari/JupyterTalk.git/master?filepath=Tutorial1_BasicStatistics.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jmari/JupyterTalk.git/master?filepath=notebooks/Tutorial1_BasicStatistics.ipynb)
 
  
 Basic Pharo Smaltalk kernel for Jupyter. This project is implemented on Pharo 6.1 64 bits and test it on Ubuntu Linux and Mac Os X. 
@@ -14,9 +14,9 @@ TO-DO:
 
 This project is also hosted in Smalltalkhub repository <a href="http://smalltalkhub.com/#!/~jmari/JupyterTalk">JupyterTalk</a><br/>
 There you are a few examples on using jupiterTalk.
-  - <a href="http://rawcdn.githack.com/jmari/JupyterTalk/master/Tutorial1_BasicStatistics.html"> Tutorial  1 - basic statistics</a>
-  - <a href="http://rawcdn.githack.com/jmari/JupyterTalk/master/tensorflow.html"> Tutorial 2 - tensorflow </a>
-  - <a href="http://rawcdn.githack.com/jmari/JupyterTalk/master/Tutorial4_Linear+Regression.html"> Tutorial 3 - Linear regression with tensorflow and polymath </a>
+  - <a href="http://rawcdn.githack.com/jmari/JupyterTalk/master/notebooks/Tutorial1_BasicStatistics.html"> Tutorial  1 - basic statistics</a>
+  - <a href="http://rawcdn.githack.com/jmari/JupyterTalk/master/notebooks/tensorflow.html"> Tutorial 2 - tensorflow </a>
+  - <a href="http://rawcdn.githack.com/jmari/JupyterTalk/master/notebooks/Tutorial4_Linear+Regression.html"> Tutorial 3 - Linear regression with tensorflow and polymath </a>
   
 ![JupyterTalk in Action](/jup3.png)
 
@@ -51,5 +51,5 @@ Create the folder	'/usr/local/share/jupyter/kernels/pharo'. Create file	'kernel.
 ```
 Optional, copy an icon with file name logo-64x64.png.
 
-![Starting JupyterTalk](/jup1.png)
-![JupyterTalk in Action](/jup2.png)
+![Starting JupyterTalk](/img/jup1.png)
+![JupyterTalk in Action](/img/jup2.png)
