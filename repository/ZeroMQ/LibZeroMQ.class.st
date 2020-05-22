@@ -38,7 +38,7 @@ LibZeroMQ >> unix64ModuleName [
 				libraryPath exists
 					ifTrue: [ ^ libraryPath fullName ] ] ].
 			
-	self error: 'Cannot locate ZeroMQ library (libzmp.so). Please check if it installed on your system'
+	self error: 'Cannot locate ZeroMQ library (libzmq.so). Please check if it is installed on your system'
 
 ]
 
@@ -71,6 +71,6 @@ LibZeroMQ >> win32ModuleName [
 				libraryPath exists
 					ifTrue: [ ^ libraryPath  fullName ] ] ].
 			
-	self error: 'Cannot locate ZeroMQ library (libzmp.so). Please check if it installed on your system'
+	self error: 'Cannot locate ZeroMQ library (libzmq.so). Please check if it is installed on your system'
  
 ]
