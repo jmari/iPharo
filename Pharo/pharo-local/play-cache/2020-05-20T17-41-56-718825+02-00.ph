@@ -1,0 +1,1 @@
+Metacello new  repository: 'github://svenvc/NeoCSV/repository';  baseline: 'NeoCSV';  load.Metacello new  baseline: 'DataFrame';  repository: 'github://PolyMathOrg/DataFrame:v2.0/src';  load.Metacello new        repository: 'github://PolyMathOrg/PolyMath:v1.0.2/src';        baseline: 'PolyMath';        load

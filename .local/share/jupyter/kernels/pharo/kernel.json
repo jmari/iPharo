@@ -1,0 +1,8 @@
+{"argv": [
+  "/home/jovyan/Pharo/pharo-vm/pharo",
+  "--nodisplay", "/home/jovyan/Pharo/jupyter.image",
+  "ipharo",
+  "{connection_file}"],
+ "display_name": "Pharo Smalltalk",
+ "language": "smalltalk"
+}
