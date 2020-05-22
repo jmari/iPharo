@@ -11,16 +11,16 @@ TO-DO:
 - Improve ZeroMQ API.
 - Installation procedure.
 
-
-This project is also hosted in Smalltalkhub repository <a href="http://smalltalkhub.com/#!/~jmari/JupyterTalk">JupyterTalk</a><br/>
-There you are a few examples on using jupiterTalk.
+There you are a few examples on using jupiterTalk, you can test some of them in Binder.
   - <a href="http://rawcdn.githack.com/jmari/JupyterTalk/master/notebooks/Tutorial1_BasicStatistics.html"> Tutorial  1 - basic statistics</a>
   - <a href="http://rawcdn.githack.com/jmari/JupyterTalk/master/notebooks/tensorflow.html"> Tutorial 2 - tensorflow </a>
   - <a href="http://rawcdn.githack.com/jmari/JupyterTalk/master/notebooks/Tutorial4_Linear+Regression.html"> Tutorial 3 - Linear regression with tensorflow and polymath </a>
   
-![JupyterTalk in Action](/jup3.png)
+
+![JupyterTalk in Action](/img/jup3.png)
 
 ### install JupyterTalk
+Install Jupyter notebooks, I suggest you to install Anaconda package. Once you have Jupyter installed, load JupyterTalk in a fresh Pharo image.
 ```Smalltalk
 Metacello new 
 	baseline: 'JupyterTalk';
@@ -35,7 +35,7 @@ Metacello new
 	repository: 'github://jmari/JupyterTalk:master/repository';
 	load:'zmq'
 ```
-
+Kernel.json file should be created by Metacello (in Mac or Linux) in the correct place. If you are not able to star a new notebook in Pharo Smalltalk language, create this file manually.
 Create the folder	'/usr/local/share/jupyter/kernels/pharo'. Create file	'kernel.json' with contents
 ```JSON
 '{
