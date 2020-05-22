@@ -1,5 +1,5 @@
 {"argv": [
-  "/home/jovyan/Pharo/pharo-vm/lib/pharo/5.0-202002121043/pharo",
+  "/home/jovyan/Pharo/pharo-vm/pharo",
   "--nodisplay", "/home/jovyan/Pharo/jupyter.image",
   "ipharo",
   "{connection_file}"],
