@@ -1,6 +1,6 @@
 {"argv": [
-  "/home/jovyan/pharo-vm/lib/pharo/5.0-202002121043/pharo",
-  "--nodisplay", "/home/jovyan/jupyter.image",
+  "/home/jovyan/Pharo/pharo-vm/lib/pharo/5.0-202002121043/pharo",
+  "--nodisplay", "/home/jovyan/Pharo/jupyter.image",
   "ipharo",
   "{connection_file}"],
  "display_name": "Pharo Smalltalk",
