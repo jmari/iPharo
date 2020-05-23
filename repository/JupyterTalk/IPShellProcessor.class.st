@@ -75,8 +75,7 @@ IPShellProcessor >> executeExecuteRequest: aMessage [
 										respondsToWireMessage: self wireMessage;
 										code:aMessage content code;
 										yourself ).	
-	[[session compileAndEvaluate: aMessage] 
-		on:OCUndeclaredVariableWarning do:["Nothing"]]
+	[session compileAndEvaluate: aMessage]
 		on:Exception do:[:e| 
 			response := (session executionErrorMessage 
 									respondsToWireMessage: self wireMessage;

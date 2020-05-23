@@ -3,7 +3,10 @@ Extension { #name : #SequenceableCollection }
 { #category : #'*JupyterTalk-Core' }
 SequenceableCollection >> asJupyterDataWithExtent:aPoint [
 	|htmlStream  |
-
+	self isEmpty ifTrue:[^ nil].
+	(self first isKindOf: SequenceableCollection) 
+	ifFalse:[ ^ self asString asJupyterDataWithExtent:aPoint].
+	
 	htmlStream := ReadWriteStream on:String new.
 	htmlStream 
 			nextPutAll:'<table>';cr;
