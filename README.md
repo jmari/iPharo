@@ -35,7 +35,7 @@ Metacello new
 	repository: 'github://jmari/JupyterTalk:master/repository';
 	load:'zmq'
 ```
-Kernel.json file should be created by Metacello (in Mac or Linux) in the correct place. If you are not able to star a new notebook in Pharo Smalltalk language, create this file manually.
+Kernel.json file should be created by Metacello (in Mac or Linux) in the correct place. If you are not able to start a new notebook in Pharo Smalltalk language, create this file manually.
 Create the folder	'/usr/local/share/jupyter/kernels/pharo'. Create file	'kernel.json' with contents
 ```JSON
 '{
