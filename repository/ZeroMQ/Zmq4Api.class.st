@@ -11,6 +11,11 @@ Zmq4Api class >> apiZmqGetsockoptSocket: socket option: option value: value size
 ]
 
 { #category : #'private-library api' }
+Zmq4Api class >> apiZmqProxyFrontEnd: frontEndSocketPointer backEnd: backEndSocketPointer capture: captureSocketPointer [
+	self ffiCall: #( int zmq_proxy (ZmqApiSocket* frontEndSocketPointer, ZmqApiSocket* backEndSocketPointer, ZmqApiSocket* captureSocketPointer) ) module: LibZeroMQ
+]
+
+{ #category : #'private-library api' }
 Zmq4Api class >> apiZmqReceiveFromSocket: socket message:  message withFlags:   flags [
   self ffiCall: #( long zmq_msg_recv (ZmqApiMessage* message, ZmqApiSocket* socket,  long flags) ) module: LibZeroMQ
 ]
