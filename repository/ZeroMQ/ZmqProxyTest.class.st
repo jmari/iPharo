@@ -27,7 +27,7 @@ ZmqProxyTest >> testProxyPubSub [
 	backend := ZmqXPublisherSocket new.
 	backend bind: 'tcp://*:5560'.
 	ZmqProxy frontend: frontend backend: backend capture: nil
-	"this freezes the image forever"
+	"this freezes the image forever, proxy process keep waiting for connections and message fordwarding"
 
 	
 	
