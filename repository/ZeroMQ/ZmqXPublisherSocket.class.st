@@ -1,6 +1,6 @@
 Class {
 	#name : #ZmqXPublisherSocket,
-	#superclass : #ZmqSocket,
+	#superclass : #ZmqPublisherSocket,
 	#category : #'ZeroMQ-Core'
 }
 

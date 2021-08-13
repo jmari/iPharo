@@ -7,6 +7,7 @@ Class {
 { #category : #tests }
 ZmqProxyTest >> testProxy [
 	| frontend backend |
+	self halt.
 	frontend := ZmqRouterSocket new.
 	frontend bind: 'tcp://*:5559'.
 	backend := ZmqDealerSocket new.

@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+ZmqProxy class >> frontend: frontEndSocket backend: backendSocket [
+
+	self frontend: frontEndSocket backend: backendSocket capture: nil
+
+]
+
+{ #category : #'as yet unclassified' }
 ZmqProxy class >> frontend: frontEndSocket backend: backendSocket capture: captureSocket [
 
 	Zmq4Api apiZmqProxyFrontEnd: frontEndSocket socketPointer backEnd: backendSocket socketPointer 
