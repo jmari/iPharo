@@ -89,6 +89,10 @@ BaselineOfJupyterTalk >> installOSSubprocess [
  	baseline: 'OSSubprocess';
  	repository: 'github://pharo-contributions/OSSubprocess:master/repository';
 	load.
+	
+"should be changed by 	spec 
+		baseline: 'OSSubprocess' with: [ spec repository: 'github://pharo-contributions/OSSubprocess:master/repository ];
+		import: 'all'"
 ]
 
 { #category : #'as yet unclassified' }
