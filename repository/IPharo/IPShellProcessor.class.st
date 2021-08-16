@@ -66,10 +66,9 @@ IPShellProcessor >> executeExecuteRequest: aMessage [
 	"parent_header must be exactly the same header"
 
 	session := IPSession getSessionForMessage: aMessage.
-self halt.
 	self publish: (session executeInputMessage	code:aMessage content code).	
 	[session compileAndEvaluate: aMessage]
-		on:Exception do:[:e| 
+		on: Error do:[:e| 
 			response := (session executionErrorMessage 	exceptionObject: e).
 			self publish: (session executeErrorMessage content: response content) ].
 	response ifNil:[response:= session executionOkMessage ].

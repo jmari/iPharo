@@ -25,7 +25,7 @@ IPharoCommandLineHandler >> activate [
 			stream := ref readStreamIfAbsent: [ self error: 'Kernel config not found.' ].
 			content := stream upToEnd.
 			ZmqLog logDebug: content.	
-			kernelConfig := SCMaterializer materializeFromString:content 
+			kernelConfig := SCMaterializer materializeFromString:content. 
 			stream close.
 			ZmqContext current.
 			IPharoKernel new 

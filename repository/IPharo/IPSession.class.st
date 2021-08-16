@@ -183,29 +183,26 @@ IPSession >> doItContext [
 
 ]
 
-{ #category : #'workspace vars support' }
+{ #category : #compilation }
 IPSession >> doItReceiver [
 
-	^  self
+	^  self  
 	
 
 ]
 
 { #category : #compilation }
 IPSession >> evaluate: source [
-	| result rcvr ctxt |
+	| result method |
 
-	rcvr := self doItReceiver.
-	ctxt := self doItContext. 
-
-	result := rcvr class compiler
+	
+	method := self class compiler
 			source: source;
-			context: ctxt;
-			receiver: rcvr;
-			requestor: self;
+			noPattern: true;
+			context: thisContext;
 			failBlock:  [:err| ZmqLog logError:err messageText . ^ nil];
-			evaluate.	
-				
+			compileDoit.
+	result := method valueWithReceiver: self arguments: { thisContext }.		
 	^  result 
 			
 	
