@@ -225,7 +225,7 @@ ZmqSocket >> send: aByteArray flags: aZmqFlags [
 		critical: [ 
 			| messagePointer |
 			self waitForUnpark.
-			messagePointer := self context zmqApi messageFromByteArray: aByteArray.
+			messagePointer := self context zmqApi messageFromByteArray: aByteArray asByteArray.
 			self context zmqApi executeApiCall: [ self context zmqApi apiZmqSendToSocket: self socketPointer message: messagePointer withFlags: aZmqFlags]. 
 			self context zmqApi executeApiCall: [ self context zmqApi apiZmqMsgClose: messagePointer ]].
 			self logDebug: 'Sent ' , aByteArray asString 
