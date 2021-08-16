@@ -1,3 +1,7 @@
+"
+I m the command line handler. I start the pharo kernel passing a JSON read from the configuration file.
+
+"
 Class {
 	#name : #IPharoCommandLineHandler,
 	#superclass : #CommandLineHandler,

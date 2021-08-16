@@ -1,3 +1,33 @@
+"
+I'm the pharo kernel for Jupyter. I have a single instance created by IPharoCommandLineHandler, I need a configuration file passed as a first argument in the command line in order to configure all the ZmQ Sockets.
+I have four processes, each of them has a Zmq socket as https://jupyter-client.readthedocs.io/en/latest/messaging.html describes. They are ""publisher"", ""shell"", ""control"", ""stdin"" and ""heartbeat"".
+
+I keep the IPCommManager instance, it handles the communication with the widgets.   
+
+- message one   
+- message two 
+- (for bonus points) how to create instances.
+
+   One simple example is simply gorgeous.
+ 
+Internal Representation and Key Implementation Points.
+
+    Instance Variables
+	commManager:		<Object>
+	config:		<Object>
+	control:		<Object>
+	heartbeat:		<Object>
+	ioPub:		<Object>
+	port:		<Object>
+	processors:		<Object>
+	sharedKey:		<Object>
+	shell:		<Object>
+	stdin:		<Object>
+	stop:		<Object>
+
+
+    Implementation Points
+"
 Class {
 	#name : #IPharoKernel,
 	#superclass : #Object,
@@ -27,9 +57,9 @@ IPharoKernel class >> implementation [
 
 { #category : #initialization }
 IPharoKernel class >> initialize [
-"by now we need to stop the kernel each time the image is stopped or saved"
+	"stops the kernel each time the image is stopped or saved"
 	SessionManager default registerUserClassNamed: self name  atPriority: 100.
-self flag: #todo.
+
 "installation script"
 
 "create folder"
@@ -39,8 +69,8 @@ self flag: #todo.
 "with contents"
 '{
   "argv": [
-    "/Applications/Pharo6.1-64_ZeroMQ.app/Contents/MacOS/Pharo",
-    "/Applications/Pharo6.1-64_ZeroMQ.app/Contents/Resources/Pharo6.1-64.image",
+    "/PathToPharoExecutable/Pharo",
+    "/PathToPharoImage/Pharo.image",
     "ipharo",
     "{connection_file}"
   ],
@@ -48,13 +78,12 @@ self flag: #todo.
   "language": "smalltalk"
 }'.
 "copy an icon with file name logo-64x64.png in the same folder"
-
 'jupyter kernelspec install /path/to/kernel.json'
 ]
 
 { #category : #'instance creation' }
 IPharoKernel class >> instance [
-	^ instance ifNil:[self new]
+	^ instance ifNil:[ self new ]
 	
 ]
 
@@ -76,7 +105,7 @@ IPharoKernel class >> protocolVersion [
 IPharoKernel class >> shutDown [
 	self instance stop.
 	instance:=nil.
-	(Delay forSeconds:1) wait
+
 ]
 
 { #category : #versions }

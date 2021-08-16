@@ -8,8 +8,8 @@ Class {
 }
 
 { #category : #accessing }
-IPShellProcessor >> completer [
-	^ completer ifNil:[completer := IPVSAutoCompleter new]
+IPShellProcessor >> completion [
+	^ completer ifNil:[completer := IPCompletion new]
 ]
 
 { #category : #running }
@@ -46,18 +46,18 @@ IPShellProcessor >> executeCommInfoRequest: aMessage [
 
 { #category : #private }
 IPShellProcessor >> executeCompleteRequest: aMessage [
-	| response completionList |
+	| response completionList session |
 
-	response := IPCompleteReplyMsg new.
-	completionList := self completer getCompletionListFrom: aMessage.
+	session := IPSession getSessionForMessage: aMessage.
+	response := session completeReplyMsg.
+	completionList := self completion getCompletionListFrom: aMessage.
 	response content matches: (completionList at:1).
 	response content at:#cursor_start put: (completionList at:2).
 	response content at:#cursor_end put: (completionList at:3).
 	response content at:#status put:#ok. 
 	"parent_header must be exactly the same header"
-	response replyingToWireMessage: self wireMessage.
+
 	^ response
-	
 ]
 
 { #category : #running }

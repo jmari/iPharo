@@ -1,3 +1,11 @@
+"
+I'm the wire message user in the communication between the kernel (processors) and the client.
+See https://jupyter-client.readthedocs.io/en/latest/messaging.html#the-wire-protocol for more information abour the wire protocol.
+I'm created by pushing one by one line from a ZmQ socket, then I become a IPMsg, much more ""human readable"".
+I'm also created as an answer for a IPmsg using self class newFromMessage; anIPMessage.
+I will be stored inside an IPMsg because the replay wire message should return exactly the same header byte array in its parent header.
+
+"
 Class {
 	#name : #IPWireMessage,
 	#superclass : #Object,
@@ -26,7 +34,7 @@ IPWireMessage class >> newFromMessage: anIPMessage [
 	^instance
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #hmac }
 IPWireMessage >> calculateHMAC [
 	^ (HMAC on: SHA256)
 			key: IPharoKernel instance sharedKey asByteArray ;
@@ -65,7 +73,7 @@ IPWireMessage >> hmac: hmac [
 	wireMessage at:2 put:hmac
 ]
 
-{ #category : #converting }
+{ #category : #testing }
 IPWireMessage >> hmacIsValid [
 ^	self hmac asString = self calculateHMAC hex 
 	
@@ -95,7 +103,7 @@ IPWireMessage >> metadata [
 		
 ]
 
-{ #category : #converting }
+{ #category : #accessing }
 IPWireMessage >> parentHeader [
 	^ wireMessage at:4 
 		

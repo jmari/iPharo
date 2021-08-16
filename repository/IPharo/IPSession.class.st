@@ -15,10 +15,8 @@ Internal Representation and Key Implementation Points.
 	executionCounter:		<Integer>.
 	id:		<Object> Session Id.
 	startTime:		<Object> Session starting time.
-	tasks:		<Object>
-	timeout:		<Object>
 	username:		<Object>
-	widgetsFactory:		<Object>
+	widgetsFactory:		<IPWidgetFactory>
 
 
     Implementation Points
@@ -139,6 +137,14 @@ IPSession >> compileAndEvaluate: aMessage [
 	
 ]
 
+{ #category : #'message-comm' }
+IPSession >> completeReplyMsg [
+	 | msg |
+	msg := IPCompleteReplyMsg new.
+	self initializeMessageHeader: msg.
+	^ msg 
+]
+
 { #category : #accessing }
 IPSession >> currentMessage [
 
@@ -175,27 +181,9 @@ IPSession >> displayDataMessage [
 	^ msg 
 ]
 
-{ #category : #'workspace vars support' }
-IPSession >> doItContext [
-
-	^  nil
-	
-
-]
-
-{ #category : #compilation }
-IPSession >> doItReceiver [
-
-	^  self  
-	
-
-]
-
 { #category : #compilation }
 IPSession >> evaluate: source [
 	| result method |
-
-	
 	method := self class compiler
 			source: source;
 			noPattern: true;
