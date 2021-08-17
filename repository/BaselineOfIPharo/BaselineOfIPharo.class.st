@@ -120,7 +120,8 @@ BaselineOfIPharo >> osSubprocess: spec [
 BaselineOfIPharo >> pharoDAP: spec [
 	spec 
 		baseline: 'PharoLanguageServer' with: [ 
-			spec repository: 'github://badetitou/Pharo-LanguageServer:v1.1.4' ].
+			spec repository: 'github://badetitou/Pharo-LanguageServer:v1.1.4' ];
+		load: 'PharoDAP'.
 	
 
 
