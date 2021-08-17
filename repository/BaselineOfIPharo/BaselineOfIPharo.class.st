@@ -12,14 +12,14 @@ BaselineOfIPharo >> baseline: spec [
 		Smalltalk os isWindows ifFalse:[ 
 			"OSSubprocess does not support Windows"
 			self osSubprocess: spec.
-			self pharoDAP: spec.
 			self createKernelFile].
+		self pharoDAP: spec.
 		spec
 			package: 'ZeroMQ';
 			package: 'IPharo' with: [ spec requires: #('ZeroMQ') ];
 			package: 'JupyterTalk-Roassal' with: [
 				spec 
-					requires: #('JupyterTalk');
+					requires: #('IPharo');
 					preLoadDoIt: #installRoassal
 				].
 		self groups: spec
