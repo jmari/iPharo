@@ -8,22 +8,23 @@ Class {
 BaselineOfIPharo >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ 
+		self pharoDAP: spec.
 		self json: spec.
 		Smalltalk os isWindows ifFalse:[ 
 			"OSSubprocess does not support Windows"
 			self osSubprocess: spec.
 			self createKernelFile].
-		self pharoDAP: spec.
+
 		spec
 			package: 'ZeroMQ';
+			package: 'PharoDAP';
 			package: 'IPharo' with: [ spec requires: #('ZeroMQ' 'SCouchDB' 'PharoDAP') ];
 			package: 'JupyterTalk-Roassal' with: [
 				spec 
 					requires: #('IPharo');
 					preLoadDoIt: #installRoassal
 				].
-		self groups: spec
-	]
+		self groups: spec ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -120,7 +121,7 @@ BaselineOfIPharo >> osSubprocess: spec [
 BaselineOfIPharo >> pharoDAP: spec [
 	spec 
 		baseline: 'PharoLanguageServer' with: [ 
-			spec repository: 'https://github.com/badetitou/Pharo-LanguageServer.git' ].
+			spec repository: 'github://badetitou/Pharo-LanguageServer:v1.1.4' ].
 	
 
 
