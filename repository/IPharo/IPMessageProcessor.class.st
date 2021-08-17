@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'zmqSocket',
 		'stop',
-		'wireMessage'
+		'wireMessage',
+		'handlers'
 	],
 	#category : #'IPharo-Core'
 }
@@ -17,6 +18,24 @@ IPMessageProcessor class >> new: aZmqSocket [
 	^ i startThread 
 ]
 
+{ #category : #'message-handlers' }
+IPMessageProcessor >> addHandler: aDAPHandler [
+	handlers add: aDAPHandler
+]
+
+{ #category : #'message-handlers' }
+IPMessageProcessor >> addHandlersFromPragmasIn: handlerInstance [
+	(Pragma allNamed: #ipharo: in: handlerInstance class)
+		do: [ :pragma | 
+			self
+				addHandler:
+					(IPHandler new
+						receiver: handlerInstance;
+						methodName: pragma arguments first;
+						messageSelector: pragma methodSelector;
+						yourself) ]
+]
+
 { #category : #hooks }
 IPMessageProcessor >> debug: anError [
 	ZmqLog logDebug: anError asString 
@@ -27,50 +46,28 @@ IPMessageProcessor >> execute: anIPMessage [
 	self subclassResponsibility 
 ]
 
-{ #category : #widgetMessages }
-IPMessageProcessor >> executeCommCloseRequest: aMessage [
-	IPharoKernel instance commManager unregisterComm: (aMessage content at:#comm_id).
-	
-	"NO-RESPONSE"
+{ #category : #'message-handlers' }
+IPMessageProcessor >> handleRequest: anIPMsg [
+	[ | handler |
+	handler := self handlerFor: anIPMsg.
+	handler executeWithArguments: anIPMsg ]
+		on: Error
+		do: [ :ipError | self debug: ipError ] 
 ]
 
-{ #category : #widgetMessages }
-IPMessageProcessor >> executeCommMsgRequest: aMessage [ 
-	| comm data |
-	                   
-	comm :=(IPharoKernel instance commManager commChannelAt:(aMessage content at:#comm_id)). 
-	data := aMessage content at:#data.
-	(data at:#method) = 'update' ifTrue:[ comm commListeners do:[:l| l updateState:(data at:#state)]].
-	(data at:#method) = 'request_state' ifTrue:[ comm commListeners 
-		do:[:l| comm update:l model state]].	 
+{ #category : #'message-handlers' }
+IPMessageProcessor >> handlerFor: aIPMsg [
 
+	^ handlers
+		detect: [ :handler | handler methodName = aIPMsg msgType ]
+		ifNone: [ IPNonExistentHandler signal: aIPMsg msgType ]
 ]
 
-{ #category : #widgetMessages }
-IPMessageProcessor >> executeCommOpenRequest: aMessage [
-	IPComm new:(aMessage content at:#comm_id) onSession: (IPSession getSessionForMessage: aMessage)
-
-	"NO-RESPONSE"
-
-	
-	
-
-]
-
-{ #category : #widgetMessages }
-IPMessageProcessor >> executeRequestState: aMessage [ 
-	                   
-	(IPharoKernel instance commManager commChannelAt:(aMessage content at:#comm_id)) 
-	commListeners do:[:aMsgHandler|
-		aMsgHandler comm update: aMsgHandler model state].
-]
-
-{ #category : #widgetMessages }
-IPMessageProcessor >> executeUpdateState: aMessage [ 
-	| response |                
-	(IPharoKernel instance commManager commChannelAt:(aMessage content at:#comm_id)) commListeners  
-	 do:[:aListener|
-		response := aListener model state: (aMessage content at:#state)]
+{ #category : #initialize }
+IPMessageProcessor >> initialize [ 
+	super initialize.
+	handlers := OrderedCollection new.
+	self addHandlersFromPragmasIn: self.
 ]
 
 { #category : #testing }
@@ -90,7 +87,7 @@ IPMessageProcessor >> processMessage [
 
 	response := self wireMessage hmacIsValid 
 												ifTrue:[self execute: self wireMessage]
-												ifFalse:[IPHMACException signal:'Wrong HMAC'].
+												ifFalse:[IPHMACError signal:'Wrong HMAC'].
 
 	self wireMessage: IPWireMessage new].
 
@@ -130,7 +127,7 @@ IPMessageProcessor >> receiveWireMessage [
 ]
 
 { #category : #running }
-IPMessageProcessor >> respond: anIPResponse [
+IPMessageProcessor >> sendMessage: anIPResponse [
 	| aResponse |
 	aResponse := IPWireMessage newFromMessage: anIPResponse.
 	self zmqSocket ifNotNil: [ 

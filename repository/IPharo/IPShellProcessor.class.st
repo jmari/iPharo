@@ -14,40 +14,68 @@ IPShellProcessor >> completion [
 
 { #category : #running }
 IPShellProcessor >> execute: aWireMessage [
-	| message response|
+	| message |
 
 	message := IPMsg newFromWireMessage: aWireMessage.
 	self publish: (IPKernelStatusBusyMsg newReplyingToWireMessage: aWireMessage).
-	message msgType = #kernel_info_request ifTrue:[ response:=self executeKernelInfoRequest: message ].	
-	message msgType = #comm_info_request ifTrue:[ response:=self executeCommInfoRequest: message ].			
-	message msgType = #execute_request ifTrue:[ response:=self executeExecuteRequest: message ].
-	message msgType = #is_complete_request ifTrue:[ response:=self executeIsCompleteRequest: message ].
-	message msgType = #shutdown_request ifTrue:[ self executeShutdown: message ].
-	message msgType = #complete_request ifTrue:[ response:=self executeCompleteRequest: message ].
-	"Comm messaging protocol, handlers are implemented in super because iopub also use them"
-	message msgType = #comm_open ifTrue:[ self executeCommOpenRequest: message ].	
-	message msgType = #comm_close ifTrue:[ self executeCommCloseRequest: message].	
-	message msgType = #comm_msg ifTrue:[ self executeCommMsgRequest: message].	
-	message msgType = #update_state ifTrue:[ self executeUpdateState: message].	
-	message msgType = #request_state ifTrue:[ self executeUpdateState: message].	
-	response ifNotNil:[self respond: response].
+	self handleRequest: message.	
 	self publish:  (IPKernelStatusIdleMsg newReplyingToWireMessage: aWireMessage).
 ]
 
-{ #category : #running }
+{ #category : #'message-handling-comm' }
+IPShellProcessor >> executeCommCloseRequest: aMessage [
+	<ipharo: #comm_close>
+	
+	IPharoKernel instance commManager unregisterComm: (aMessage content at:#comm_id).
+	"NO-RESPONSE"
+]
+
+{ #category : #'message-handling' }
 IPShellProcessor >> executeCommInfoRequest: aMessage [
+	<ipharo:#comm_info_request>
+	
 	| response |
+	
 	response := IPCommInfoReplyMsg new.
 	"parent_header must be exactly the same header"
 	response replyingToWireMessage: self wireMessage.
-	^  response
+	self sendMessage: response
 	
+]
+
+{ #category : #'message-handling-comm' }
+IPShellProcessor >> executeCommMsgRequest: aMessage [ 
+	<ipharo:#comm_msg> 
+	
+	| comm data |
+	
+	comm :=(IPharoKernel instance commManager commChannelAt:(aMessage content at:#comm_id)). 
+	data := aMessage content at:#data.
+	(data at:#method) = 'update' ifTrue:[ comm commListeners do:[:l| l updateState:(data at:#state)]].
+	(data at:#method) = 'request_state' ifTrue:[ comm commListeners 
+		do:[:l| comm update:l model state]].	 
+
+]
+
+{ #category : #'message-handling-comm' }
+IPShellProcessor >> executeCommOpenRequest: aMessage [
+	<ipharo: #comm_open>
+	
+	IPComm new:(aMessage content at:#comm_id) onSession: (IPSession getSessionForMessage: aMessage)
+
+	"NO-RESPONSE"
+
+	
+	
+
 ]
 
 { #category : #private }
 IPShellProcessor >> executeCompleteRequest: aMessage [
+	<ipharo: #complete_request>
+	
 	| response completionList session |
-
+		
 	session := IPSession getSessionForMessage: aMessage.
 	response := session completeReplyMsg.
 	completionList := self completion getCompletionListFrom: aMessage.
@@ -55,53 +83,67 @@ IPShellProcessor >> executeCompleteRequest: aMessage [
 	response content at:#cursor_start put: (completionList at:2).
 	response content at:#cursor_end put: (completionList at:3).
 	response content at:#status put:#ok. 
-	"parent_header must be exactly the same header"
 
-	^ response
+	self sendMessage: response
 ]
 
-{ #category : #running }
+{ #category : #'message-handling' }
 IPShellProcessor >> executeExecuteRequest: aMessage [
+	<ipharo: #execute_request>
+	
 	| response session  |
-	"parent_header must be exactly the same header"
 
 	session := IPSession getSessionForMessage: aMessage.
 	self publish: (session executeInputMessage	code:aMessage content code).	
-	[session compileAndEvaluate: aMessage]
-		on: Error do:[:e| 
+	[ session compileAndEvaluate: aMessage.
+	  session increaseExecutionCounter.	
+	  self sendMessage: session executionOkMessage ] 
+	on: Error do:[ :e| 
 			response := (session executionErrorMessage 	exceptionObject: e).
-			self publish: (session executeErrorMessage content: response content) ].
-	response ifNil:[response:= session executionOkMessage ].
-
-	session increaseExecutionCounter.	
-	^ response
-	
+			self publish: (session executeErrorMessage content: response content).
+			self sendMessage: response ]
 ]
 
-{ #category : #running }
+{ #category : #'message-handling' }
 IPShellProcessor >> executeIsCompleteRequest: aMessage [
+	<ipharo: #is_complete_request>
+	
 	| response |
+
 	response := IPIsCompleteReplyMsg new.
 	"parent_header must be exactly the same header"
 	response replyingToWireMessage: self wireMessage.
-	^ response
+	self sendMessage: response
 	
 ]
 
-{ #category : #running }
+{ #category : #'message-handling' }
 IPShellProcessor >> executeKernelInfoRequest: aMessage [
+	<ipharo: #kernel_info_request>
+	
 	| session|
-	
+
 	session := IPSession getSessionForMessage: aMessage.
-	^ session kernelInfoReplayMessage.
-
-
-	
+	self sendMessage: session kernelInfoReplayMessage
 ]
 
-{ #category : #running }
-IPShellProcessor >> executeShutdown: aMessage [
-	Smalltalk snapshot: false andQuit: true 
+{ #category : #'message-handling-comm' }
+IPShellProcessor >> executeRequestState: aMessage [ 
+	<ipharo: #request_state>
+	
+	(IPharoKernel instance commManager commChannelAt:(aMessage content at:#comm_id)) 
+	commListeners do:[:aMsgHandler|
+		aMsgHandler comm update: aMsgHandler model state].
+]
+
+{ #category : #'message-handling-comm' }
+IPShellProcessor >> executeUpdateState: aMessage [ 
+   <ipharo:#update_state>
+
+	| response | 
+	       
+	(IPharoKernel instance commManager commChannelAt:(aMessage content at:#comm_id)) commListeners  
+	 do:[ :aListener | response := aListener model state: (aMessage content at:#state) ]
 ]
 
 { #category : #accessing }

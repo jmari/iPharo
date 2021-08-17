@@ -33,7 +33,9 @@ Class {
 		'cachedObjects',
 		'display',
 		'widgetsFactory',
-		'currentMessage'
+		'currentMessage',
+		'request',
+		'sem'
 	],
 	#classInstVars : [
 		'sessions'
@@ -81,6 +83,12 @@ IPSession class >> session: aSessionId [
 { #category : #accessing }
 IPSession class >> sessions [
 	^ sessions ifNil:[ sessions := Dictionary new ]
+]
+
+{ #category : #visiting }
+IPSession >> acceptInputReplay: content [
+	request := content.
+	sem signal
 ]
 
 { #category : #'workspace vars support' }
@@ -293,7 +301,8 @@ IPSession >> initialize [
 
 	super initialize.
 	self initializeBindings.
-	executionCounter := 1
+	executionCounter := 1.
+	sem :=Semaphore new.
 ]
 
 { #category : #initialization }
@@ -319,7 +328,6 @@ IPSession >> initializeMessageHeader: aMessage [
 IPSession >> kernelInfoReplayMessage [
 	 | msg |
 	msg := IPKernelInfoReplyMsg new. 
-	msg uuid:'Ø'.
 	self initializeMessageHeader: msg.
 	^ msg 
 ]
@@ -344,6 +352,21 @@ IPSession >> loadScript: aStringScript [
 { #category : #accessing }
 IPSession >> print: anObject [
 	self display openInJupyter: anObject
+]
+
+{ #category : #'public-api' }
+IPSession >> request: requestString [
+	| msg |
+	(self currentMessage content at:'allow_stdin') ifFalse:[ IPStdInNotSupportedByClient signal].
+	msg := IPInputRequestMsg new.
+	msg prompt: requestString.
+	self initializeMessageHeader: msg.
+	IPharoKernel instance stdin sendMessage: msg.
+	"request should be written by #acceptInputReply from IPharoKernel instance stdin processor"
+	sem wait.
+	^ request
+	
+	
 ]
 
 { #category : #accessing }
