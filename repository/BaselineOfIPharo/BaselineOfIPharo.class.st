@@ -17,7 +17,7 @@ BaselineOfIPharo >> baseline: spec [
 
 		spec
 			package: 'ZeroMQ';
-			package: 'IPharo' with: [ spec requires: #('ZeroMQ' 'SCouchDB' 'PharoDAP') ];
+			package: 'IPharo' with: [ spec requires: #('ZeroMQ' 'SCouchDB') ];
 			package: 'JupyterTalk-Roassal' with: [
 				spec 
 					requires: #('IPharo');
@@ -118,10 +118,10 @@ BaselineOfIPharo >> osSubprocess: spec [
 
 { #category : #'as yet unclassified' }
 BaselineOfIPharo >> pharoDAP: spec [
-	spec 
-		baseline: 'PharoLanguageServer' with: [ 
-			spec repository: 'github://badetitou/Pharo-LanguageServer:v1.1.4' ];
-		load: 'PharoDAP'.
+	Metacello new
+		baseline: 'PharoLanguageServer';
+		repository: 'github://badetitou/Pharo-LanguageServer:v1.1.4';
+		load.
 	
 
 
