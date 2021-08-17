@@ -16,7 +16,7 @@ BaselineOfIPharo >> baseline: spec [
 			self createKernelFile].
 		spec
 			package: 'ZeroMQ';
-			package: 'JupyterTalk' with: [ spec requires: #('ZeroMQ') ];
+			package: 'IPharo' with: [ spec requires: #('ZeroMQ') ];
 			package: 'JupyterTalk-Roassal' with: [
 				spec 
 					requires: #('JupyterTalk');
@@ -70,7 +70,7 @@ BaselineOfIPharo >> getKernelFileReference [
 { #category : #protocol }
 BaselineOfIPharo >> groups: spec [
 	spec 
-		group: 'default' with: #('JupyterTalk');
+		group: 'default' with: #('IPharo');
 		group: 'zmq' with: #('ZeroMQ');
 		group: 'roassalSupport' with: #('JupyterTalk-Roassal');
 		group: 'all' with: #('JupyterTalk-Roassal')
