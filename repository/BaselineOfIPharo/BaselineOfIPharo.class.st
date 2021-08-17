@@ -120,7 +120,7 @@ BaselineOfIPharo >> osSubprocess: spec [
 { #category : #'as yet unclassified' }
 BaselineOfIPharo >> pharoDAP: spec [
 	spec 
-		baseline: 'PharoLanguageServer' with: [ 
+		baseline: 'PharoDAP' with: [ 
 			spec repository: 'github://badetitou/Pharo-LanguageServer:v1.1.4' ].
 	
 
