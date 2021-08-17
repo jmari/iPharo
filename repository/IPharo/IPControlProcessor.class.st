@@ -13,6 +13,13 @@ IPControlProcessor >> execute: aWireMessage [
 ]
 
 { #category : #'message-handling' }
+IPControlProcessor >> executeDebugRequest: aMessage [
+	<ipharo: #debug_request>
+	
+	
+]
+
+{ #category : #'message-handling' }
 IPControlProcessor >> executeShutdown: aMessage [
 	<ipharo: #shutdown_request>
 	

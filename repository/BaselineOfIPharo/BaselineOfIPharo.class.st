@@ -12,6 +12,7 @@ BaselineOfIPharo >> baseline: spec [
 		Smalltalk os isWindows ifFalse:[ 
 			"OSSubprocess does not support Windows"
 			self osSubprocess: spec.
+			self pharoDAP: spec.
 			self createKernelFile].
 		spec
 			package: 'ZeroMQ';
@@ -111,6 +112,16 @@ BaselineOfIPharo >> osSubprocess: spec [
 		baseline: 'OSSubprocess' with: [ 
 			spec repository: 'github://pharo-contributions/OSSubprocess:master/repository' ];
 		import: 'all'
+
+
+]
+
+{ #category : #'as yet unclassified' }
+BaselineOfIPharo >> pharoDAP: spec [
+	spec 
+		baseline: 'PharoLanguageServer' with: [ 
+			spec repository: 'https://github.com/badetitou/Pharo-LanguageServer.git' ];
+		import: 'PharoDAP'
 
 
 ]
