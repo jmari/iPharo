@@ -36,9 +36,7 @@ IPShellProcessor >> executeCommInfoRequest: aMessage [
 	
 	| response |
 	
-	response := IPCommInfoReplyMsg new.
-	"parent_header must be exactly the same header"
-	response replyingToWireMessage: self wireMessage.
+	response := IPCommInfoReplyMsg newReplyingToWireMessage: self wireMessage.
 	self sendMessage: response
 	
 ]
@@ -110,9 +108,7 @@ IPShellProcessor >> executeIsCompleteRequest: aMessage [
 	
 	| response |
 
-	response := IPIsCompleteReplyMsg new.
-	"parent_header must be exactly the same header"
-	response replyingToWireMessage: self wireMessage.
+	response := IPIsCompleteReplyMsg newReplyingToWireMessage: self wireMessage.
 	self sendMessage: response
 	
 ]

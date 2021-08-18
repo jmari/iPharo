@@ -356,7 +356,7 @@ IPSession >> print: anObject [
 IPSession >> request: requestString [
 	| msg |
 	(self currentMessage content at:'allow_stdin') ifFalse:[ IPStdInNotSupportedByClient signal].
-	msg := IPInputRequestMsg new.
+	msg := IPInputRequestMsg newReplyingToWireMessage: self currentMessage wireMessage.
 	msg prompt: requestString.
 	self initializeMessageHeader: msg.
 	IPharoKernel instance stdin sendMessage: msg.
