@@ -1,8 +1,17 @@
 Class {
 	#name : #IPControlProcessor,
 	#superclass : #IPMessageProcessor,
+	#instVars : [
+		'debuggerServer'
+	],
 	#category : #'IPharo-Core'
 }
+
+{ #category : #execution }
+IPControlProcessor >> debuggerServer [
+	^ debuggerServer ifNil:[
+		debuggerServer := PharoDAP start ]
+]
 
 { #category : #execution }
 IPControlProcessor >> execute: aWireMessage [

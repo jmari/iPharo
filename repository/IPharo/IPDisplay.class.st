@@ -33,7 +33,8 @@ Class {
 		'interaction',
 		'extent',
 		'session',
-		'hasBeenAlreadyPublished'
+		'hasBeenAlreadyPublished',
+		'dataModel'
 	],
 	#classInstVars : [
 		'cachedObjects'
@@ -84,6 +85,12 @@ IPDisplay >> buildDisplayDataModel: data [
 												#interactive-> interaction.
 												#extent->self extent.
 												#metadata ->dataModel metadata} asDictionary. 
+	^ dataModel
+]
+
+{ #category : #accessing }
+IPDisplay >> dataModel [
+
 	^ dataModel
 ]
 
@@ -160,12 +167,12 @@ IPDisplay >> maxNumberOfRows [
 
 { #category : #'public-api' }
 IPDisplay >> openInJupyter: data [ 
-	| dataModel executionResult |
+	| displayData |
 	hasBeenAlreadyPublished := false.
 	dataModel := self buildDisplayDataModel: data.
-	executionResult := self session executeResultMessage.
-	executionResult content addAll: dataModel.	
-	self publish: executionResult.
+	displayData  := self session displayDataMessage.
+	displayData addAll: dataModel deepCopy.
+	self publish: displayData.
 	"returns the UUID"
 	^ dataModel transient display_id 
 ]

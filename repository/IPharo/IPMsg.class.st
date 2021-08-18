@@ -40,7 +40,7 @@ IPMsg class >> newReplyingToWireMessage: aWireMessage [
 
 { #category : #accessing }
 IPMsg >> content [
-	^ content ifNil:[content := SCJsonObject new]
+	^ content ifNil:[ content := SCJsonObject new ]
 ]
 
 { #category : #accessing }
@@ -50,7 +50,7 @@ IPMsg >> content: anObject [
 
 { #category : #accessing }
 IPMsg >> header [
-	^ header  ifNil:[header := {
+	^ header ifNil:[ header := {
                 'msg_id' -> self msgUUID.
                 'date' -> DateAndTime now asString. 
                 'msg_type' -> self msgType.
@@ -65,7 +65,7 @@ IPMsg >> header: anObject [
 
 { #category : #accessing }
 IPMsg >> metadata [
-	^ metadata ifNil:[metadata := SCJsonObject new]
+	^ metadata ifNil:[ metadata := SCJsonObject new ]
 ]
 
 { #category : #accessing }
@@ -75,7 +75,7 @@ IPMsg >> metadata: anObject [
 
 { #category : #accessing }
 IPMsg >> msgId [
-	^ msg_id ifNil:[ msg_id:= UUID new hex asString asUppercase].
+	^ msg_id ifNil:[ msg_id:= UUID new hex asString asUppercase ].
 ]
 
 { #category : #accessing }
@@ -95,12 +95,12 @@ IPMsg >> msgType: anObject [
 
 { #category : #accessing }
 IPMsg >> msgUUID [
- 	^ msgUUID ifNil:[ UUID new hex asString asUppercase].
+ 	^ msgUUID ifNil:[ UUID new hex asString asUppercase ].
 ]
 
 { #category : #accessing }
 IPMsg >> parentHeader [
-	^ parentHeader ifNil:[parentHeader := SCJsonObject new asByteArray ]
+	^ parentHeader ifNil:[ parentHeader := SCJsonObject new asByteArray ]
 ]
 
 { #category : #accessing }
@@ -117,7 +117,7 @@ IPMsg >> replyingToWireMessage: aWireMessage [
 
 { #category : #accessing }
 IPMsg >> uuid [
- 	^ uuid ifNil:[ uuid := UUID new hex asString asUppercase].
+ 	^ uuid ifNil:[ uuid := UUID new hex asString asUppercase ].
 ]
 
 { #category : #accessing }

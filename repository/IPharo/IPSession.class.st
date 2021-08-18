@@ -137,10 +137,13 @@ IPSession >> commUpdateMessage [
 
 { #category : #compilation }
 IPSession >> compileAndEvaluate: aMessage [
-	| result |
+	| result executionResult dataModel |
 	self display reset.
 	result := self evaluate: aMessage content code.
-	self display hasBeenAlreadyPublished ifFalse:[self display openInJupyter: result asString].
+	executionResult := self  executeResultMessage.
+	dataModel := self display buildDisplayDataModel: result asString.
+	executionResult content addAll: dataModel.	
+	self display publish: executionResult.
 	
 	
 ]

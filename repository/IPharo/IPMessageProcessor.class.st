@@ -83,18 +83,12 @@ IPMessageProcessor >> messageDelimiter [
 { #category : #'as yet unclassified' }
 IPMessageProcessor >> processMessage [
 	|response|
-	self wireMessage isFull ifTrue:[
+	self wireMessage isFull ifFalse:[ ^ self ].
 
 	response := self wireMessage hmacIsValid 
-												ifTrue:[self execute: self wireMessage]
-												ifFalse:[IPHMACError signal:'Wrong HMAC'].
-
-	self wireMessage: IPWireMessage new].
-
-
-						
-	
-
+												ifTrue:[ self execute: self wireMessage ]
+												ifFalse:[ IPHMACError signal:'Wrong HMAC' ].
+	self wireMessage: IPWireMessage new.
 ]
 
 { #category : #'comm handlers' }
@@ -104,7 +98,7 @@ IPMessageProcessor >> publish: aResult [
 
 { #category : #parsing }
 IPMessageProcessor >> pushMessageFrame:messageData [ 
-	Transcript show: '-', messageData asString;cr.
+
 	(messageData =  (self messageDelimiter asByteArray))
 				ifFalse:[ self wireMessage push:messageData ]
 
@@ -118,12 +112,12 @@ IPMessageProcessor >> receiveWireMessage [
 	|more|
 	self zmqSocket receiveIfAvailable: [ :messageData|  
 							more:= self zmqSocket getOption: ZmqApiConstants zmqRcvMore.
-							messageData size > 0 
-							ifTrue:[self pushMessageFrame:messageData]
-							ifFalse:[							
+							messageData isEmpty 
+							ifTrue:[							
 									Processor yield.
-									(Delay forMilliseconds: 500) wait].
-							more = 0 ifTrue: [ self processMessage ]].	
+									(Delay forMilliseconds: 500) wait ]
+							ifFalse:[ self pushMessageFrame:messageData ].
+							more = 0 ifTrue: [ self processMessage ] ].	
 ]
 
 { #category : #running }
