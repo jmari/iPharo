@@ -8,7 +8,6 @@ Class {
 BaselineOfIPharo >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ 
-		self pharoDAP: spec.
 		self json: spec.
 		Smalltalk os isWindows ifFalse:[ 
 			"OSSubprocess does not support Windows"
@@ -17,8 +16,9 @@ BaselineOfIPharo >> baseline: spec [
 
 		spec
 			package: 'ZeroMQ';
-			package: 'PharoDAP' with: [ spec requires: 'PharoLanguageServer' ];
-			package: 'IPharo' with: [ spec requires: #('ZeroMQ' 'SCouchDB' 'PharoDAP') ];
+			package: 'IPharo' with: [ 
+				spec requires: #('ZeroMQ' 'SCouchDB');
+				preLoadDoIt: #installPharoDAP ];
 			package: 'JupyterTalk-Roassal' with: [
 				spec 
 					requires: #('IPharo');
@@ -78,6 +78,17 @@ BaselineOfIPharo >> groups: spec [
 ]
 
 { #category : #'as yet unclassified' }
+BaselineOfIPharo >> installPharoDAP [
+	Metacello new
+		baseline: 'PharoLanguageServer';
+		repository: 'github://badetitou/Pharo-LanguageServer:v1.1.4';
+		load.
+	
+
+
+]
+
+{ #category : #'as yet unclassified' }
 BaselineOfIPharo >> installRoassal [
 	"ROASSAL 3 is not supported"
 	| installRoassal |
@@ -113,17 +124,6 @@ BaselineOfIPharo >> osSubprocess: spec [
  	baseline: 'OSSubprocess';
  	repository: 'github://pharo-contributions/OSSubprocess:master/repository';
 	load.
-
-
-]
-
-{ #category : #'as yet unclassified' }
-BaselineOfIPharo >> pharoDAP: spec [
-	Metacello new
-		baseline: 'PharoLanguageServer';
-		repository: 'github://badetitou/Pharo-LanguageServer:v1.1.4';
-		load.
-	
 
 
 ]
