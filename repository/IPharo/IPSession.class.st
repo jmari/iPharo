@@ -106,7 +106,7 @@ IPSession >> bindings [
 { #category : #'message-comm' }
 IPSession >> commCloseMessage [
 	 | msg |
-	msg := IPCommCloseMsg new.
+	msg := IPCommCloseMsg newReplyingToWireMessage: self currentMessage wireMessage. 
 	self initializeMessageHeader: msg.
 	^ msg 
 ]
@@ -114,7 +114,7 @@ IPSession >> commCloseMessage [
 { #category : #'message-comm' }
 IPSession >> commMsgMessage [
 	 | msg |
-	msg := IPCommMsg new.
+	msg := IPCommMsg newReplyingToWireMessage: self currentMessage wireMessage. 
 	self initializeMessageHeader: msg.
 	^ msg 
 ]
@@ -122,7 +122,7 @@ IPSession >> commMsgMessage [
 { #category : #'message-comm' }
 IPSession >> commOpenMessage [
 	 | msg |
-	msg := IPCommOpenMsg new.
+	msg := IPCommOpenMsg newReplyingToWireMessage: self currentMessage wireMessage. 
 	self initializeMessageHeader: msg.
 	^ msg 
 ]
@@ -130,7 +130,7 @@ IPSession >> commOpenMessage [
 { #category : #'message-comm' }
 IPSession >> commUpdateMessage [
 	 | msg |
-	msg := IPCommUpdateMsg new.
+	msg := IPCommUpdateMsg newReplyingToWireMessage: self currentMessage wireMessage. 
 	self initializeMessageHeader: msg.
 	^ msg 
 ]
@@ -148,7 +148,7 @@ IPSession >> compileAndEvaluate: aMessage [
 { #category : #'message-comm' }
 IPSession >> completeReplyMsg [
 	 | msg |
-	msg := IPCompleteReplyMsg new.
+	msg := IPCompleteReplyMsg newReplyingToWireMessage: self currentMessage wireMessage. 
 	self initializeMessageHeader: msg.
 	^ msg 
 ]
@@ -183,7 +183,7 @@ IPSession >> display [
 { #category : #'messages-iopub' }
 IPSession >> displayDataMessage [
 	 | msg |
-	msg := IPDisplayDataMsg new.
+	msg := IPDisplayDataMsg newReplyingToWireMessage: self currentMessage wireMessage. 
 	self initializeMessageHeader: msg.
 
 	^ msg 
@@ -207,7 +207,7 @@ IPSession >> evaluate: source [
 { #category : #'messages-iopub' }
 IPSession >> executeErrorMessage [
 	 | msg |
-	msg := IPExecuteErrorMsg new.
+	msg := IPExecuteErrorMsg newReplyingToWireMessage: self currentMessage wireMessage. 
 	self initializeMessageHeader: msg.
 	^ msg 
 ]
@@ -215,7 +215,7 @@ IPSession >> executeErrorMessage [
 { #category : #'messages-iopub' }
 IPSession >> executeInputMessage [
 	 | msg |
-	msg := IPExecuteInputMsg new.
+	msg := IPExecuteInputMsg newReplyingToWireMessage: self currentMessage wireMessage. 
 	self initializeMessageHeader: msg.
 	^ msg executionCount:  executionCounter
 	
@@ -225,7 +225,7 @@ IPSession >> executeInputMessage [
 { #category : #'messages-iopub' }
 IPSession >> executeResultMessage [
 	 | msg |
-	msg := IPExecuteResultMsg new.
+	msg := IPExecuteResultMsg newReplyingToWireMessage: self currentMessage wireMessage. 
 	self initializeMessageHeader: msg.
 	^ msg executionCount:  executionCounter
 ]
@@ -233,7 +233,7 @@ IPSession >> executeResultMessage [
 { #category : #'messages-shell' }
 IPSession >> executionAbortedMessage [
 	 | msg |
-	msg := IPExecutionAbortedMsg new.
+	msg := IPExecutionAbortedMsg newReplyingToWireMessage: self currentMessage wireMessage. 
 	self initializeMessageHeader: msg.
 	^ msg executionCount:  self executionCounter
 ]
@@ -246,7 +246,7 @@ IPSession >> executionCounter [
 { #category : #'messages-shell' }
 IPSession >> executionErrorMessage [
 	 | msg |
-	msg := IPExecutionErrorMsg new. 
+	msg := IPExecutionErrorMsg newReplyingToWireMessage: self currentMessage wireMessage.  
 	self initializeMessageHeader: msg.
 	^ msg executionCount:  self executionCounter
 ]
@@ -254,7 +254,7 @@ IPSession >> executionErrorMessage [
 { #category : #'messages-shell' }
 IPSession >> executionOkMessage [
 	 | msg |
-	msg := IPExecutionOkMsg new.
+	msg := IPExecutionOkMsg newReplyingToWireMessage: self currentMessage wireMessage. 
 	msg metadata engine: self id.
 	self initializeMessageHeader: msg.
 	^ msg executionCount:  self executionCounter
@@ -319,15 +319,13 @@ IPSession >> initializeMessageHeader: aMessage [
 				session: self id;
 				username: self kernelUsername.
 
-	aMessage parentHeader: self currentMessage wireMessage header.
-	aMessage uuid: self currentMessage wireMessage uuid.
 	^ aMessage 
 ]
 
 { #category : #'messages-shell' }
 IPSession >> kernelInfoReplayMessage [
 	 | msg |
-	msg := IPKernelInfoReplyMsg new. 
+	msg := IPKernelInfoReplyMsg newReplyingToWireMessage: self currentMessage wireMessage. 
 	self initializeMessageHeader: msg.
 	^ msg 
 ]
@@ -394,7 +392,7 @@ IPSession >> startTime: anObject [
 { #category : #'messages-iopub' }
 IPSession >> updateDisplayMessage [
 	 | msg |
-	msg := IPUpdateDisplayDataMsg new.
+	msg := IPUpdateDisplayDataMsg newReplyingToWireMessage: self currentMessage wireMessage. 
 	self initializeMessageHeader: msg.
 	^ msg 
 ]
