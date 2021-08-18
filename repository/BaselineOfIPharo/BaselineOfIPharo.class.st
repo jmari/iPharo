@@ -119,9 +119,10 @@ BaselineOfIPharo >> osSubprocess: spec [
 
 { #category : #'as yet unclassified' }
 BaselineOfIPharo >> pharoDAP: spec [
-	spec 
-		baseline: 'PharoLanguageServer' with: [ 
-			spec repository: 'github://badetitou/Pharo-LanguageServer:v1.1.4' ].
+	Metacello new
+		baseline: 'PharoLanguageServer';
+		repository: 'github://badetitou/Pharo-LanguageServer:v1.1.4';
+		load.
 	
 
 
