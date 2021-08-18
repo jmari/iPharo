@@ -6,7 +6,7 @@ Pharo Smaltalk kernel for Jupyter. This project is implemented on Pharo 9 64 bit
 It uses ZeroMQ ported from <a href="http://smalltalkhub.com/#!/~panuw/zeromq">zeromq</a> project to uFFI.
 Roassal 2 integration is supported. Main branch in this repository is in active development.
 
-There you are a few examples on using jupiterTalk, you can test some of them in Binder.
+There you are a few examples on using iPharo, you can test some of them in Binder.
   - <a href="http://rawcdn.githack.com/jmari/JupyterTalk/master/notebooks/Tutorial1_BasicStatistics.html"> Tutorial  1 - basic statistics</a>
   - <a href="http://rawcdn.githack.com/jmari/JupyterTalk/master/notebooks/tensorflow.html"> Tutorial 2 - tensorflow </a>
   - <a href="http://rawcdn.githack.com/jmari/JupyterTalk/master/notebooks/Tutorial4_Linear+Regression.html"> Tutorial 3 - Linear regression with tensorflow and polymath </a>
