@@ -112,6 +112,14 @@ IPSession >> commCloseMessage [
 ]
 
 { #category : #'message-comm' }
+IPSession >> commInfoReplyMessage [
+	 | msg |
+	msg := IPCommInfoReplyMsg newReplyingToWireMessage: self currentMessage wireMessage. 
+	self initializeMessageHeader: msg.
+	^ msg 
+]
+
+{ #category : #'message-comm' }
 IPSession >> commMsgMessage [
 	 | msg |
 	msg := IPCommMsg newReplyingToWireMessage: self currentMessage wireMessage. 
@@ -320,7 +328,7 @@ IPSession >> initializeMessageHeader: aMessage [
 	All of the messages in a session are answering to an execute request message"
 	aMessage header 
 				session: self id;
-				username: self kernelUsername.
+				username: self username.
 
 	^ aMessage 
 ]
@@ -333,9 +341,22 @@ IPSession >> kernelInfoReplayMessage [
 	^ msg 
 ]
 
-{ #category : #accessing }
-IPSession >> kernelUsername [
-	^#kernel
+{ #category : #'messages-iopub' }
+IPSession >> kernelStatusBusyMessage [
+	 | msg |
+	msg := IPKernelStatusBusyMsg newReplyingToWireMessage: self currentMessage wireMessage. 
+	self initializeMessageHeader: msg.
+	^ msg 
+ 
+]
+
+{ #category : #'messages-iopub' }
+IPSession >> kernelStatusIdleMessage [
+	 | msg |
+	msg := IPKernelStatusIdleMsg newReplyingToWireMessage: self currentMessage wireMessage. 
+	self initializeMessageHeader: msg.
+	^ msg 
+ 
 ]
 
 { #category : #'public-api' }
@@ -352,7 +373,7 @@ IPSession >> loadScript: aStringScript [
 
 { #category : #accessing }
 IPSession >> print: anObject [
-	self display openInJupyter: anObject
+	^ self display openInJupyter: anObject
 ]
 
 { #category : #'public-api' }

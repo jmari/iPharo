@@ -39,7 +39,8 @@ BaselineOfIPharo >> createKernelFile [
   "{connection_file}"
 	],
 	"display_name": "Pharo Smalltalk",
-	"language": "smalltalk"
+	"language": "smalltalk",
+	"metadata": { "debugger": true }
 	}'.
 	kernelFile := self getKernelFileReference.
 	stream := kernelFile writeStream.
@@ -82,7 +83,7 @@ BaselineOfIPharo >> installPharoDAP [
 	Metacello new
 		baseline: 'PharoLanguageServer';
 		repository: 'github://badetitou/Pharo-LanguageServer:v1.1.4';
-		load.
+		import:'PharoDAP'.
 	
 
 
@@ -126,4 +127,12 @@ BaselineOfIPharo >> osSubprocess: spec [
 	load.
 
 
+]
+
+{ #category : #'instance creation' }
+BaselineOfIPharo >> pharoNonCryptographicHashes: spec [
+    spec
+    	baseline: #NonCryptographicHashes
+    	with: [ spec repository: 'github://osoco/pharo-non-cryptographic-hashes:master/src' ];
+		import: 'Core'
 ]

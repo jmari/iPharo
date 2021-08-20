@@ -1,7 +1,7 @@
 Class {
 	#name : #IPCommOpenMsg,
 	#superclass : #IPCommMsg,
-	#category : #'IPharo-Messages-Comm'
+	#category : #'IPharo-Messages-Custom'
 }
 
 { #category : #initialization }

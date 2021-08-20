@@ -51,6 +51,7 @@ IPKernelInfoReplyMsg >> initialize [
 							#file_extension -> 'st'.
 							} asSCJsonObject .
 						#banner -> 'Pharo Smalltalk'.
+						#debugger -> IPharoKernel hasSupportForDebugger.
 						#HelpLinks -> {{#Text-> 'Pharo Smaltalk'. 
 											 #URL-> 'https://pharo.org/'} asSCJsonObject} asSCJsonObject  
 						} asSCJsonObject 

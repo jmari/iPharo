@@ -14,12 +14,12 @@ IPShellProcessor >> completion [
 
 { #category : #running }
 IPShellProcessor >> execute: aWireMessage [
-	| message |
-
+	| message session|
 	message := IPMsg newFromWireMessage: aWireMessage.
-	self publish: (IPKernelStatusBusyMsg newReplyingToWireMessage: aWireMessage).
+	session := IPSession getSessionForMessage: message.
+	self publish: session kernelStatusBusyMessage.
 	self handleRequest: message.	
-	self publish:  (IPKernelStatusIdleMsg newReplyingToWireMessage: aWireMessage).
+	self publish:  session kernelStatusIdleMessage..
 ]
 
 { #category : #'message-handling-comm' }
@@ -30,13 +30,13 @@ IPShellProcessor >> executeCommCloseRequest: aMessage [
 	"NO-RESPONSE"
 ]
 
-{ #category : #'message-handling' }
+{ #category : #'message-handling-comm' }
 IPShellProcessor >> executeCommInfoRequest: aMessage [
 	<ipharo:#comm_info_request>
 	
-	| response |
-	
-	response := IPCommInfoReplyMsg newReplyingToWireMessage: self wireMessage.
+	| response session |
+	session := IPSession getSessionForMessage: aMessage.
+	response := session commInfoReplyMessage.
 	self sendMessage: response
 	
 ]
@@ -93,9 +93,9 @@ IPShellProcessor >> executeExecuteRequest: aMessage [
 
 	session := IPSession getSessionForMessage: aMessage.
 	self publish: (session executeInputMessage	code:aMessage content code).	
-	[ session compileAndEvaluate: aMessage.
-	  session increaseExecutionCounter.	
-	  self sendMessage: session executionOkMessage ] 
+	[ session compileAndEvaluate: aMessage.  
+	  self sendMessage: session executionOkMessage.
+	  session increaseExecutionCounter] 
 	on: Error do:[ :e | 
 			response := (session executionErrorMessage 	exceptionObject: e).
 			self publish: (session executeErrorMessage content: response content).

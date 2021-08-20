@@ -1,7 +1,7 @@
 Class {
 	#name : #IPCommRequestStateMsg,
 	#superclass : #IPMsg,
-	#category : #'IPharo-Messages-Comm'
+	#category : #'IPharo-Messages-Custom'
 }
 
 { #category : #'as yet unclassified' }

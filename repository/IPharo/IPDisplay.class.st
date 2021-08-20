@@ -168,10 +168,11 @@ IPDisplay >> maxNumberOfRows [
 { #category : #'public-api' }
 IPDisplay >> openInJupyter: data [ 
 	| displayData |
+	
 	hasBeenAlreadyPublished := false.
 	dataModel := self buildDisplayDataModel: data.
 	displayData  := self session displayDataMessage.
-	displayData addAll: dataModel deepCopy.
+	displayData content addAll: dataModel deepCopy.
 	self publish: displayData.
 	"returns the UUID"
 	^ dataModel transient display_id 

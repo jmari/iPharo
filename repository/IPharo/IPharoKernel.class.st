@@ -50,6 +50,11 @@ Class {
 	#category : #'IPharo-Core'
 }
 
+{ #category : #testing }
+IPharoKernel class >> hasSupportForDebugger [
+	^ true
+]
+
 { #category : #'as yet unclassified' }
 IPharoKernel class >> implementation [
 	^ 'IPharo Smalltalk'
