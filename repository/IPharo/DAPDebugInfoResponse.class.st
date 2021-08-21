@@ -19,8 +19,8 @@ DAPDebugInfoResponse >> initialize [
                 'source' ->'',  source file
                 'breakpoints' -> {}.  list of breakpoints for that source file
             } asDictionary "
-        },
-        'stoppedThreads' -> {},  "threads in which the debugger is currently in a stopped state (int)"
+        }.
+        'stoppedThreads' -> {}.  "threads in which the debugger is currently in a stopped state (int)"
         'richRendering' -> true. " whether the debugger supports rich rendering of variables"
         'exceptionPaths' -> {}. "exception names used to match leaves or nodes in a tree of exception"
     } asDictionary 

@@ -29,23 +29,26 @@ IPControlProcessor >> execute: aWireMessage [
 { #category : #'message-handling' }
 IPControlProcessor >> executeDebugRequest: aMessage [
 	<ipharo: #debug_request>
-	| serverAddress clientSocket request response data event dapRequest |
-		
-	request := IPDebugRequestMsg  newFromWireMessage: aMessage.
-	response := IPDebugReplyMsg newReplyingToWireMessage: aMessage.
+	| serverAddress clientSocket request response data event dapRequest dataReceived session |
+	session := IPSession getSessionForMessage: aMessage.
+	response := session debugReplyMsg.
 
 	serverAddress := NetNameResolver addressForName: '127.0.0.1'.
 	clientSocket := Socket newTCP.
-	self halt.
+
 	data :={} asSCJsonObject.
 	[ clientSocket connectTo: serverAddress port: dapServerPort;
 	  waitForConnectionFor: 10. 
-	  dapRequest := (SCSerializer serialize: request content).
+	  dapRequest := (SCSerializer serialize: aMessage content).
 	  dapRequest := 'Content-Length: ', dapRequest size asString , dapRequest, String cr.
+	self halt.
 	  clientSocket sendData: dapRequest.
-	  data := SCMaterializer materializeFromString: clientSocket receiveData] ensure: [ clientSocket closeAndDestroy ].
+	  dataReceived := clientSocket receiveAvailableData.
+	  dataReceived := dataReceived copyFrom: (dataReceived indexOf: Character cr) to: dataReceived size.
+	  data := SCMaterializer materializeFromString: dataReceived ] ensure: [ clientSocket closeAndDestroy ].
+
 	data event ifNotNil:[ 
-		event := IPDebugEventMsg newReplyingToWireMessage: aMessage.
+		event := session debugEventMsg.
 		event content: event asSCJsonObject.
 		self publish: event ].
 	response content: data.

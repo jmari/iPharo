@@ -176,6 +176,30 @@ IPSession >> currentMessage: anObject [
 	currentMessage := anObject
 ]
 
+{ #category : #'message-control' }
+IPSession >> debugEventMsg [
+	 | msg |
+	msg := IPDebugEventMsg  newReplyingToWireMessage: self currentMessage wireMessage. 
+	self initializeMessageHeader: msg.
+	^ msg 
+]
+
+{ #category : #'message-control' }
+IPSession >> debugReplyMsg [
+	 | msg |
+	msg := IPDebugReplyMsg  newReplyingToWireMessage: self currentMessage wireMessage. 
+	self initializeMessageHeader: msg.
+	^ msg 
+]
+
+{ #category : #'message-control' }
+IPSession >> debugRequestMsg [
+	 | msg |
+	msg := IPDebugRequestMsg  newReplyingToWireMessage: self currentMessage wireMessage. 
+	self initializeMessageHeader: msg.
+	^ msg 
+]
+
 { #category : #'public-api' }
 IPSession >> defaultNumberOfRows [
 	^ 100
