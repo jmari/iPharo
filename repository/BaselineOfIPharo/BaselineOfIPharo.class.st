@@ -81,9 +81,9 @@ BaselineOfIPharo >> groups: spec [
 { #category : #'as yet unclassified' }
 BaselineOfIPharo >> installPharoDAP [
 	Metacello new
-		baseline: 'PharoLanguageServer';
-		repository: 'github://badetitou/Pharo-LanguageServer:v1.1.4';
-		import:'PharoDAP'.
+  		githubUser: 'badetitou' project: 'Pharo-LanguageServer' commitish: 'v2' path: 'src';
+  		baseline: 'PharoLanguageServer';
+  		load:'PharoDAP'
 	
 
 
