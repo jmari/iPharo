@@ -3,13 +3,26 @@ Class {
 	#superclass : #IPMessageProcessor,
 	#instVars : [
 		'debuggerServer',
-		'dapServerPort'
+		'dapServerPort',
+		'clientSocket'
 	],
 	#classInstVars : [
 		'dapServerPort'
 	],
 	#category : #'IPharo-Core'
 }
+
+{ #category : #execution }
+IPControlProcessor >> dapClientSocket [
+
+	| serverAddress |
+	^ clientSocket ifNil:[
+		clientSocket := Socket newTCP.
+		serverAddress := NetNameResolver addressForName: '127.0.0.1'.
+		clientSocket connectTo: serverAddress port: dapServerPort;
+	waitForConnectionFor: 10. 
+		clientSocket ]
+]
 
 { #category : #execution }
 IPControlProcessor >> dapServer [
@@ -32,20 +45,19 @@ IPControlProcessor >> execute: aWireMessage [
 { #category : #'message-handling' }
 IPControlProcessor >> executeDebugRequest: aMessage [
 	<ipharo: #debug_request>
-	| serverAddress clientSocket response data event dapRequest dataReceived session |
+	| clnSocket response data event dapRequest dataReceived session |
 	session := IPSession getSessionForMessage: aMessage.
 	response := session debugReplyMsg.
-	serverAddress := NetNameResolver addressForName: '127.0.0.1'.
-	clientSocket := Socket newTCP.
+	clnSocket := self dapClientSocket.
 	data:={} asSCJsonObject.
-	clientSocket connectTo: serverAddress port: dapServerPort;
-	waitForConnectionFor: 10. 
 	dapRequest := (SCSerializer serialize: aMessage content).
 	dapRequest := 'Content-Length: ', dapRequest size asString , String cr, dapRequest.
-	clientSocket sendData: dapRequest.
-	dataReceived := clientSocket receiveData.
+
+	clnSocket sendData: dapRequest.
+	dataReceived := clnSocket receiveData.
 	dataReceived := dataReceived copyFrom: (dataReceived indexOf: Character cr) to: dataReceived size.
-	data := SCMaterializer materializeFromString: dataReceived .
+	data := SCMaterializer materializeFromString: dataReceived deepCopy.
+
 
 	data event ifNotNil:[ 
 		event := session debugEventMsg.
@@ -53,6 +65,7 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 		self publish: event ].
 	response content: data.
 	self sendMessage: response.
+	
 
 	 
 ]

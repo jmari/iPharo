@@ -3,6 +3,7 @@ Extension { #name : #DAPServer }
 { #category : #'*IPharo' }
 DAPServer >> dapDebugInfo: aDAPDumpCellRequest [
 	<dap: #debugInfo>
+
 	self sendMessage: DAPDebugInfoResponse new
 ]
 
