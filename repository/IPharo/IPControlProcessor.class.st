@@ -35,11 +35,13 @@ IPControlProcessor >> dapServer [
 
 { #category : #execution }
 IPControlProcessor >> execute: aWireMessage [
-	| message |
-	self dapServer.
+	| message session|
+	self dapServer.		
 	message := IPMsg newFromWireMessage: aWireMessage.
-	self handleRequest: message.		
-
+	session := IPSession getSessionForMessage: message.
+	self publish: session kernelStatusBusyMessage.
+	self handleRequest: message.	
+	self publish:  session kernelStatusIdleMessage.
 ]
 
 { #category : #'message-handling' }
