@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'debuggerServer',
 		'dapServerPort',
-		'clientSocket'
+		'clientSocket',
+		'controlReplay'
 	],
 	#classInstVars : [
 		'dapServerPort'
@@ -16,12 +17,20 @@ Class {
 IPControlProcessor >> dapClientSocket [
 
 	| serverAddress |
-	^ clientSocket ifNil:[
-		clientSocket := Socket newTCP.
-		serverAddress := NetNameResolver addressForName: '127.0.0.1'.
-		clientSocket connectTo: serverAddress port: dapServerPort;
-	waitForConnectionFor: 10. 
-		clientSocket ]
+	^ clientSocket 
+		ifNil:[
+			clientSocket := Socket newTCP.
+			serverAddress := NetNameResolver addressForName: '127.0.0.1'.
+			clientSocket connectTo: serverAddress port: dapServerPort;waitForConnectionFor: 10. 
+			clientSocket ]
+		ifNotNil:[
+			clientSocket isConnected 
+				ifTrue:[ clientSocket ]
+				ifFalse:[ 
+					clientSocket closeAndDestroy.
+					clientSocket := nil.
+					self dapClientSocket ] ]
+	
 ]
 
 { #category : #execution }
@@ -36,40 +45,44 @@ IPControlProcessor >> dapServer [
 { #category : #execution }
 IPControlProcessor >> execute: aWireMessage [
 	| message session|
-	self dapServer.		
+	
 	message := IPMsg newFromWireMessage: aWireMessage.
 	session := IPSession getSessionForMessage: message.
+	self dapServer.
 	self publish: session kernelStatusBusyMessage.
 	self handleRequest: message.	
 	self publish:  session kernelStatusIdleMessage.
+
 ]
 
 { #category : #'message-handling' }
 IPControlProcessor >> executeDebugRequest: aMessage [
 	<ipharo: #debug_request>
-	| clnSocket response data event dapRequest dataReceived session |
+	| clnSocket response data event dapRequest session dataReceived dTokens |
 	session := IPSession getSessionForMessage: aMessage.
 	response := session debugReplyMsg.
 	clnSocket := self dapClientSocket.
 	data:={} asSCJsonObject.
 	dapRequest := (SCSerializer serialize: aMessage content).
-	dapRequest := 'Content-Length: ', dapRequest size asString , String cr, dapRequest.
-
+	dapRequest := 'Content-Length: ', dapRequest size asString , String cr, String cr, dapRequest.
+	self dapServer compileContext: session myContext.
 	clnSocket sendData: dapRequest.
-	dataReceived := clnSocket receiveData.
-	dataReceived := dataReceived copyFrom: (dataReceived indexOf: Character cr) to: dataReceived size.
-	data := SCMaterializer materializeFromString: dataReceived deepCopy.
-
-
-	data event ifNotNil:[ 
-		event := session debugEventMsg.
-		event content: event asSCJsonObject.
-		self publish: event ].
-	response content: data.
-	self sendMessage: response.
 	
+	dataReceived := clnSocket receiveData.
+	dTokens := dataReceived findTokens: String crlf.
+	dTokens := dTokens select:[ :each | each size > 1 ].
 
-	 
+	dTokens allButFirst do:[ : aDAPMessage |
+		data := SCMaterializer materializeFromString: aDAPMessage.
+		data type = #event 
+			ifTrue:[ 
+				event := session debugEventMsg.
+				event content: data.
+				self publish: event ]
+			ifFalse:[	
+				response content: data.
+				self sendMessage: response ] ]
+	
 ]
 
 { #category : #'message-handling' }

@@ -10,10 +10,10 @@ DAPDebugInfoResponse >> initialize [
 	self body: 
 	{
         'isStarted' -> true.  " whether the debugger is started"
-        'hashMethod' -> 'Murmur3'.
-        'hashSeed' -> 'Pharo'.
-        'tmpFilePrefix' -> 'ipharo'.
-        'tmpFileSuffix' -> 'dbg'.
+        'hashMethod' -> 'Murmur2'.
+        'hashSeed' -> 3339675911.
+        'tmpFilePrefix' -> '/tmp/'.
+        'tmpFileSuffix' -> '.st'.
         'breakpoints' -> {    "breakpoints currently registered in the debugger"
             "{  
                 'source' ->'',  source file
@@ -21,8 +21,6 @@ DAPDebugInfoResponse >> initialize [
             } asDictionary "
         }.
         'stoppedThreads' -> {}.  "threads in which the debugger is currently in a stopped state (int)"
-        'richRendering' -> true. " whether the debugger supports rich rendering of variables"
-        'exceptionPaths' -> {}. "exception names used to match leaves or nodes in a tree of exception"
-    } asDictionary 
+      } asDictionary 
 
 ]

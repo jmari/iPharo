@@ -395,6 +395,11 @@ IPSession >> loadScript: aStringScript [
 														
 ]
 
+{ #category : #'as yet unclassified' }
+IPSession >> myContext [
+	^ thisContext
+]
+
 { #category : #accessing }
 IPSession >> print: anObject [
 	^ self display openInJupyter: anObject
