@@ -37,9 +37,14 @@ DAPServer >> dapDumpCell: aDAPDumpCellRequest [
 { #category : #'*IPharo' }
 DAPServer >> dapInspectVariables: aDAPInspectVariablesRequest [
 	<dap: #inspectVariables>
-	| variables |
-
-	variables := variablesReferenceCache collect:[ :aVar | 
+	| variablesReference scope context2 variables|
+self halt.
+	scope := (variablesReferenceCache at: variablesReference) at: #scope.
+	context2 := (variablesReferenceCache at: variablesReference) at: #context.
+				
+			
+	variables := self compileContext bindings collect:[ :aVar | 
+	
 		{
 			#name->aVar name.
 			#variableReference-> aVar variablesReference.

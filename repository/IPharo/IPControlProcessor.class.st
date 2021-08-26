@@ -65,7 +65,7 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 	data:={} asSCJsonObject.
 	dapRequest := (SCSerializer serialize: aMessage content).
 	dapRequest := 'Content-Length: ', dapRequest size asString , String cr, String cr, dapRequest.
-	self dapServer compileContext: session myContext.
+	self dapServer compileContext: session.
 	clnSocket sendData: dapRequest.
 	
 	dataReceived := clnSocket receiveData.

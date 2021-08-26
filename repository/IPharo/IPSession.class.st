@@ -91,14 +91,14 @@ IPSession >> acceptInputReplay: content [
 	sem signal
 ]
 
-{ #category : #'workspace vars support' }
+{ #category : #'workspace-variables' }
 IPSession >> bindingOf: aString [ 
 	(bindings includesKey: aString)
 		ifFalse: [ bindings add: (WorkspaceVariable key: aString asSymbol) ].
 	^ bindings associationAt: aString
 ]
 
-{ #category : #accessing }
+{ #category : #'workspace-variables' }
 IPSession >> bindings [
 	^ bindings
 ]
@@ -227,16 +227,19 @@ IPSession >> displayDataMessage [
 { #category : #compilation }
 IPSession >> evaluate: source [
 	| result method |
-	method := self class compiler
-			source: source;
+
+
+	result := self class compiler
+			source:  source;
 			noPattern: true;
 			context: thisContext;
-			failBlock:  [:err| ZmqLog logError:err messageText . ^ nil];
-			compileDoit.
-	result := method valueWithReceiver: self arguments: { thisContext }.		
-	^  result 
-			
-	
+			receiver: self;
+			requestor: self;
+			noPattern: true;
+			bindings: self initializeBindings;
+			evaluate.	
+				
+	^  	result 
 ]
 
 { #category : #'messages-iopub' }
@@ -295,7 +298,7 @@ IPSession >> executionOkMessage [
 	^ msg executionCount:  self executionCounter
 ]
 
-{ #category : #'workspace vars support' }
+{ #category : #'workspace-variables' }
 IPSession >> guessTypeForName: aString [
 	| binding |
 	bindings
@@ -306,12 +309,12 @@ IPSession >> guessTypeForName: aString [
 	^ nil
 ]
 
-{ #category : #'workspace vars support' }
+{ #category : #'workspace-variables' }
 IPSession >> hasBindingOf: aString [ 
 	^(self guessTypeForName: aString) notNil
 ]
 
-{ #category : #'workspace vars support' }
+{ #category : #'workspace-variables' }
 IPSession >> hasBindingThatBeginsWith: aString [
 	^ bindings keys anySatisfy: [:each | each beginsWith: aString]
 ]
@@ -343,7 +346,7 @@ IPSession >> initialize [
 { #category : #initialization }
 IPSession >> initializeBindings [
 	
-	bindings := Dictionary new
+	^ bindings := { #self -> self } asDictionary
 ]
 
 { #category : #initialization }
@@ -355,6 +358,11 @@ IPSession >> initializeMessageHeader: aMessage [
 				username: self username.
 
 	^ aMessage 
+]
+
+{ #category : #'workspace-variables' }
+IPSession >> interactive [ 
+	^ false
 ]
 
 { #category : #'messages-shell' }
@@ -395,9 +403,9 @@ IPSession >> loadScript: aStringScript [
 														
 ]
 
-{ #category : #'as yet unclassified' }
-IPSession >> myContext [
-	^ thisContext
+{ #category : #'workspace-variables' }
+IPSession >> notify: aString at: anInteger in: aString3 [ 
+	"we ignore"
 ]
 
 { #category : #accessing }
@@ -425,10 +433,9 @@ IPSession >> selectedClassOrMetaClass [
 	^ nil
 ]
 
-{ #category : #'workspace vars support' }
+{ #category : #'workspace-variables' }
 IPSession >> setBindings: aDictionary [
 	"Sets the Workspace to use the specified dictionary as its namespace"
-
 	bindings := aDictionary.
 ]
 
