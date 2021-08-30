@@ -26,7 +26,8 @@ DAPServer >> dapDumpCell: aDAPDumpCellRequest [
 	sourcePath := fileReference fullName.
 	ws := fileReference writeStream.
 	[ ws nextPutAll: code ] ensure:[ ws close ].
-	sourcesReferenceCache at: 0 put: [ { #sourceCode -> code} asSCJsonObject  ].
+	sourcesReferenceCache at: 0 put: ({ #sourceCode -> code} asSCJsonObject).
+	sourcesReferenceCache inspect.
 	self sendMessage: (DAPDumpCellResponse new 
 									seq: self nextSeq;
 									request_seq: aDAPDumpCellRequest seq;
@@ -41,7 +42,7 @@ DAPServer >> dapInspectVariables: aDAPInspectVariablesRequest [
 
 	initialized :=true. 
 	variables := OrderedCollection new.
-	variablesReferenceCache inspect.
+
 	variablesReferenceCache keysDo:[ :aVariablesReference |
 		
 		scope := (variablesReferenceCache at: aVariablesReference) at: #scope.
@@ -49,10 +50,10 @@ DAPServer >> dapInspectVariables: aDAPInspectVariablesRequest [
 		variables := (scope getDAPVariablesInContent: context2) collect:[ :aVar |
 		{
 		
-			#name->aVar key.
+			#name->aVar name.
 			#variableReference-> aVariablesReference.
-			#value-> (aVar value asString).
-			#type -> (aVar value class name).
+			#value-> (aVar value1 asString).
+			#type -> (aVar value1 class name).
 		} asDictionary ] ].
 
 	self sendMessage: (DAPInspectVariablesResponse new
@@ -72,7 +73,7 @@ DAPServer >> handleLaunch: source seq: seq [
 		strategy := OupsDebuggerSelectionStrategy debuggerSelectionStrategy.
 		OupsDebuggerSelectionStrategy debuggerSelectionStrategy: (DAPOupsDebuggerSelector with: { self }).
 		'Begin Evaluate.' record.		
-		sourcesReferenceCache at: 0 put: [ { #sourceCode -> source} asSCJsonObject ].
+		sourcesReferenceCache at: 0 put: { #sourceCode -> source} asSCJsonObject.
 		result := self pluggableEvaluationBlock value: source.
 		'End Evaluate.' record.
 		OupsDebuggerSelectionStrategy debuggerSelectionStrategy: strategy]

@@ -1,6 +1,9 @@
 Class {
 	#name : #IPIOPubProcessor,
 	#superclass : #IPMessageProcessor,
+	#instVars : [
+		'mutex'
+	],
 	#category : #'IPharo-Core'
 }
 
@@ -12,10 +15,17 @@ IPIOPubProcessor >> execute: aWireMessage [
 	self handleRequest: message.		
 ]
 
+{ #category : #initialization }
+IPIOPubProcessor >> initialize [ 
+	super initialize.
+	mutex := Mutex new
+]
+
 { #category : #'as yet unclassified' }
 IPIOPubProcessor >> publish: anIPMessage [
 	| aMessage |
 	aMessage := IPWireMessage newFromMessage: anIPMessage.
+	mutex critical:[
 	self zmqSocket  
 				send: ('kernel.',anIPMessage uuid asString ,'.',anIPMessage msgType) asByteArray  flags:ZmqApiConstants  zmqSendMore;
 	 			send: self messageDelimiter asByteArray flags:ZmqApiConstants  zmqSendMore;
@@ -23,7 +33,7 @@ IPIOPubProcessor >> publish: anIPMessage [
  				send: aMessage header flags:ZmqApiConstants  zmqSendMore;
 				send: aMessage parentHeader flags:ZmqApiConstants  zmqSendMore;
  				send: aMessage metadata flags:ZmqApiConstants  zmqSendMore;
-				send: aMessage content  
+				send: aMessage content ]
 ]
 
 { #category : #'as yet unclassified' }

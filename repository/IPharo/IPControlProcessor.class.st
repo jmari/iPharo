@@ -5,7 +5,8 @@ Class {
 		'debuggerServer',
 		'dapServerPort',
 		'clientSocket',
-		'controlReplay'
+		'controlReplay',
+		'mutex'
 	],
 	#classInstVars : [
 		'dapServerPort'
@@ -37,6 +38,7 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 	data:={} asSCJsonObject.
 	dapRequest := (SCSerializer serialize: aMessage content).
 	dapRequest := 'Content-Length: ', dapRequest size asString , String cr, String cr, dapRequest.
+	mutex critical:[  
 	clnSocket sendData: dapRequest.
 	dataReceived  := String new: 65536.
 	bytesRead := clnSocket  receiveDataTimeout:1000 into: dataReceived.
@@ -53,7 +55,7 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 				self publish: event ]
 			ifFalse:[	
 				response content: data.
-				self sendMessage: response ] ]
+				self sendMessage: response ] ] ] 
 	
 ]
 
@@ -64,6 +66,12 @@ IPControlProcessor >> executeShutdown: aMessage [
 	session := IPSession getSessionForMessage: aMessage.
 	session dapServer stop.
 	Smalltalk snapshot: false andQuit: true 
+]
+
+{ #category : #initialization }
+IPControlProcessor >> initialize [ 
+	super initialize.
+	mutex := Mutex new
 ]
 
 { #category : #accessing }

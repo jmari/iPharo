@@ -501,6 +501,11 @@ IPSession >> request: requestString [
 	
 ]
 
+{ #category : #private }
+IPSession >> seed [ 
+	^ 1972
+]
+
 { #category : #accessing }
 IPSession >> selectedClassOrMetaClass [
 	^ nil
