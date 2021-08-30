@@ -11,7 +11,7 @@ DAPDebugInfoResponse >> initialize [
 	{
         'isStarted' -> true.  " whether the debugger is started"
         'hashMethod' -> 'Murmur2'.
-        'hashSeed' -> 3339675911.
+        'hashSeed' -> 0.
         'tmpFilePrefix' -> '/tmp/'.
         'tmpFileSuffix' -> '.st'.
         'breakpoints' -> {    "breakpoints currently registered in the debugger"

@@ -35,7 +35,11 @@ Class {
 		'widgetsFactory',
 		'currentMessage',
 		'request',
-		'sem'
+		'sem',
+		'pluggableEvaluationBlock',
+		'debuggerServer',
+		'dapServerPort',
+		'clientSocket'
 	],
 	#classInstVars : [
 		'sessions'
@@ -51,6 +55,8 @@ IPSession class >> finalizeSession: sessionId [
 
 { #category : #accessing }
 IPSession class >> finalizeSessions [
+	self sessions do:[:aSession | aSession dapServer ifNotNil:[
+		  aSession dapServer isRunning ifTrue:[ aSession dapServer stop ] ] ]. 
 	self sessions removeAll
 
 ]
@@ -176,6 +182,33 @@ IPSession >> currentMessage: anObject [
 	currentMessage := anObject
 ]
 
+{ #category : #dap }
+IPSession >> dapClientSocket [
+
+	| serverAddress |
+	
+	^ clientSocket 
+		ifNil:[
+			clientSocket := Socket newTCP.
+			serverAddress := NetNameResolver addressForName: '127.0.0.1'.
+			clientSocket connectTo: serverAddress port: dapServerPort;waitForConnectionFor: 10. 
+			clientSocket ]
+		ifNotNil:[
+			clientSocket isConnected 
+				ifTrue:[ clientSocket ]
+				ifFalse:[ 
+					clientSocket closeAndDestroy.
+					clientSocket := nil.
+					self dapClientSocket ] ]
+	
+]
+
+{ #category : #dap }
+IPSession >> dapServer [
+
+	^ debuggerServer 
+]
+
 { #category : #'message-control' }
 IPSession >> debugEventMsg [
 	 | msg |
@@ -225,21 +258,34 @@ IPSession >> displayDataMessage [
 ]
 
 { #category : #compilation }
-IPSession >> evaluate: source [
-	| result method |
+IPSession >> evaluate: sourceCode [
 
-
-	result := self class compiler
-			source:  source;
-			noPattern: true;
-			context: thisContext;
-			receiver: self;
-			requestor: self;
-			noPattern: true;
-			bindings: self initializeBindings;
-			evaluate.	
-				
-	^  	result 
+	| dataReceived dTokens data event response |
+	^  	
+		self dapServer isInitialized 
+		ifTrue:[ 
+			[
+			|bytesRead|
+			dataReceived  := String new: 65536.
+			bytesRead := self dapClientSocket receiveDataTimeout:1000 into: dataReceived.
+			dataReceived := dataReceived copyFrom: 1 to: bytesRead.
+			dTokens := dataReceived findTokens: String crlf.
+			dTokens := dTokens select:[ :each | each size > 1 ].
+			dTokens allButFirst do:[ : aDAPMessage |
+			data := SCMaterializer materializeFromString: aDAPMessage.
+			Transcript crShow: data asString.
+			data type = #event 
+				ifTrue:[ 
+					event := self debugEventMsg.
+					event content: data.
+					IPharoKernel instance publisher publish: event ]
+				ifFalse:[	
+					response := self debugReplyMsg.
+					response content: data.
+					IPharoKernel instance control sendMessage: response ]  ] ] forkNamed:'Ipharo-sender'.
+			self dapServer launch:sourceCode seq: 1.
+		 ]
+		ifFalse:[ 	pluggableEvaluationBlock value: sourceCode ]	 
 ]
 
 { #category : #'messages-iopub' }
@@ -339,14 +385,25 @@ IPSession >> initialize [
 
 	super initialize.
 	self initializeBindings.
+	self initializeDapServer.
 	executionCounter := 1.
 	sem :=Semaphore new.
+
 ]
 
 { #category : #initialization }
 IPSession >> initializeBindings [
 	
 	^ bindings := { #self -> self } asDictionary
+]
+
+{ #category : #dap }
+IPSession >> initializeDapServer [
+
+	^ debuggerServer ifNil:[
+		debuggerServer := DAPServer new.
+		dapServerPort := debuggerServer start.
+		debuggerServer ]
 ]
 
 { #category : #initialization }
@@ -408,6 +465,22 @@ IPSession >> notify: aString at: anInteger in: aString3 [
 	"we ignore"
 ]
 
+{ #category : #compilation }
+IPSession >> pluggableEvaluationBlock [
+
+	^ pluggableEvaluationBlock ifNil:[
+		pluggableEvaluationBlock :=  [ :source | 
+			self class compiler
+			source:  source;
+			noPattern: true;
+			context: thisContext;
+			receiver: self;
+			requestor: self;
+			noPattern: true;
+			bindings: self bindings;
+			evaluate] ]
+]
+
 { #category : #accessing }
 IPSession >> print: anObject [
 	^ self display openInJupyter: anObject
@@ -431,6 +504,11 @@ IPSession >> request: requestString [
 { #category : #accessing }
 IPSession >> selectedClassOrMetaClass [
 	^ nil
+]
+
+{ #category : #'as yet unclassified' }
+IPSession >> sessionId [ 
+	^ self currentMessage header session
 ]
 
 { #category : #'workspace-variables' }

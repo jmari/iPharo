@@ -14,41 +14,12 @@ Class {
 }
 
 { #category : #execution }
-IPControlProcessor >> dapClientSocket [
-
-	| serverAddress |
-	^ clientSocket 
-		ifNil:[
-			clientSocket := Socket newTCP.
-			serverAddress := NetNameResolver addressForName: '127.0.0.1'.
-			clientSocket connectTo: serverAddress port: dapServerPort;waitForConnectionFor: 10. 
-			clientSocket ]
-		ifNotNil:[
-			clientSocket isConnected 
-				ifTrue:[ clientSocket ]
-				ifFalse:[ 
-					clientSocket closeAndDestroy.
-					clientSocket := nil.
-					self dapClientSocket ] ]
-	
-]
-
-{ #category : #execution }
-IPControlProcessor >> dapServer [
-
-	^ debuggerServer ifNil:[
-		debuggerServer := DAPServer new.
-		dapServerPort := debuggerServer start.
-		debuggerServer ]
-]
-
-{ #category : #execution }
 IPControlProcessor >> execute: aWireMessage [
 	| message session|
 	
 	message := IPMsg newFromWireMessage: aWireMessage.
 	session := IPSession getSessionForMessage: message.
-	self dapServer.
+	session dapServer pluggableEvaluationBlock: session pluggableEvaluationBlock.
 	self publish: session kernelStatusBusyMessage.
 	self handleRequest: message.	
 	self publish:  session kernelStatusIdleMessage.
@@ -58,22 +29,23 @@ IPControlProcessor >> execute: aWireMessage [
 { #category : #'message-handling' }
 IPControlProcessor >> executeDebugRequest: aMessage [
 	<ipharo: #debug_request>
-	| clnSocket response data event dapRequest session dataReceived dTokens |
+	| clnSocket response data event dapRequest session dataReceived dTokens bytesRead |
 	session := IPSession getSessionForMessage: aMessage.
+	Transcript crShow:  aMessage content asString.
 	response := session debugReplyMsg.
-	clnSocket := self dapClientSocket.
+	clnSocket := session dapClientSocket.		
 	data:={} asSCJsonObject.
 	dapRequest := (SCSerializer serialize: aMessage content).
 	dapRequest := 'Content-Length: ', dapRequest size asString , String cr, String cr, dapRequest.
-	self dapServer compileContext: session.
 	clnSocket sendData: dapRequest.
-	
-	dataReceived := clnSocket receiveData.
+	dataReceived  := String new: 65536.
+	bytesRead := clnSocket  receiveDataTimeout:1000 into: dataReceived.
+	dataReceived := dataReceived copyFrom: 1 to: bytesRead.
 	dTokens := dataReceived findTokens: String crlf.
 	dTokens := dTokens select:[ :each | each size > 1 ].
-
 	dTokens allButFirst do:[ : aDAPMessage |
 		data := SCMaterializer materializeFromString: aDAPMessage.
+		Transcript crShow: data asString.
 		data type = #event 
 			ifTrue:[ 
 				event := session debugEventMsg.
@@ -88,7 +60,9 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 { #category : #'message-handling' }
 IPControlProcessor >> executeShutdown: aMessage [
 	<ipharo: #shutdown_request>
-	
+	| session |
+	session := IPSession getSessionForMessage: aMessage.
+	session dapServer stop.
 	Smalltalk snapshot: false andQuit: true 
 ]
 

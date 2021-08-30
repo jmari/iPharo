@@ -15,6 +15,7 @@ IPShellProcessor >> completion [
 { #category : #running }
 IPShellProcessor >> execute: aWireMessage [
 	| message session|
+
 	message := IPMsg newFromWireMessage: aWireMessage.
 	session := IPSession getSessionForMessage: message.
 	self publish: session kernelStatusBusyMessage.

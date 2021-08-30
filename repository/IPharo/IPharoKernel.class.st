@@ -261,6 +261,7 @@ IPharoKernel >> stop [
 	self processors values do:[:each| each stop].
 	self processors removeAll.
 	self commManager commChannels removeAll.
+	IPSession finalizeSessions.
 	IPDisplay resetCache.
 	[ZmqContext terminate] on:Error do:[:e|].
 	stop :=false
