@@ -282,7 +282,7 @@ IPSession >> evaluate: sourceCode [
 				ifFalse:[	
 					response := self debugReplyMsg.
 					response content: data.
-					IPharoKernel instance control sendMessage: response ]  ] ] forkNamed:'Ipharo-sender'.
+					IPharoKernel instance control sendMessage: response ] ] ] forkNamed:'Ipharo-sender'.
 			self dapServer launch:sourceCode seq: 1.
 		 ]
 		ifFalse:[ 	pluggableEvaluationBlock value: sourceCode ]	 
