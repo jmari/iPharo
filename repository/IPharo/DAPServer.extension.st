@@ -98,8 +98,6 @@ DAPServer >> launch: source seq: seq [
 		messageProcess: seq
 		put:
 			([ self handleLaunch: source seq: seq.
-				Processor yield.
-				(Delay forMilliseconds: 500) wait.
 			self removeMessageProcess: seq ]
 				forkAt: Processor lowIOPriority
 				named: 'IPharo debug process')
