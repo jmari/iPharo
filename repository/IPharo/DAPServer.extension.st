@@ -76,7 +76,8 @@ DAPServer >> handleLaunch: source seq: seq [
 		sourcesReferenceCache at: 0 put: { #sourceCode -> source} asSCJsonObject.
 		result := self pluggableEvaluationBlock value: source.
 		'End Evaluate.' record.
-		OupsDebuggerSelectionStrategy debuggerSelectionStrategy: strategy]
+		OupsDebuggerSelectionStrategy debuggerSelectionStrategy: strategy.
+		self sendMessage: DAPTerminatedEvent new]
 	on: Error do: [ :dapError | dapError pass ];
 	ensure:[ OupsDebuggerSelectionStrategy debuggerSelectionStrategy: strategy ].
 	
@@ -97,8 +98,11 @@ DAPServer >> launch: source seq: seq [
 	self
 		messageProcess: seq
 		put:
-			([ self handleLaunch: source seq: seq.
-			self removeMessageProcess: seq ]
+			([ 
+				self handleLaunch: source seq: seq.
+				Processor yield.
+				(Delay forMilliseconds: 500) wait.
+				self removeMessageProcess: seq]
 				forkAt: Processor lowIOPriority
 				named: 'IPharo debug process')
 
