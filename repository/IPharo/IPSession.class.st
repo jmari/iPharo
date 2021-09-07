@@ -260,7 +260,8 @@ IPSession >> displayDataMessage [
 { #category : #compilation }
 IPSession >> evaluate: sourceCode [
 
-	| dataReceived dTokens data event response |
+	| dataReceived dTokens data event response compiledMethod |
+
 	^  	
 		self dapServer isInitialized 
 		ifTrue:[ 
@@ -285,7 +286,9 @@ IPSession >> evaluate: sourceCode [
 					IPharoKernel instance control sendMessage: response ] ] ] forkNamed:'Ipharo-sender'.
 			self dapServer launch:sourceCode seq: 1.
 		 ]
-		ifFalse:[ 	pluggableEvaluationBlock value: sourceCode ]	 
+		ifFalse:[ 	
+				compiledMethod := pluggableEvaluationBlock value: sourceCode.
+				compiledMethod  valueWithReceiver: self arguments:{self} ]	 
 ]
 
 { #category : #'messages-iopub' }
@@ -466,7 +469,7 @@ IPSession >> notify: aString at: anInteger in: aString3 [
 ]
 
 { #category : #compilation }
-IPSession >> pluggableEvaluationBlock [
+IPSession >> pluggableCompilationBlock [
 
 	^ pluggableEvaluationBlock ifNil:[
 		pluggableEvaluationBlock :=  [ :source | 
@@ -474,11 +477,10 @@ IPSession >> pluggableEvaluationBlock [
 			source:  source;
 			noPattern: true;
 			context: thisContext;
-			receiver: self;
 			requestor: self;
 			noPattern: true;
 			bindings: self bindings;
-			evaluate] ]
+			compile] ]
 ]
 
 { #category : #accessing }

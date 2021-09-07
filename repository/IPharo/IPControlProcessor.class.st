@@ -20,7 +20,7 @@ IPControlProcessor >> execute: aWireMessage [
 	
 	message := IPMsg newFromWireMessage: aWireMessage.
 	session := IPSession getSessionForMessage: message.
-	session dapServer pluggableEvaluationBlock: session pluggableEvaluationBlock.
+	session dapServer pluggableCompilationBlock: session pluggableCompilationBlock.
 	self publish: session kernelStatusBusyMessage.
 	self handleRequest: message.	
 	self publish:  session kernelStatusIdleMessage.
@@ -30,33 +30,29 @@ IPControlProcessor >> execute: aWireMessage [
 { #category : #'message-handling' }
 IPControlProcessor >> executeDebugRequest: aMessage [
 	<ipharo: #debug_request>
-	| clnSocket response data event dapRequest session dataReceived dTokens bytesRead |
+	| clnSocket response data event dapRequest dataReceived session |
 	session := IPSession getSessionForMessage: aMessage.
-	Transcript crShow:  aMessage content asString.
 	response := session debugReplyMsg.
-	clnSocket := session dapClientSocket.		
+	clnSocket := session dapClientSocket.
 	data:={} asSCJsonObject.
 	dapRequest := (SCSerializer serialize: aMessage content).
-	dapRequest := 'Content-Length: ', dapRequest size asString , String cr, String cr, dapRequest.
-	mutex critical:[  
+	dapRequest := 'Content-Length: ', dapRequest size asString , String cr, dapRequest.
+
 	clnSocket sendData: dapRequest.
-	dataReceived  := String new: 65536.
-	bytesRead := clnSocket  receiveDataTimeout:1000 into: dataReceived.
-	dataReceived := dataReceived copyFrom: 1 to: bytesRead.
-	dTokens := dataReceived findTokens: String crlf.
-	dTokens := dTokens select:[ :each | each size > 1 ].
-	dTokens allButFirst do:[ : aDAPMessage |
-		data := SCMaterializer materializeFromString: aDAPMessage.
-		Transcript crShow: data asString.
-		data type = #event 
-			ifTrue:[ 
-				event := session debugEventMsg.
-				event content: data.
-				self publish: event ]
-			ifFalse:[	
-				response content: data.
-				self sendMessage: response ] ] ] 
+	dataReceived := clnSocket receiveData.
+	dataReceived := dataReceived copyFrom: (dataReceived indexOf: Character cr) to: dataReceived size.
+	data := SCMaterializer materializeFromString: dataReceived deepCopy.
+
+
+	data type = #event ifNotNil:[ 
+		event := session debugEventMsg.
+		event content: event asSCJsonObject.
+		self publish: event ].
+	response content: data.
+	self sendMessage: response.
 	
+
+	 
 ]
 
 { #category : #'message-handling' }

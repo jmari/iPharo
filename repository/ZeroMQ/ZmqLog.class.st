@@ -16,5 +16,5 @@ ZmqLog class >> logError: aString [
 
 { #category : #'as yet unclassified' }
 ZmqLog class >> logInfo: aString [
-	"self trace: DateAndTime now asString , ' - ' , aString , String cr"
+	self trace: DateAndTime now asString , ' - ' , aString , String cr
 ]

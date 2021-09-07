@@ -19,10 +19,10 @@ DAPServer >> dapDebugInfo: aDAPDebugInfoRequest [
 { #category : #'*IPharo' }
 DAPServer >> dapDumpCell: aDAPDumpCellRequest [
 	<dap: #dumpCell>
-	| code sourcePath fileReference ws |
-
+	| code sourcePath fileReference ws|
+	
 	code := ((aDAPDumpCellRequest arguments) at:#code).
-	fileReference := ('/tmp/dc', code hash asString ,'.st') asFileReference.  
+	fileReference := (self fileNameForCode: code) asFileReference.  
 	sourcePath := fileReference fullName.
 	ws := fileReference writeStream.
 	[ ws nextPutAll: code ] ensure:[ ws close ].
@@ -49,7 +49,6 @@ DAPServer >> dapInspectVariables: aDAPInspectVariablesRequest [
 		context2 := (variablesReferenceCache at: aVariablesReference) at: #context.
 		variables := (scope getDAPVariablesInContent: context2) collect:[ :aVar |
 		{
-		
 			#name->aVar name.
 			#variableReference-> aVariablesReference.
 			#value-> (aVar value1 asString).
@@ -65,21 +64,33 @@ DAPServer >> dapInspectVariables: aDAPInspectVariablesRequest [
 ]
 
 { #category : #'*IPharo' }
-DAPServer >> handleLaunch: source seq: seq [ 
-	| strategy result|
+DAPServer >> fileNameForCode: sourceCode [
+	| hasher hash |
+	hasher := NCHMurmur2 withSeed: 1972.
+	hash :=  hasher hash: (sourceCode withLineEndings: String lf) asByteArray.
+	^  '/tmp/', hash asString,'.st'
+]
 
-	[	'Launch.' record.	
+{ #category : #'*IPharo' }
+DAPServer >> handleLaunch: source seq: seq [ 
+	| result compiledMethod |
+
+	[	['Launch.' record.	
 		self threads at: 1 put: 1.
 		strategy := OupsDebuggerSelectionStrategy debuggerSelectionStrategy.
 		OupsDebuggerSelectionStrategy debuggerSelectionStrategy: (DAPOupsDebuggerSelector with: { self }).
 		'Begin Evaluate.' record.		
 		sourcesReferenceCache at: 0 put: { #sourceCode -> source} asSCJsonObject.
-		result := self pluggableEvaluationBlock value: source.
+		compiledMethod := self pluggableCompilationBlock value: source.
+		self 
+			setBreakpoints: (self breakpoints at: (self fileNameForCode:source))
+		 	inCompiledMethod: compiledMethod.
+		result:= compiledMethod  valueWithReceiver: self arguments:{self}. 
 		'End Evaluate.' record.
-		OupsDebuggerSelectionStrategy debuggerSelectionStrategy: strategy.
-		self sendMessage: DAPTerminatedEvent new]
-	on: Error do: [ :dapError | dapError pass ];
-	ensure:[ OupsDebuggerSelectionStrategy debuggerSelectionStrategy: strategy ].
+		
+		self sendMessage: DAPTerminatedEvent new] 
+	ensure:[ OupsDebuggerSelectionStrategy debuggerSelectionStrategy: strategy ] ]
+	on: Error do: [ :dapError | dapError pass ].
 	
 				
 	^ result
