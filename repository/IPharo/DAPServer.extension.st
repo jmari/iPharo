@@ -27,7 +27,7 @@ DAPServer >> dapDumpCell: aDAPDumpCellRequest [
 	ws := fileReference writeStream.
 	[ ws nextPutAll: code ] ensure:[ ws close ].
 	sourcesReferenceCache at: 0 put: ({ #sourceCode -> code} asSCJsonObject).
-	sourcesReferenceCache inspect.
+
 	self sendMessage: (DAPDumpCellResponse new 
 									seq: self nextSeq;
 									request_seq: aDAPDumpCellRequest seq;
@@ -73,26 +73,24 @@ DAPServer >> fileNameForCode: sourceCode [
 
 { #category : #'*IPharo' }
 DAPServer >> handleLaunch: source seq: seq [ 
-	| result compiledMethod |
+	| result compiledMethod breakpointList sourceWithBreakpoints |
 
-	[	['Launch.' record.	
+		'Launch.' record.	
 		self threads at: 1 put: 1.
 		strategy := OupsDebuggerSelectionStrategy debuggerSelectionStrategy.
 		OupsDebuggerSelectionStrategy debuggerSelectionStrategy: (DAPOupsDebuggerSelector with: { self }).
 		'Begin Evaluate.' record.		
 		sourcesReferenceCache at: 0 put: { #sourceCode -> source} asSCJsonObject.
-		compiledMethod := self pluggableCompilationBlock value: source.
-		self 
-			setBreakpoints: (self breakpoints at: (self fileNameForCode:source))
-		 	inCompiledMethod: compiledMethod.
-		result:= compiledMethod  valueWithReceiver: self arguments:{self}. 
+		breakpointList := self breakpoints at: (self fileNameForCode:source) ifAbsent: Array new. 
+		sourceWithBreakpoints := self insertHaltsIn: source using:breakpointList.
+		compiledMethod := self pluggableCompilationBlock value: sourceWithBreakpoints.
+		result:= compiledMethod  
+			valueWithReceiver: self pluggableCompilationBlock receiver 
+			arguments:{self pluggableCompilationBlock receiver}. 
 		'End Evaluate.' record.
-		
-		self sendMessage: DAPTerminatedEvent new] 
-	ensure:[ OupsDebuggerSelectionStrategy debuggerSelectionStrategy: strategy ] ]
-	on: Error do: [ :dapError | dapError pass ].
-	
-				
+		"OupsDebuggerSelectionStrategy debuggerSelectionStrategy: strategy."
+		self sendMessage: DAPTerminatedEvent new. 
+
 	^ result
 
 ]

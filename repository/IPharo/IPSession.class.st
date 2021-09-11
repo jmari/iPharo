@@ -287,7 +287,7 @@ IPSession >> evaluate: sourceCode [
 			self dapServer launch:sourceCode seq: 1.
 		 ]
 		ifFalse:[ 	
-				compiledMethod := pluggableEvaluationBlock value: sourceCode.
+				compiledMethod := self pluggableCompilationBlock value: sourceCode.
 				compiledMethod  valueWithReceiver: self arguments:{self} ]	 
 ]
 
@@ -478,9 +478,8 @@ IPSession >> pluggableCompilationBlock [
 			noPattern: true;
 			context: thisContext;
 			requestor: self;
-			noPattern: true;
 			bindings: self bindings;
-			compile] ]
+			compileDoit ] ]
 ]
 
 { #category : #accessing }
@@ -513,7 +512,7 @@ IPSession >> selectedClassOrMetaClass [
 	^ nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 IPSession >> sessionId [ 
 	^ self currentMessage header session
 ]

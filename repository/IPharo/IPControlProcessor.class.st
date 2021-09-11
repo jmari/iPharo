@@ -30,7 +30,7 @@ IPControlProcessor >> execute: aWireMessage [
 { #category : #'message-handling' }
 IPControlProcessor >> executeDebugRequest: aMessage [
 	<ipharo: #debug_request>
-	| clnSocket response data event dapRequest dataReceived session |
+	| clnSocket response data event dapRequest dataReceived session bytesRead dTokens |
 	session := IPSession getSessionForMessage: aMessage.
 	response := session debugReplyMsg.
 	clnSocket := session dapClientSocket.
@@ -39,17 +39,25 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 	dapRequest := 'Content-Length: ', dapRequest size asString , String cr, dapRequest.
 
 	clnSocket sendData: dapRequest.
-	dataReceived := clnSocket receiveData.
-	dataReceived := dataReceived copyFrom: (dataReceived indexOf: Character cr) to: dataReceived size.
-	data := SCMaterializer materializeFromString: dataReceived deepCopy.
+	dataReceived  := String new: 65536.
+	bytesRead := clnSocket receiveDataTimeout:1000 into: dataReceived.
+	dataReceived := dataReceived copyFrom: 1 to: bytesRead.
+	dTokens := dataReceived findTokens: String crlf.
+	dTokens := dTokens select:[ :each | each size > 1 ].
+	dTokens allButFirst do:[ : aDAPMessage |
+			data := SCMaterializer materializeFromString: aDAPMessage.
+			Transcript crShow: data asString.
+			data type = #event 
+				ifTrue:[ 
+					event := session debugEventMsg.
+					event content: data.
+					IPharoKernel instance publisher publish: event ]
+				ifFalse:[	
+					response := session debugReplyMsg.
+					response content: data.
+					self sendMessage: response ] ] .
 
 
-	data type = #event ifNotNil:[ 
-		event := session debugEventMsg.
-		event content: event asSCJsonObject.
-		self publish: event ].
-	response content: data.
-	self sendMessage: response.
 	
 
 	 
