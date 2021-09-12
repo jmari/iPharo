@@ -149,15 +149,14 @@ IPSession >> commUpdateMessage [
 	^ msg 
 ]
 
-{ #category : #compilation }
+{ #category : #evaluation }
 IPSession >> compileAndEvaluate: aMessage [
-	| result executionResult dataModel |
+	| result |
 	self display reset.
 	result := self evaluate: aMessage content code.
-	executionResult := self  executeResultMessage.
-	dataModel := self display buildDisplayDataModel: result asString.
-	executionResult content addAll: dataModel.	
-	self display publish: executionResult.
+	result = self doNotSendDisplayOutputToken
+	ifFalse:[
+		self publishExecutionResult: result]
 	
 	
 ]
@@ -257,38 +256,27 @@ IPSession >> displayDataMessage [
 	^ msg 
 ]
 
-{ #category : #compilation }
+{ #category : #evaluation }
+IPSession >> doNotSendDisplayOutputToken [
+	^ '123456789qwertyui---------donotdisplay'
+	
+	
+]
+
+{ #category : #evaluation }
 IPSession >> evaluate: sourceCode [
 
-	| dataReceived dTokens data event response compiledMethod |
+	| compiledMethod |
 
 	^  	
 		self dapServer isInitialized 
 		ifTrue:[ 
-			[
-			|bytesRead|
-			dataReceived  := String new: 65536.
-			bytesRead := self dapClientSocket receiveDataTimeout:1000 into: dataReceived.
-			dataReceived := dataReceived copyFrom: 1 to: bytesRead.
-			dTokens := dataReceived findTokens: String crlf.
-			dTokens := dTokens select:[ :each | each size > 1 ].
-			dTokens allButFirst do:[ : aDAPMessage |
-			data := SCMaterializer materializeFromString: aDAPMessage.
-			Transcript crShow: data asString.
-			data type = #event 
-				ifTrue:[ 
-					event := self debugEventMsg.
-					event content: data.
-					IPharoKernel instance publisher publish: event ]
-				ifFalse:[	
-					response := self debugReplyMsg.
-					response content: data.
-					IPharoKernel instance control sendMessage: response ] ] ] forkNamed:'Ipharo-sender'.
 			self dapServer launch:sourceCode seq: 1.
+			self doNotSendDisplayOutputToken
 		 ]
-		ifFalse:[ 	
-				compiledMethod := self pluggableCompilationBlock value: sourceCode.
-				compiledMethod  valueWithReceiver: self arguments:{self} ]	 
+		ifFalse:[ 		
+			compiledMethod := self pluggableCompilationBlock value: sourceCode.
+			compiledMethod  valueWithReceiver: self arguments:{self} ]	 
 ]
 
 { #category : #'messages-iopub' }
@@ -347,6 +335,19 @@ IPSession >> executionOkMessage [
 	^ msg executionCount:  self executionCounter
 ]
 
+{ #category : #dap }
+IPSession >> extractDapRequest [
+	| result interactionStream |
+	result := OrderedCollection new.
+	interactionStream := SocketStream on: self dapClientSocket. 
+	[ interactionStream isDataAvailable ] whileTrue:[
+		[interactionStream peek = ${] whileFalse:[	interactionStream next ].
+		result add: (SCMaterializer materializeFrom: interactionStream) ].
+	Processor yield.
+	(Delay forDuration: 5 milliSecond ) wait.
+	 ^ result .
+]
+
 { #category : #'workspace-variables' }
 IPSession >> guessTypeForName: aString [
 	| binding |
@@ -400,12 +401,13 @@ IPSession >> initializeBindings [
 	^ bindings := { #self -> self } asDictionary
 ]
 
-{ #category : #dap }
+{ #category : #initialization }
 IPSession >> initializeDapServer [
 
 	^ debuggerServer ifNil:[
 		debuggerServer := DAPServer new.
 		dapServerPort := debuggerServer start.
+		self startDapResponder.
 		debuggerServer ]
 ]
 
@@ -468,7 +470,7 @@ IPSession >> notify: aString at: anInteger in: aString3 [
 	"we ignore"
 ]
 
-{ #category : #compilation }
+{ #category : #evaluation }
 IPSession >> pluggableCompilationBlock [
 
 	^ pluggableEvaluationBlock ifNil:[
@@ -485,6 +487,16 @@ IPSession >> pluggableCompilationBlock [
 { #category : #accessing }
 IPSession >> print: anObject [
 	^ self display openInJupyter: anObject
+]
+
+{ #category : #evaluation }
+IPSession >> publishExecutionResult: result [
+
+	| executionResult dataModel |
+	executionResult := self  executeResultMessage.
+	dataModel := self display buildDisplayDataModel: result asString.
+	executionResult content addAll: dataModel.	
+	self display publish: executionResult
 ]
 
 { #category : #'public-api' }
@@ -521,6 +533,25 @@ IPSession >> sessionId [
 IPSession >> setBindings: aDictionary [
 	"Sets the Workspace to use the specified dictionary as its namespace"
 	bindings := aDictionary.
+]
+
+{ #category : #dap }
+IPSession >> startDapResponder [
+	| event response collectionOfMessages |
+	[
+		[self dapServer isRunning] whileTrue:[
+			collectionOfMessages := self extractDapRequest.
+			collectionOfMessages do:[ :message |
+				message type = #event 
+				ifTrue:[ 
+					event := self debugEventMsg.
+					event content: message.
+					IPharoKernel instance publisher publish: event ]
+				ifFalse:[	
+					response := self debugReplyMsg.
+					response content: message.
+					IPharoKernel instance control sendMessage: response ] ] ] ] 
+	forkAt: Processor systemBackgroundPriority named:'ipharo-dapResponder'
 ]
 
 { #category : #accessing }

@@ -26,7 +26,8 @@ DAPServer >> dapDumpCell: aDAPDumpCellRequest [
 	sourcePath := fileReference fullName.
 	ws := fileReference writeStream.
 	[ ws nextPutAll: code ] ensure:[ ws close ].
-	sourcesReferenceCache at: 0 put: ({ #sourceCode -> code} asSCJsonObject).
+	sourcesReferenceCache at: 0 put: ({ #sourceCode -> code.
+												  #path -> sourcePath } asSCJsonObject).
 
 	self sendMessage: (DAPDumpCellResponse new 
 									seq: self nextSeq;
@@ -73,25 +74,26 @@ DAPServer >> fileNameForCode: sourceCode [
 
 { #category : #'*IPharo' }
 DAPServer >> handleLaunch: source seq: seq [ 
-	| result compiledMethod breakpointList sourceWithBreakpoints |
+	| result compiledMethod breakpointList sourceWithBreakpoints iPSession |
 
 		'Launch.' record.	
 		self threads at: 1 put: 1.
 		strategy := OupsDebuggerSelectionStrategy debuggerSelectionStrategy.
 		OupsDebuggerSelectionStrategy debuggerSelectionStrategy: (DAPOupsDebuggerSelector with: { self }).
 		'Begin Evaluate.' record.		
-		sourcesReferenceCache at: 0 put: { #sourceCode -> source} asSCJsonObject.
 		breakpointList := self breakpoints at: (self fileNameForCode:source) ifAbsent: Array new. 
 		sourceWithBreakpoints := self insertHaltsIn: source using:breakpointList.
 		compiledMethod := self pluggableCompilationBlock value: sourceWithBreakpoints.
+		iPSession :=self pluggableCompilationBlock receiver. 
 		result:= compiledMethod  
-			valueWithReceiver: self pluggableCompilationBlock receiver 
-			arguments:{self pluggableCompilationBlock receiver}. 
+			valueWithReceiver: iPSession 
+			arguments:{iPSession}. 
 		'End Evaluate.' record.
-		"OupsDebuggerSelectionStrategy debuggerSelectionStrategy: strategy."
+		OupsDebuggerSelectionStrategy debuggerSelectionStrategy: strategy.
 		self sendMessage: DAPTerminatedEvent new. 
+		"now its the time to publish the execution result"
+		iPSession publishExecutionResult: result.
 
-	^ result
 
 ]
 
@@ -103,16 +105,19 @@ DAPServer >> isInitialized [
 
 { #category : #'*IPharo' }
 DAPServer >> launch: source seq: seq [ 
-
+	"jupyterLab only supports the code stack if you select other scope it gives an code 
+	out of sync error...the offset is because the name of the method DoIt: inserted by Pharo"
+	self 
+		lineOffset: -3;
+		numberOfStacks: 3.
+	debugSession ifNotNil:[ debugSession resume ].
 	self
 		messageProcess: seq
 		put:
 			([ 
 				self handleLaunch: source seq: seq.
-				Processor yield.
-				(Delay forMilliseconds: 500) wait.
 				self removeMessageProcess: seq]
-				forkAt: Processor lowIOPriority
-				named: 'IPharo debug process')
+				forkNamed: 'IPharo debug process') 
+
 
 ]

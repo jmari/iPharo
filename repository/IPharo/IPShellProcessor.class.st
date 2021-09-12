@@ -97,7 +97,7 @@ IPShellProcessor >> executeExecuteRequest: aMessage [
 	[ session compileAndEvaluate: aMessage.  
 	  self sendMessage: session executionOkMessage.
 	  session increaseExecutionCounter] 
-	on: Error do:[ :e | 
+	on: Exception do:[ :e | 
 			response := (session executionErrorMessage 	exceptionObject: e).
 			self publish: (session executeErrorMessage content: response content).
 			self sendMessage: response ]

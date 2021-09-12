@@ -5,8 +5,7 @@ Class {
 		'debuggerServer',
 		'dapServerPort',
 		'clientSocket',
-		'controlReplay',
-		'mutex'
+		'controlReplay'
 	],
 	#classInstVars : [
 		'dapServerPort'
@@ -30,32 +29,19 @@ IPControlProcessor >> execute: aWireMessage [
 { #category : #'message-handling' }
 IPControlProcessor >> executeDebugRequest: aMessage [
 	<ipharo: #debug_request>
-	| clnSocket response data event dapRequest dataReceived session bytesRead dTokens |
+	| clnSocket response data dapRequest session |
+
 	session := IPSession getSessionForMessage: aMessage.
 	response := session debugReplyMsg.
 	clnSocket := session dapClientSocket.
 	data:={} asSCJsonObject.
 	dapRequest := (SCSerializer serialize: aMessage content).
 	dapRequest := 'Content-Length: ', dapRequest size asString , String cr, dapRequest.
-
 	clnSocket sendData: dapRequest.
-	dataReceived  := String new: 65536.
-	bytesRead := clnSocket receiveDataTimeout:1000 into: dataReceived.
-	dataReceived := dataReceived copyFrom: 1 to: bytesRead.
-	dTokens := dataReceived findTokens: String crlf.
-	dTokens := dTokens select:[ :each | each size > 1 ].
-	dTokens allButFirst do:[ : aDAPMessage |
-			data := SCMaterializer materializeFromString: aDAPMessage.
-			Transcript crShow: data asString.
-			data type = #event 
-				ifTrue:[ 
-					event := session debugEventMsg.
-					event content: data.
-					IPharoKernel instance publisher publish: event ]
-				ifFalse:[	
-					response := session debugReplyMsg.
-					response content: data.
-					self sendMessage: response ] ] .
+	" RESPONSE LOOP IS DONE BY A THREAD STARTED BU SESSION"
+	Processor yield.
+	(Delay forDuration: 10 milliSecond ) wait.
+
 
 
 	
@@ -75,7 +61,7 @@ IPControlProcessor >> executeShutdown: aMessage [
 { #category : #initialization }
 IPControlProcessor >> initialize [ 
 	super initialize.
-	mutex := Mutex new
+
 ]
 
 { #category : #accessing }

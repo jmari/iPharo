@@ -51,7 +51,7 @@ IPMessageProcessor >> handleRequest: anIPMsg [
 	[ | handler |
 	handler := self handlerFor: anIPMsg.
 	handler executeWithArguments: anIPMsg ]
-		on: Error
+		on: Exception
 		do: [ :ipError | self debug: ipError ] 
 ]
 
@@ -144,7 +144,7 @@ IPMessageProcessor >> startThread [
 		[ self isStopping ] whileFalse:[
 			self receiveWireMessage.
 			Processor yield].
-			] forkAt: Processor userSchedulingPriority named: self threadName
+			] forkAt: Processor systemBackgroundPriority named: self threadName
 ]
 
 { #category : #accessing }
