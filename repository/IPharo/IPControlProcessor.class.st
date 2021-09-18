@@ -61,6 +61,7 @@ IPControlProcessor >> executeShutdown: aMessage [
 { #category : #initialization }
 IPControlProcessor >> initialize [ 
 	super initialize.
+	
 
 ]
 
