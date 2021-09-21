@@ -5,7 +5,8 @@ Class {
 		'debuggerServer',
 		'dapServerPort',
 		'clientSocket',
-		'controlReplay'
+		'controlReplay',
+		'prevMessage'
 	],
 	#classInstVars : [
 		'dapServerPort'
@@ -31,10 +32,25 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 	<ipharo: #debug_request>
 	| clnSocket response data dapRequest session |
 
+	((aMessage content command = #source) and:[prevMessage  isNil]) ifTrue:[ 
+		prevMessage:= aMessage.
+		^ self].
+	((aMessage content command = #scopes) and:[prevMessage  notNil]) ifTrue:[ 
+		"now we now whap scope we have to return its time to set the correct source...
+		it is a hack because jupyterlab always ask for sourceRef = 0"
+		session := IPSession getSessionForMessage: prevMessage.
+		session dapServer setCodeForFrameId: aMessage content arguments frameId.
+		self executeDebugRequest: prevMessage.
+		prevMessage := nil.
+		"this delay is super important...dont ask me why"
+		Processor yield.
+		(Delay forDuration: 10 milliSecond ) wait.
+		].
 	session := IPSession getSessionForMessage: aMessage.
 	response := session debugReplyMsg.
 	clnSocket := session dapClientSocket.
 	data:={} asSCJsonObject.
+
 	dapRequest := (SCSerializer serialize: aMessage content).
 	dapRequest := 'Content-Length: ', dapRequest size asString , String cr, dapRequest.
 	clnSocket sendData: dapRequest.

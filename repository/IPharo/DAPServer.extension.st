@@ -121,3 +121,12 @@ DAPServer >> launch: source seq: seq [
 
 
 ]
+
+{ #category : #'*IPharo' }
+DAPServer >> setCodeForFrameId: aFrameId [
+	| stack scope |
+	stack := self getStacks
+		detect: [ :aStack | aStack hash = aFrameId ].
+	scope := stack sourceNodeExecuted scope.
+	(sourcesReferenceCache at: 0 ) sourceCode:stack method sourceCode.
+]

@@ -51,7 +51,7 @@ IPMessageProcessor >> handleRequest: anIPMsg [
 	[ | handler |
 	handler := self handlerFor: anIPMsg.
 	handler executeWithArguments: anIPMsg ]
-		on: Exception
+		on: Error
 		do: [ :ipError | self debug: ipError ] 
 ]
 
