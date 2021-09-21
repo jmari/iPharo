@@ -46,6 +46,17 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 		Processor yield.
 		(Delay forDuration: 10 milliSecond ) wait.
 		].
+	prevMessage ifNotNil:[ 
+		"do not forget to send source..."
+		session := IPSession getSessionForMessage: prevMessage.
+		self executeDebugRequest: prevMessage.
+		prevMessage := nil.
+		"this delay is super important...dont ask me why"
+		Processor yield.
+		(Delay forDuration: 10 milliSecond ) wait.
+		].
+
+
 	session := IPSession getSessionForMessage: aMessage.
 	response := session debugReplyMsg.
 	clnSocket := session dapClientSocket.
