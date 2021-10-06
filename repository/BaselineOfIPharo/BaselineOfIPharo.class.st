@@ -9,10 +9,7 @@ BaselineOfIPharo >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ 
 		self json: spec.
-		Smalltalk os isWindows ifFalse:[ 
-			"OSSubprocess does not support Windows"
-			self osSubprocess: spec.
-			self createKernelFile].
+		self createKernelFile.
 
 		spec
 			package: 'ZeroMQ';
@@ -29,42 +26,36 @@ BaselineOfIPharo >> baseline: spec [
 
 { #category : #'as yet unclassified' }
 BaselineOfIPharo >> createKernelFile [
+	| listOfKernels first last  kernelPath kernelsDir fileRef outString stream |
 	
-	| contents kernelFile stream |
-	contents := '{
-  "argv": [
-  "', FileLocator vmBinary fullName,'",
-  "--headless", "', FileLocator image fullName, '",
-  "ipharo",
-  "{connection_file}"
-	],
-	"display_name": "Pharo Smalltalk",
-	"language": "smalltalk",
-	"metadata": { "debugger": true }
-	}'.
-	kernelFile := self getKernelFileReference.
-	stream := kernelFile writeStream.
-	stream nextPutAll: contents.
-	stream close.
+	outString := LibC resultOfCommand: 'jupyter kernelspec list'.
+	listOfKernels := outString findTokens: Character lf.
+	2 to:listOfKernels size do:[ :index |
+		first := (listOfKernels at: index) findString: ' ' startingAt: 12.
+		last := (listOfKernels at: index) findString: 'kernels'.
+		kernelPath := (listOfKernels at:index) copyFrom: first +2 to: last + 7.
+		kernelsDir := (FileSystem root / kernelPath / 'pharo') createDirectory.  
+		fileRef := kernelsDir / 'kernel.json'.  
+		fileRef := fileRef ensureCreateFile.
+		stream := fileRef writeStream.
+		stream nextPutAll: self kernelFileContents.
+		stream close ]
+
+
 ]
 
 { #category : #'as yet unclassified' }
 BaselineOfIPharo >> getKernelFileReference [
-	| listOfKernels first last  kernelPath kernelsDir fileRef |
-	OSSUnixSubprocess new
-		command: 'jupyter';
-		arguments: #('kernelspec' 'list');
-		redirectStdout;
-		runAndWaitOnExitDo: [ :process :outString  | 
-				listOfKernels := outString findTokens: Character lf.
-				first := (listOfKernels at:2) findString: ' ' startingAt:12.
-				last := (listOfKernels at:2) findString: 'kernels'. 
-				kernelPath := (listOfKernels at:2) copyFrom: first +2 to: last + 7
-				].
+	| listOfKernels first last  kernelPath kernelsDir fileRef outString |
+	outString := LibC resultOfCommand: 'jupyter kernelspec list'.
+	listOfKernels := outString findTokens: Character lf.
+	2 to:listOfKernels size do:[ :index |
+		first := (listOfKernels at: index) findString: ' ' startingAt: 12.
+		last := (listOfKernels at: index) findString: 'kernels'.
+		kernelPath := (listOfKernels at:index) copyFrom: first +2 to: last + 7.
 		kernelsDir := (FileSystem root / kernelPath / 'pharo') createDirectory.  
 		fileRef := kernelsDir / 'kernel.json'.  
-		fileRef := fileRef ensureCreateFile.
-		^ fileRef
+		fileRef := fileRef ensureCreateFile ]
 		
 
 ]
@@ -120,13 +111,19 @@ BaselineOfIPharo >> json: spec [
 ]
 
 { #category : #'as yet unclassified' }
-BaselineOfIPharo >> osSubprocess: spec [
-	Metacello new
- 	baseline: 'OSSubprocess';
- 	repository: 'github://pharo-contributions/OSSubprocess:master/repository';
-	load.
-
-
+BaselineOfIPharo >> kernelFileContents [
+	
+	^ '{
+  "argv": [
+  "', FileLocator vmBinary fullName,'",
+  "--headless", "', FileLocator image fullName, '",
+  "ipharo",
+  "{connection_file}"
+	],
+	"display_name": "Pharo Smalltalk",
+	"language": "smalltalk",
+	"metadata": { "debugger": true }
+	}'
 ]
 
 { #category : #'instance creation' }
