@@ -65,14 +65,6 @@ DAPServer >> dapInspectVariables: aDAPInspectVariablesRequest [
 ]
 
 { #category : #'*IPharo' }
-DAPServer >> fileNameForCode: sourceCode [
-	| hasher hash |
-	hasher := NCHMurmur2 withSeed: 1972.
-	hash :=  hasher hash: (sourceCode withLineEndings: String lf) asByteArray.
-	^  '/tmp/', hash asString,'.st'
-]
-
-{ #category : #'*IPharo' }
 DAPServer >> handleLaunch: source seq: seq [ 
 	| result compiledMethod breakpointList sourceWithBreakpoints iPSession |
 
