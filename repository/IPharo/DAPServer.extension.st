@@ -22,7 +22,7 @@ DAPServer >> dapDumpCell: aDAPDumpCellRequest [
 	| code sourcePath fileReference ws|
 	
 	code := ((aDAPDumpCellRequest arguments) at:#code).
-	fileReference := (self murmulFileNameForCode: code) asFileReference.  
+	fileReference := (self murmurFileNameForCode: code) asFileReference.  
 	sourcePath := fileReference fullName.
 	ws := fileReference writeStream.
 	[ ws nextPutAll: code ] ensure:[ ws close ].
@@ -73,7 +73,7 @@ DAPServer >> handleLaunch: source seq: seq [
 		strategy := OupsDebuggerSelectionStrategy debuggerSelectionStrategy.
 		OupsDebuggerSelectionStrategy debuggerSelectionStrategy: (DAPOupsDebuggerSelector with: { self }).
 		'Begin Evaluate.' record.		
-		breakpointList := self breakpoints at: (self nurnurFileNameForCode:source) ifAbsent: Array new. 
+		breakpointList := self breakpoints at: (self murmurFileNameForCode:source) ifAbsent: Array new. 
 		sourceWithBreakpoints := self insertHaltsIn: source using:breakpointList.
 		compiledMethod := self pluggableCompilationBlock value: sourceWithBreakpoints.
 		iPSession :=self pluggableCompilationBlock receiver. 
