@@ -12,7 +12,7 @@ Class {
 IPMessaggingTest >> handleLaunch: source seq: seq [ 
 	| result compiledMethod breakpointList |
 		compiledMethod := self pluggableCompilationBlock value: 'ipharoMethod ', source.
-		breakpointList := self breakpoints at: (self fileNameForCode:source) ifAbsent: Array new. 
+		breakpointList := self breakpoints at: (self murmurFileNameForCode:source) ifAbsent: Array new. 
 		self 
 			setBreakpoints: breakpointList
 		 	inCompiledMethod: compiledMethod.	
