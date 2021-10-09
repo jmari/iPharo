@@ -10,12 +10,13 @@ BaselineOfIPharo >> baseline: spec [
 	spec for: #common do: [ 
 		self json: spec.
 		self pharoDAP: spec.
+		self nonCryptoHashes: spec
 		self createKernelFile.
 
 		spec
 			package: 'ZeroMQ';
 			package: 'IPharo' with: [ 
-				spec requires: #('ZeroMQ' 'SCouchDB' 'PharoLanguageServer')];
+				spec requires: #('ZeroMQ' 'SCouchDB' 'PharoLanguageServer' 'NonCryptographicHashes')];
 			package: 'JupyterTalk-Roassal' with: [
 				spec 
 					requires: #('IPharo');
@@ -70,17 +71,6 @@ BaselineOfIPharo >> groups: spec [
 ]
 
 { #category : #'as yet unclassified' }
-BaselineOfIPharo >> installPharoDAP [
-	Metacello new
-  		githubUser: 'badetitou' project: 'Pharo-LanguageServer' commitish: 'v2' path: 'src';
-  		baseline: 'PharoLanguageServer';
-  		load:'PharoDAP'
-	
-
-
-]
-
-{ #category : #'as yet unclassified' }
 BaselineOfIPharo >> installRoassal [
 	"ROASSAL 3 is not supported"
 	| installRoassal |
@@ -124,6 +114,17 @@ BaselineOfIPharo >> kernelFileContents [
 	"language": "smalltalk",
 	"metadata": { "debugger": true }
 	}'
+]
+
+{ #category : #'as yet unclassified' }
+BaselineOfIPharo >> nonCryptoHashes: spec [
+    spec
+    	baseline: #NonCryptographicHashes
+    	with: [ spec repository: 'github://osoco/pharo-non-cryptographic-hashes:master/src' ]
+
+	
+
+
 ]
 
 { #category : #'as yet unclassified' }
