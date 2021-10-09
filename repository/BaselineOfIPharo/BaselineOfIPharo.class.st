@@ -10,7 +10,7 @@ BaselineOfIPharo >> baseline: spec [
 	spec for: #common do: [ 
 		self json: spec.
 		self pharoDAP: spec.
-		self nonCryptoHashes: spec
+		self nonCryptoHashes: spec.
 		self createKernelFile.
 
 		spec
