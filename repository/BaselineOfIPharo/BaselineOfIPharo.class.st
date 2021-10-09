@@ -9,13 +9,13 @@ BaselineOfIPharo >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ 
 		self json: spec.
+		self pharoDAP: spec.
 		self createKernelFile.
 
 		spec
 			package: 'ZeroMQ';
 			package: 'IPharo' with: [ 
-				spec requires: #('ZeroMQ' 'SCouchDB');
-				preLoadDoIt: #installPharoDAP ];
+				spec requires: #('ZeroMQ' 'SCouchDB')];
 			package: 'JupyterTalk-Roassal' with: [
 				spec 
 					requires: #('IPharo');
@@ -124,6 +124,16 @@ BaselineOfIPharo >> kernelFileContents [
 	"language": "smalltalk",
 	"metadata": { "debugger": true }
 	}'
+]
+
+{ #category : #'as yet unclassified' }
+BaselineOfIPharo >> pharoDAP:spec [
+
+	spec 
+		baseline: 'PharoLanguageServer' with: [ spec repository: 'github://badetitou/Pharo-LanguageServer/src:v2' ];
+		import: 'PharoDAP'
+
+
 ]
 
 { #category : #'instance creation' }

@@ -32,7 +32,11 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 	<ipharo: #debug_request>
 	| clnSocket response data dapRequest session |
 
-	((aMessage content command = #source) and:[prevMessage  isNil]) ifTrue:[ 
+	((aMessage content command = #source) 
+		and:[prevMessage  isNil
+		and:[aMessage content arguments source path isNil ] ]) ifTrue:[ 
+		"this source command is sended before setting the scope, so we need to keep it,
+		 and execute it later because source is not specified"
 		prevMessage:= aMessage.
 		^ self].
 	((aMessage content command = #scopes) and:[prevMessage  notNil]) ifTrue:[ 
@@ -46,15 +50,7 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 		Processor yield.
 		(Delay forDuration: 10 milliSecond ) wait.
 		].
-	prevMessage ifNotNil:[ 
-		"do not forget to send source..."
-		session := IPSession getSessionForMessage: prevMessage.
-		self executeDebugRequest: prevMessage.
-		prevMessage := nil.
-		"this delay is super important...dont ask me why"
-		Processor yield.
-		(Delay forDuration: 10 milliSecond ) wait.
-		].
+
 
 
 	session := IPSession getSessionForMessage: aMessage.
@@ -65,7 +61,7 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 	dapRequest := (SCSerializer serialize: aMessage content).
 	dapRequest := 'Content-Length: ', dapRequest size asString , String cr, dapRequest.
 	clnSocket sendData: dapRequest.
-	" RESPONSE LOOP IS DONE BY A THREAD STARTED BU SESSION"
+	" RESPONSE LOOP IS DONE BY A THREAD STARTED BY SESSION"
 	Processor yield.
 	(Delay forDuration: 10 milliSecond ) wait.
 
