@@ -15,7 +15,7 @@ BaselineOfIPharo >> baseline: spec [
 		spec
 			package: 'ZeroMQ';
 			package: 'IPharo' with: [ 
-				spec requires: #('ZeroMQ' 'SCouchDB')];
+				spec requires: #('ZeroMQ' 'SCouchDB' 'PharoLanguageServer')];
 			package: 'JupyterTalk-Roassal' with: [
 				spec 
 					requires: #('IPharo');
@@ -130,7 +130,7 @@ BaselineOfIPharo >> kernelFileContents [
 BaselineOfIPharo >> pharoDAP:spec [
 
 	spec 
-		baseline: 'PharoLanguageServer' with: [ spec repository: 'github://badetitou/Pharo-LanguageServer/src:v2' ];
+		baseline: 'PharoLanguageServer' with: [ spec repository: 'github://badetitou/Pharo-LanguageServer:v2/src' ];
 		import: 'PharoDAP'
 
 
