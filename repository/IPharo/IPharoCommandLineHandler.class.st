@@ -32,9 +32,10 @@ IPharoCommandLineHandler >> activate [
 			kernelConfig := SCMaterializer materializeFromString:content. 
 			stream close.
 			ZmqContext current.
+			Smalltalk at:#CommandLineDapUIManager ifPresent:[
 			CommandLineDapUIManager isValidForCurrentSystemConfiguration ifTrue:[ 
 				CommandLineDapUIManager new beDefault.
-				 ].
+				 ] ].
 			IPharoKernel new 
 						configureKernel: kernelConfig;
 						start ] ]
