@@ -1,7 +1,7 @@
 Class {
 	#name : #CommandLineDapUIManager,
 	#superclass : #NonInteractiveUIManager,
-	#category : #'IPharo-DAP'
+	#category : #'IPharo-DAP-UIManager'
 }
 
 { #category : #debug }

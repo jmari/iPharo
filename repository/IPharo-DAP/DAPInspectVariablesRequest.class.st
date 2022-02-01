@@ -1,7 +1,7 @@
 Class {
 	#name : #DAPInspectVariablesRequest,
 	#superclass : #DAPRequest,
-	#category : #'IPharo-Messages-DAPSupport'
+	#category : #'IPharo-DAP-Messages-DAPSupport'
 }
 
 { #category : #initialization }

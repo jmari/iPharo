@@ -1,5 +1,5 @@
 Class {
 	#name : #DAPInspectVariablesResponse,
 	#superclass : #DAPResponse,
-	#category : #'IPharo-Messages-DAPSupport'
+	#category : #'IPharo-DAP-Messages-DAPSupport'
 }
