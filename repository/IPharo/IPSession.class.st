@@ -403,12 +403,15 @@ IPSession >> initializeBindings [
 
 { #category : #initialization }
 IPSession >> initializeDapServer [
-
+	
 	^ debuggerServer ifNil:[
-		debuggerServer := DAPServer new.
-		dapServerPort := debuggerServer start.
-		self startDapResponder.
-		debuggerServer ]
+		Smalltalk at: #DAPServer 
+			ifPresent:[ 
+				debuggerServer := DAPServer new.
+				dapServerPort := debuggerServer start.
+				self startDapResponder.
+				debuggerServer ]
+			ifAbsent:[ debuggerServer := NoDebugServerPresent new ] ]
 ]
 
 { #category : #initialization }

@@ -9,19 +9,22 @@ BaselineOfIPharo >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ 
 		self json: spec.
-		self pharoDAP: spec.
 		self nonCryptoHashes: spec.
 		self createKernelFile.
 
 		spec
 			package: 'ZeroMQ';
 			package: 'IPharo' with: [ 
-				spec requires: #('ZeroMQ' 'SCouchDB' 'PharoLanguageServer' 'NonCryptographicHashes')];
+				spec requires: #('ZeroMQ' 'SCouchDB' 'NonCryptographicHashes')];	
+			package: 'Dap' with:[
+				spec requires: #('ZeroMQ' 'SCouchDB' 'NonCryptographicHashes' 'IPharo-UIMAnager');
+					preLoadDoIt: #pharoDAP];
 			package: 'JupyterTalk-Roassal' with: [
 				spec 
 					requires: #('IPharo');
 					preLoadDoIt: #installRoassal
 				].
+			
 		self groups: spec ]
 ]
 
@@ -66,6 +69,7 @@ BaselineOfIPharo >> groups: spec [
 	spec 
 		group: 'default' with: #('IPharo');
 		group: 'zmq' with: #('ZeroMQ');
+		group: 'dap' with: #('Dap');
 		group: 'roassalSupport' with: #('JupyterTalk-Roassal');
 		group: 'all' with: #('JupyterTalk-Roassal')
 ]
@@ -123,6 +127,16 @@ BaselineOfIPharo >> nonCryptoHashes: spec [
     	with: [ spec repository: 'github://osoco/pharo-non-cryptographic-hashes:master/src' ]
 
 	
+
+
+]
+
+{ #category : #'as yet unclassified' }
+BaselineOfIPharo >> pharoDAP [
+		Metacello new
+			baseline: 'PharoLanguageServer';
+			repository: 'github://badetitou/Pharo-LanguageServer:v2/src' ;
+			load: 'PharoDAP'
 
 
 ]
