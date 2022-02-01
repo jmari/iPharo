@@ -1,6 +1,6 @@
 Extension { #name : #DAPServer }
 
-{ #category : #'*IPharo' }
+{ #category : #'*IPharo-DAP' }
 DAPServer >> dapDebugInfo: aDAPDebugInfoRequest [
 	<dap: #debugInfo>
 	| debugInfo |
@@ -16,7 +16,7 @@ DAPServer >> dapDebugInfo: aDAPDebugInfoRequest [
 	self sendMessage: debugInfo
 ]
 
-{ #category : #'*IPharo' }
+{ #category : #'*IPharo-DAP' }
 DAPServer >> dapDumpCell: aDAPDumpCellRequest [
 	<dap: #dumpCell>
 	| code sourcePath fileReference ws|
@@ -36,7 +36,7 @@ DAPServer >> dapDumpCell: aDAPDumpCellRequest [
 									body:({ 'sourcePath'-> sourcePath } asDictionary);yourself)
 ]
 
-{ #category : #'*IPharo' }
+{ #category : #'*IPharo-DAP' }
 DAPServer >> dapInspectVariables: aDAPInspectVariablesRequest [
 	<dap: #inspectVariables>
 	| scope context2 variables|
@@ -64,7 +64,7 @@ DAPServer >> dapInspectVariables: aDAPInspectVariablesRequest [
 												yourself)
 ]
 
-{ #category : #'*IPharo' }
+{ #category : #'*IPharo-DAP' }
 DAPServer >> handleLaunch: source seq: seq [ 
 	| result compiledMethod breakpointList sourceWithBreakpoints iPSession |
 
@@ -89,13 +89,7 @@ DAPServer >> handleLaunch: source seq: seq [
 
 ]
 
-{ #category : #'*IPharo' }
-DAPServer >> isInitialized [
-	^ initialized
-
-]
-
-{ #category : #'*IPharo' }
+{ #category : #'*IPharo-DAP' }
 DAPServer >> launch: source seq: seq [ 
 	"jupyterLab only supports the code stack if you select other scope it gives an code 
 	out of sync error...the offset is because the name of the method DoIt: inserted by Pharo"
@@ -114,7 +108,7 @@ DAPServer >> launch: source seq: seq [
 
 ]
 
-{ #category : #'*IPharo' }
+{ #category : #'*IPharo-DAP' }
 DAPServer >> murmurFileNameForCode: sourceCode [
 	| hasher hash |
 	hasher := NCHMurmur2 withSeed: 1972.
@@ -122,7 +116,7 @@ DAPServer >> murmurFileNameForCode: sourceCode [
 	^  '/tmp/', hash asString,'.st'
 ]
 
-{ #category : #'*IPharo' }
+{ #category : #'*IPharo-DAP' }
 DAPServer >> setCodeForFrameId: aFrameId [
 	| stack scope |
 	stack := self getStacks

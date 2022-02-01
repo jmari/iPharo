@@ -406,8 +406,8 @@ IPSession >> initializeDapServer [
 	
 	^ debuggerServer ifNil:[
 		Smalltalk at: #DAPServer 
-			ifPresent:[ 
-				debuggerServer := DAPServer new.
+			ifPresent:[ :aDAPclass |
+				debuggerServer := aDAPclass new.
 				dapServerPort := debuggerServer start.
 				self startDapResponder.
 				debuggerServer ]
