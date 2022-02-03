@@ -22,9 +22,9 @@ LibZeroMQ >> unix64ModuleName [
 	| libNames libZmqPaths|
 	libZmqPaths := {	((OSEnvironment current at: 'HOME' ifAbsent:['']),'/anaconda3/lib/').
 							((OSEnvironment current at: 'HOME' ifAbsent:['']),'/anaconda2/lib/').
-							'/usr/lib'.
-							'/lib/x86_64-linux-gnu'.
-							'/usr/local/lib'
+							'/usr/lib/'.
+							'/lib/x86_64-linux-gnu/'.
+							'/usr/local/lib/'
 							},
 						((OSEnvironment current 
 												at: 'LD_LIBRARY_PATH' 

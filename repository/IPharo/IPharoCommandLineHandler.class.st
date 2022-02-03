@@ -33,8 +33,8 @@ IPharoCommandLineHandler >> activate [
 			stream close.
 			ZmqContext current.
 			Smalltalk at:#CommandLineDapUIManager ifPresent:[
-			CommandLineDapUIManager isValidForCurrentSystemConfiguration ifTrue:[ 
-				CommandLineDapUIManager new beDefault.
+			(Smalltalk at:#CommandLineDapUIManager) isValidForCurrentSystemConfiguration ifTrue:[ 
+				(Smalltalk at:#CommandLineDapUIManager) new beDefault.
 				 ] ].
 			IPharoKernel new 
 						configureKernel: kernelConfig;
