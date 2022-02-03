@@ -24,6 +24,7 @@ LibZeroMQ >> unix64ModuleName [
 							((OSEnvironment current at: 'HOME' ifAbsent:['']),'/anaconda2/lib/').
 							'/usr/lib'.
 							'/lib/x86_64-linux-gnu'.
+							'/opt/zeromq-4.1.5/'
 							},
 						((OSEnvironment current 
 												at: 'LD_LIBRARY_PATH' 
