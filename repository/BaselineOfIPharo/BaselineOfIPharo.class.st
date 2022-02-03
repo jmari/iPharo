@@ -9,7 +9,7 @@ BaselineOfIPharo >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ 
 		self json: spec.
-		self nonCryptoHashes: spec.
+		self nonCryptoHashes: spec.		
 		self createKernelFile.
 
 		spec
@@ -109,6 +109,31 @@ BaselineOfIPharo >> json: spec [
 
 { #category : #'as yet unclassified' }
 BaselineOfIPharo >> kernelFileContents [
+	| fr |
+	fr := '/opt/pharo/pharo' asFileReference.
+	^ fr exists
+		ifTrue:[ self kernelFileContentsForDocker ]
+		ifFalse:[ self kernelFileDefaultContents ]
+]
+
+{ #category : #'as yet unclassified' }
+BaselineOfIPharo >> kernelFileContentsForDocker [
+	
+	^ '{
+  "argv": [
+  "/opt/pharo/pharo",
+  "', FileLocator image fullName, '",
+  "ipharo",
+  "{connection_file}"
+	],
+	"display_name": "Pharo Smalltalk",
+	"language": "smalltalk",
+	"metadata": { "debugger": true }
+	}'
+]
+
+{ #category : #'as yet unclassified' }
+BaselineOfIPharo >> kernelFileDefaultContents [
 	
 	^ '{
   "argv": [
