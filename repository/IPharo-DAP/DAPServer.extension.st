@@ -90,6 +90,17 @@ DAPServer >> handleLaunch: source seq: seq [
 ]
 
 { #category : #'*IPharo-DAP' }
+DAPServer >> isInitialized [
+	^ initialized
+
+]
+
+{ #category : #'*IPharo-DAP' }
+DAPServer >> isRunning [
+	^ serverLoop
+]
+
+{ #category : #'*IPharo-DAP' }
 DAPServer >> launch: source seq: seq [ 
 	"jupyterLab only supports the code stack if you select other scope it gives an code 
 	out of sync error...the offset is because the name of the method DoIt: inserted by Pharo"
