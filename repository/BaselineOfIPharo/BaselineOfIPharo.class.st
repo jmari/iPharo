@@ -16,9 +16,8 @@ BaselineOfIPharo >> baseline: spec [
 			package: 'ZeroMQ';
 			package: 'IPharo' with: [ 
 				spec requires: #('ZeroMQ' 'SCouchDB' 'NonCryptographicHashes')];	
-			package: 'IPharo-DAP';
-			package: 'PharoDAP' with:[
-				spec requires: #('IPharo' 'IPharo-DAP');
+			package: 'IPharo-DAP' with:[
+				spec requires: #('IPharo');
 					preLoadDoIt: #pharoDAP];
 			package: 'JupyterTalk-Roassal' with: [
 				spec 
@@ -72,7 +71,7 @@ BaselineOfIPharo >> groups: spec [
 	spec 
 		group: 'default' with: #('IPharo');
 		group: 'zmq' with: #('ZeroMQ');
-		group: 'dap' with: #('PharoDAP');
+		group: 'dap' with: #('IPharo-DAP');
 		group: 'roassalSupport' with: #('JupyterTalk-Roassal');
 		group: 'all' with: #('JupyterTalk-Roassal')
 ]
