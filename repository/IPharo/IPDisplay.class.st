@@ -33,8 +33,7 @@ Class {
 		'interaction',
 		'extent',
 		'session',
-		'hasBeenAlreadyPublished',
-		'dataModel'
+		'hasBeenAlreadyPublished'
 	],
 	#classInstVars : [
 		'cachedObjects'
@@ -85,12 +84,6 @@ IPDisplay >> buildDisplayDataModel: data [
 												#interactive-> interaction.
 												#extent->self extent.
 												#metadata ->dataModel metadata} asDictionary. 
-	^ dataModel
-]
-
-{ #category : #accessing }
-IPDisplay >> dataModel [
-
 	^ dataModel
 ]
 
@@ -167,7 +160,7 @@ IPDisplay >> maxNumberOfRows [
 
 { #category : #'public-api' }
 IPDisplay >> openInJupyter: data [ 
-	| displayData |
+	| dataModel displayData |
 	
 	hasBeenAlreadyPublished := false.
 	dataModel := self buildDisplayDataModel: data.
