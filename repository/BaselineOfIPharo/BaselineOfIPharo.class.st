@@ -19,6 +19,9 @@ BaselineOfIPharo >> baseline: spec [
 			package: 'IPharo-DAP' with:[
 				spec requires: #('IPharo');
 					preLoadDoIt: #pharoDAP];
+			package: 'IPharo-Roassal3' with:[ 
+				spec requires: #('IPharo');
+					preLoadDoIt: #installRoassal3Exporters];
 			package: 'JupyterTalk-Roassal' with: [
 				spec 
 					requires: #('IPharo');
@@ -72,6 +75,7 @@ BaselineOfIPharo >> groups: spec [
 		group: 'default' with: #('IPharo');
 		group: 'zmq' with: #('ZeroMQ');
 		group: 'dap' with: #('IPharo-DAP');
+		group: 'roassal3' with: #('IPharo-Roassal3'); 
 		group: 'roassalSupport' with: #('JupyterTalk-Roassal');
 		group: 'all' with: #('JupyterTalk-Roassal')
 ]
@@ -97,6 +101,15 @@ BaselineOfIPharo >> installRoassal [
 							configurationOf: 'Roassal2';
 							loadStable]
 			]
+]
+
+{ #category : #'as yet unclassified' }
+BaselineOfIPharo >> installRoassal3Exporters [
+	
+	Metacello new
+	    baseline: 'Roassal3Exporters';
+	    repository: 'github://ObjectProfile/Roassal3Exporters';
+	    load.
 ]
 
 { #category : #'instance creation' }
