@@ -487,7 +487,7 @@ IPSession >> pluggableCompilationBlock [
 			compileDoit ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #'public-api' }
 IPSession >> print: anObject [
 	^ self display openInJupyter: anObject
 ]
