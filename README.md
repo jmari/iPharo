@@ -26,7 +26,7 @@ Metacello new
 Kernel.json file should be created by Metacello (in Mac or Linux) in the correct place. If you are not able to start a new notebook in Pharo Smalltalk language, create this file manually.
 Create the folder	'/usr/local/share/jupyter/kernels/pharo'. Create file	'kernel.json' with contents
 ```JSON
-'{
+{
   "argv": [
     "/Path/To/Your/vm/Pharo",
     "/Path/to/your/image/Pharo6.1-64.image",
@@ -35,7 +35,7 @@ Create the folder	'/usr/local/share/jupyter/kernels/pharo'. Create file	'kernel.
   ],
   "display_name": "Pharo Smalltalk",
   "language": "smalltalk"
-}'
+}
 ```
 Optional, copy an icon with file name logo-64x64.png.
 
