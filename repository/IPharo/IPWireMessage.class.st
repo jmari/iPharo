@@ -11,7 +11,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'wireMessage',
-		'currentProperty'
+		'currentProperty',
+		'sharedKey'
 	],
 	#category : #'IPharo-Core'
 }
@@ -34,10 +35,20 @@ IPWireMessage class >> newFromMessage: anIPMessage [
 	^instance
 ]
 
+{ #category : #'instance creation' }
+IPWireMessage class >> newFromMessage: anIPMessage sharedKey: sharedKey [
+	| instance |
+
+	instance := self newFromMessage: anIPMessage.
+	instance sharedKey: sharedKey.
+	instance hmac: instance calculateHMAC hex asByteArray.
+	^ instance
+]
+
 { #category : #hmac }
 IPWireMessage >> calculateHMAC [
 	^ (HMAC on: SHA256)
-			key: IPharoKernel instance sharedKey asByteArray;
+			key: self sharedKey asByteArray;
 			digestMessage:
 						self header,
 						self parentHeader,
@@ -121,6 +132,16 @@ IPWireMessage >> push: aProperty [
 	currentProperty <= wireMessage size ifTrue:[wireMessage at:currentProperty put:aProperty].
 	currentProperty := currentProperty + 1
 	
+]
+
+{ #category : #hmac }
+IPWireMessage >> sharedKey [ 
+	^ sharedKey ifNil:[ sharedKey := IPharoKernel instance sharedKey ]
+]
+
+{ #category : #hmac }
+IPWireMessage >> sharedKey: sharedKeyString [ 
+	sharedKey := sharedKeyString
 ]
 
 { #category : #accessing }

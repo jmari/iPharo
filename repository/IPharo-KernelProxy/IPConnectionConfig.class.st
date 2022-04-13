@@ -13,7 +13,7 @@ IPConnectionConfig >> asJson [
 IPConnectionConfig >> initialize [ 
 	super initialize.
 	"we need to set the shared key because wireMessage uses it"
-	IPharoKernel instance sharedKey:(SHA256 hashMessage: 'put a uuid here') hex.
+
 	self 
 		control_port:50160;
 		hb_port:42540;
@@ -23,5 +23,5 @@ IPConnectionConfig >> initialize [
 		ip:'127.0.0.1';
 		signature_scheme:'hmac-sha256';
 		transport: 'tcp' ;
-		key: IPharoKernel instance sharedKey
+		key: (SHA256 hashMessage: self hash asString) hex
 ]

@@ -5,7 +5,8 @@ Class {
 		'zmqSocket',
 		'stop',
 		'wireMessage',
-		'handlers'
+		'handlers',
+		'sharedKey'
 	],
 	#category : #'IPharo-Core'
 }
@@ -15,6 +16,15 @@ IPMessageProcessor class >> new: aZmqSocket [
 	| i |
 	i :=	self new.
 	i zmqSocket: aZmqSocket.
+	^ i startThread 
+]
+
+{ #category : #'instance creation' }
+IPMessageProcessor class >> new: aZmqSocket sharedKey: sharedKeyString [
+	| i |
+	i :=	self new.
+	i zmqSocket: aZmqSocket.
+	i sharedKey: sharedKeyString.
 	^ i startThread 
 ]
 
@@ -136,6 +146,16 @@ IPMessageProcessor >> sendMessage: anIPResponse [
 				send: aResponse content ]
 ]
 
+{ #category : #accessing }
+IPMessageProcessor >> sharedKey [ 
+	^ sharedKey ifNil:[ sharedKey := IPharoKernel instance sharedKey ]
+]
+
+{ #category : #accessing }
+IPMessageProcessor >> sharedKey: sharedKeyString [ 
+	sharedKey := sharedKeyString
+]
+
 { #category : #'as yet unclassified' }
 IPMessageProcessor >> startThread [
 	[	|more|
@@ -171,7 +191,8 @@ IPMessageProcessor >> wireMessage [
 { #category : #private }
 IPMessageProcessor >> wireMessage: aWireMessage [
 	"only for testing"
-	wireMessage := aWireMessage
+	wireMessage := aWireMessage.
+	wireMessage sharedKey: self sharedKey
 ]
 
 { #category : #accessing }

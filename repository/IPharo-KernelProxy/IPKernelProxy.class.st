@@ -31,7 +31,8 @@ Class {
 		'connectionConfig',
 		'kernelPipe',
 		'wireMessage',
-		'subscriber'
+		'subscriber',
+		'sharedKey'
 	],
 	#category : #'IPharo-KernelProxy-Core'
 }
@@ -56,6 +57,16 @@ IPKernelProxy >> buildKernelStartCommand [
 		ws << op ].
 	^ ws contents	
 	
+	
+]
+
+{ #category : #'message sends' }
+IPKernelProxy >> completeRequest: aStringWithCode cursorPos: anInteger [
+	| message |
+	message := IPCompleteRequestMsg new.
+	message code: aStringWithCode cursorPos: anInteger. 
+	self sendMessage: message.
+
 	
 ]
 
@@ -121,6 +132,7 @@ IPKernelProxy >> executeRequest: aStringWithCode [
 	message := IPExecuteRequestMsg new.
 	message code: aStringWithCode.
 	self sendMessage: message.
+	self receiveWireMessage 
 
 	
 ]
@@ -139,15 +151,15 @@ IPKernelProxy >> initialize [
 
 { #category : #initialization }
 IPKernelProxy >> initializeClientPorts [
-	| kernelConfig sharedKey |
-	"heartbeat must respond to the Kernel Heartbeat
+	| kernelConfig |
+	"heartbeat must request the heartbeat to the Kernel
 	 Client is a subscribet to ioPub, kernel is the publisher
-	shell, control, stdin are Requesters"
+	shell, control, stdin are Dealers"
 	
 	heartbeat := ZmqRequestSocket new.
-	shell := ZmqRequestSocket new. 
-	control := ZmqRequestSocket new. 
-	stdin := ZmqRequestSocket new. 
+	shell := ZmqDealerSocket new. 
+	control := ZmqDealerSocket new. 
+	stdin := ZmqDealerSocket new. 
 	ioPub := ZmqSubscriberSocket new.
 	
 	kernelConfig := self connectionConfig.
@@ -171,6 +183,27 @@ IPKernelProxy >> initializeClientPorts [
 	
 ]
 
+{ #category : #'message sends' }
+IPKernelProxy >> kernelInfoRequest [
+	| message |
+	message := IPKernelInfoRequestMsg new.
+	self sendMessage: message.
+	self receiveWireMessage 
+
+	
+]
+
+{ #category : #'message sends' }
+IPKernelProxy >> kernelInfoRequest: aStringWithCode [
+	| message |
+	message := IPKernelInfoRequestMsg new.
+	message code: aStringWithCode.
+	self sendMessage: message.
+	self receiveWireMessage 
+
+	
+]
+
 { #category : #accessing }
 IPKernelProxy >> language [
 	"returns the language"
@@ -188,18 +221,40 @@ IPKernelProxy >> metadata [
 	^ self subclassResponsibility 
 ]
 
-{ #category : #'message sends' }
+{ #category : #'as yet unclassified' }
 IPKernelProxy >> pushMessageFrame:messageData [ 
 
 	(messageData =  (self messageDelimiter asByteArray))
+				ifTrue:[ self wireMessage delimiterReceived ]
 				ifFalse:[ self wireMessage push:messageData ]
+
+						
+	
+
+]
+
+{ #category : #'as yet unclassified' }
+IPKernelProxy >> receiveWireMessage [
+	|more|
+	self wireMessage: IPWireMessage new.
+	more := 1.
+	[more = 1] whileTrue:[
+		shell receiveIfAvailable: [ :messageData|  
+							more:= shell getOption: ZmqApiConstants zmqRcvMore.
+							messageData isEmpty 
+							ifTrue:[							
+									Processor yield.
+									(Delay forMilliseconds: 500) wait ]
+							ifFalse:[ self pushMessageFrame:messageData ].
+							more = 0 ifTrue: [ 
+								(IPMsg newFromWireMessage: self wireMessage ) inspect ] ] ].	
 ]
 
 { #category : #'message sends' }
 IPKernelProxy >> sendMessage: anIPRequest [
 	| aRequest |
 	
-	aRequest := IPWireMessage newFromMessage: anIPRequest.
+	aRequest := IPWireMessage newFromMessage: anIPRequest sharedKey: sharedKey.
 	shell ifNotNil: [ 
 		shell  
 				send: aRequest uuid flags:ZmqApiConstants  zmqSendMore;
@@ -237,7 +292,7 @@ IPKernelProxy >> startKernel [
 
 { #category : #initialization }
 IPKernelProxy >> startSubscriberProcessor [
-	subscriber := IPIOSubscriberProcessor new: ioPub
+	subscriber := IPIOSubscriberProcessor new: ioPub sharedKey: sharedKey
 ]
 
 { #category : #utility }
@@ -254,6 +309,7 @@ IPKernelProxy >> wireMessage [
 
 { #category : #'message sends' }
 IPKernelProxy >> wireMessage: aWireMessage [
-	"only for testing"
-	wireMessage := aWireMessage
+
+	wireMessage := aWireMessage.
+	wireMessage sharedKey: sharedKey
 ]
