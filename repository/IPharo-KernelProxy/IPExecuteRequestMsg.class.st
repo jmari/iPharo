@@ -1,10 +1,7 @@
 Class {
 	#name : #IPExecuteRequestMsg,
 	#superclass : #IPMsg,
-	#instVars : [
-		'code'
-	],
-	#category : #'IPharo-Messages-Shell'
+	#category : #'IPharo-KernelProxy-Messages-Shell'
 }
 
 { #category : #accessing }

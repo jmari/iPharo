@@ -155,8 +155,7 @@ IPSession >> compileAndEvaluate: aMessage [
 	self display reset.
 	result := self evaluate: aMessage content code.
 	result = self doNotSendDisplayOutputToken
-	ifFalse:[
-		self publishExecutionResult: result]
+		ifFalse:[ self publishExecutionResult: result ]
 	
 	
 ]
@@ -270,13 +269,12 @@ IPSession >> evaluate: sourceCode [
 
 	^  	
 		self dapServer isInitialized 
-		ifTrue:[ 
-			self dapServer launch:sourceCode seq: 1.
-			self doNotSendDisplayOutputToken
-		 ]
-		ifFalse:[ 		
-			compiledMethod := self pluggableCompilationBlock value: sourceCode.
-			compiledMethod  valueWithReceiver: self arguments:{self} ]	 
+			ifTrue:[ 
+				self dapServer launch:sourceCode seq: 1.
+				self doNotSendDisplayOutputToken ]
+			ifFalse:[ 		
+				compiledMethod := self pluggableCompilationBlock value: sourceCode.
+				compiledMethod  valueWithReceiver: self arguments: {self} ]	 
 ]
 
 { #category : #'messages-iopub' }
@@ -418,6 +416,7 @@ IPSession >> initializeDapServer [
 IPSession >> initializeMessageHeader: aMessage [
 	"copy header from wire message, it could not be serialized from the IPMsg, jupyter client need to receive exactly the same bytes in parent header than the source wire message...so if you serialize, the order of the properties could not be the same so byte stream will not.
 	All of the messages in a session are answering to an execute request message"
+	
 	aMessage header 
 				session: self id;
 				username: self username.
@@ -496,7 +495,7 @@ IPSession >> print: anObject [
 IPSession >> publishExecutionResult: result [
 
 	| executionResult dataModel |
-	executionResult := self  executeResultMessage.
+	executionResult := self executeResultMessage.
 	dataModel := self display buildDisplayDataModel: result asString.
 	executionResult content addAll: dataModel.	
 	self display publish: executionResult

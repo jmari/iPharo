@@ -189,7 +189,7 @@ IPharoKernel >> heartbeatThread [
 IPharoKernel >> initialize [
 	super initialize.
 	ZmqContext current.
-	heartbeat := ZmqRequestSocket new.
+	heartbeat := ZmqResponseSocket new.
 	shell := ZmqRouterSocket new. 
 	control := ZmqRouterSocket new. 
 	stdin := ZmqRouterSocket new. 
@@ -227,6 +227,11 @@ IPharoKernel >> publisher [
 { #category : #accessing }
 IPharoKernel >> sharedKey [
 	^ sharedKey ifNil:[0]
+]
+
+{ #category : #accessing }
+IPharoKernel >> sharedKey: aSHA256keyInHex [
+	sharedKey := aSHA256keyInHex
 ]
 
 { #category : #processors }

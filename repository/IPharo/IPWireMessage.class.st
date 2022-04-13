@@ -37,7 +37,7 @@ IPWireMessage class >> newFromMessage: anIPMessage [
 { #category : #hmac }
 IPWireMessage >> calculateHMAC [
 	^ (HMAC on: SHA256)
-			key: IPharoKernel instance sharedKey asByteArray ;
+			key: IPharoKernel instance sharedKey asByteArray;
 			digestMessage:
 						self header,
 						self parentHeader,
@@ -49,6 +49,13 @@ IPWireMessage >> calculateHMAC [
 IPWireMessage >> content [
 	^ wireMessage at:6 
 		
+]
+
+{ #category : #initialization }
+IPWireMessage >> delimiterReceived [
+	"this is just to reset when receive message delimiter because we push every received frame"
+	currentProperty := 2
+	
 ]
 
 { #category : #accessing }

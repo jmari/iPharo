@@ -83,8 +83,8 @@ IPMessageProcessor >> messageDelimiter [
 { #category : #'as yet unclassified' }
 IPMessageProcessor >> processMessage [
 	|response|
-	self wireMessage isFull ifFalse:[ ^ self ].
 
+	self wireMessage isFull ifFalse:[ ^ self ].
 	response := self wireMessage hmacIsValid 
 												ifTrue:[ self execute: self wireMessage ]
 												ifFalse:[ IPHMACError signal:'Wrong HMAC' ].
@@ -100,6 +100,7 @@ IPMessageProcessor >> publish: aResult [
 IPMessageProcessor >> pushMessageFrame:messageData [ 
 
 	(messageData =  (self messageDelimiter asByteArray))
+				ifTrue:[ self wireMessage delimiterReceived ]
 				ifFalse:[ self wireMessage push:messageData ]
 
 						
