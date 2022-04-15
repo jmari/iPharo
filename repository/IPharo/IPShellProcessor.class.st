@@ -17,7 +17,7 @@ IPShellProcessor >> execute: aWireMessage [
 	| message session|
 
 	message := IPMsg newFromWireMessage: aWireMessage.
-	session := IPSession getSessionForMessage: message.
+	session := message session.
 	self publish: session kernelStatusBusyMessage.
 	self handleRequest: message.	
 	self publish:  session kernelStatusIdleMessage.
@@ -36,7 +36,7 @@ IPShellProcessor >> executeCommInfoRequest: aMessage [
 	<ipharo:#comm_info_request>
 	
 	| response session |
-	session := IPSession getSessionForMessage: aMessage.
+	session := aMessage session.
 	response := session commInfoReplyMessage.
 	self sendMessage: response
 	
@@ -60,7 +60,7 @@ IPShellProcessor >> executeCommMsgRequest: aMessage [
 IPShellProcessor >> executeCommOpenRequest: aMessage [
 	<ipharo: #comm_open>
 	
-	IPComm new:(aMessage content at:#comm_id) onSession: (IPSession getSessionForMessage: aMessage)
+	IPComm new:(aMessage content at:#comm_id) onSession: aMessage session
 
 	"NO-RESPONSE"
 
@@ -75,7 +75,7 @@ IPShellProcessor >> executeCompleteRequest: aMessage [
 	
 	| response completionList session |
 		
-	session := IPSession getSessionForMessage: aMessage.
+	session := aMessage session.
 	response := session completeReplyMsg.
 	completionList := self completion getCompletionListFrom: aMessage.
 	response content matches: (completionList at:1).
@@ -92,7 +92,7 @@ IPShellProcessor >> executeExecuteRequest: aMessage [
 	
 	| response session  |
 
-	session := IPSession getSessionForMessage: aMessage.
+	session :=  aMessage session.
 	self publish: (session executeInputMessage	code:aMessage content code).	
 	[ session compileAndEvaluate: aMessage.  
 	  self sendMessage: session executionOkMessage.
@@ -120,7 +120,7 @@ IPShellProcessor >> executeKernelInfoRequest: aMessage [
 	
 	| session|
 
-	session := IPSession getSessionForMessage: aMessage.
+	session := aMessage session.
 	self sendMessage: session kernelInfoReplayMessage
 ]
 

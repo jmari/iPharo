@@ -30,7 +30,7 @@ IPMessaggingTest >> ipMessage [
 
 { #category : #accessing }
 IPMessaggingTest >> session [
-	^  IPSession getSessionForMessage: self ipMessage.
+	^   self ipMessage session.
 ]
 
 { #category : #accessing }
@@ -48,7 +48,7 @@ IPMessaggingTest >> setBreakpointsInCompiledMethod: aCompiledMethod [
 { #category : #initialization }
 IPMessaggingTest >> setUp [
 	context := ZmqContext current.
-	session := IPSession getSessionForMessage: self ipMessage.
+	session := self ipMessage session.
 	IPharoKernel instance start
 ]
 

@@ -8,7 +8,7 @@ Class {
 IPIOSubscriberProcessor >> execute: aWireMessage [
 	| message session|
 	message := IPMsg newFromWireMessage: aWireMessage.
-	session := IPSession getSessionForMessage: message.
+	session := message session.
 	self handleRequest: message.	
 
 	

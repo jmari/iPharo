@@ -35,7 +35,13 @@ IPMessageProcessor >> addHandler: aDAPHandler [
 
 { #category : #'message-handlers' }
 IPMessageProcessor >> addHandlersFromPragmasIn: handlerInstance [
-	(Pragma allNamed: #ipharo: in: handlerInstance class)
+	self addHandlersFromPragmasInClass: handlerInstance class handlerInstance:handlerInstance
+		
+]
+
+{ #category : #'message-handlers' }
+IPMessageProcessor >> addHandlersFromPragmasInClass: class handlerInstance: handlerInstance [ 
+	(Pragma allNamed: #ipharo: in: class)
 		do: [ :pragma | 
 			self
 				addHandler:
@@ -190,7 +196,9 @@ IPMessageProcessor >> wireMessage [
 
 { #category : #private }
 IPMessageProcessor >> wireMessage: aWireMessage [
-	"only for testing"
+	"shared key is only setted by a kernelProxy, otherwise is nil 
+	 so that wireMessage hmac calculation is done using the Kernel (IPharoKernel) 
+	 shared key "
 	wireMessage := aWireMessage.
 	wireMessage sharedKey: self sharedKey
 ]

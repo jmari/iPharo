@@ -23,7 +23,12 @@ IPIOPubProcessor >> initialize [
 
 { #category : #'as yet unclassified' }
 IPIOPubProcessor >> publish: anIPMessage [
+	"publish is called from different threads that get the reference through 
+	IPharoKernel instance publisher so we sould take care of sending	 a message 
+	in the correct sequencial order. This message overrides the default publish call
+	who actually calls this same message but always on the same publisher instance"
 	| aMessage |
+	
 	aMessage := IPWireMessage newFromMessage: anIPMessage.
 	mutex critical:[
 	self zmqSocket  

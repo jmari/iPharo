@@ -116,6 +116,11 @@ IPMsg >> replyingToWireMessage: aWireMessage [
 ]
 
 { #category : #accessing }
+IPMsg >> session [ 
+	^ IPSession getSessionForMessage: self
+]
+
+{ #category : #accessing }
 IPMsg >> uuid [
  	^ uuid ifNil:[ uuid := UUID new hex asString asUppercase ].
 ]

@@ -32,7 +32,8 @@ Class {
 		'kernelPipe',
 		'wireMessage',
 		'subscriber',
-		'sharedKey'
+		'sharedKey',
+		'kernelStatus'
 	],
 	#category : #'IPharo-KernelProxy-Core'
 }
@@ -60,12 +61,12 @@ IPKernelProxy >> buildKernelStartCommand [
 	
 ]
 
-{ #category : #'message sends' }
+{ #category : #'public-messaging' }
 IPKernelProxy >> completeRequest: aStringWithCode cursorPos: anInteger [
 	| message |
 	message := IPCompleteRequestMsg new.
 	message code: aStringWithCode cursorPos: anInteger. 
-	self sendMessage: message.
+	self sendMessage: message onSocket: shell.
 
 	
 ]
@@ -87,7 +88,7 @@ IPKernelProxy >> connectionStringFor:transport ip:anIp port:aPort [
 	^ transport asString , '://' , anIp asString, ':' ,aPort asString
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'kernel-management' }
 IPKernelProxy >> defaultKernelFileContents [
 	
 	^ '{
@@ -103,36 +104,39 @@ IPKernelProxy >> defaultKernelFileContents [
 	}'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'kernel-management' }
 IPKernelProxy >> displayName [
 	"display name can be used by the front to display the kernel name"
 	^ self subclassResponsibility 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'kernel-management' }
 IPKernelProxy >> executableFileName [
 	" full path to the executable"
 	^ self subclassResponsibility 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'kernel-management' }
 IPKernelProxy >> executableOptions [
 	"executable options, I.E. image path or any stat up option, last option is the kernel name and kernel ports configuration filename"
 	^ self subclassResponsibility 
 ]
 
-{ #category : #'as yet unclassified' }
-IPKernelProxy >> executeReplay: aIPMsg [
-	aIPMsg printDirectlyToDisplay 
+{ #category : #'message-handlers-shell' }
+IPKernelProxy >> executeReply: anIPMessage [
+	<ipharo: #execute_result>
+	anIPMessage inspect.
+	self receiveWireMessage 
+
 ]
 
-{ #category : #'message sends' }
+{ #category : #'public-messaging' }
 IPKernelProxy >> executeRequest: aStringWithCode [
 	| message |
 	message := IPExecuteRequestMsg new.
 	message code: aStringWithCode.
-	self sendMessage: message.
-	self receiveWireMessage 
+	self sendMessage: message  onSocket: shell..
+	"self receiveWireMessage should be done after idle message" 
 
 	
 ]
@@ -145,6 +149,7 @@ IPKernelProxy >> initialize [
 	self startHeartbeatThread.
 	self startSubscriberProcessor. 
 	self startKernel.
+
 	
 
 ]
@@ -183,25 +188,37 @@ IPKernelProxy >> initializeClientPorts [
 	
 ]
 
-{ #category : #'message sends' }
+{ #category : #'message-handlers-control' }
+IPKernelProxy >> kernelInfoReply: anIPMessage [
+	<ipharo: #kernel_info_reply>
+	
+	self receiveWireMessage 
+
+]
+
+{ #category : #'public-messaging' }
 IPKernelProxy >> kernelInfoRequest [
 	| message |
 	message := IPKernelInfoRequestMsg new.
-	self sendMessage: message.
-	self receiveWireMessage 
+	self sendMessage: message onSocket: shell.
+	"self receiveWireMessage should be done after idle messag on iopub"
 
 	
 ]
 
-{ #category : #'message sends' }
-IPKernelProxy >> kernelInfoRequest: aStringWithCode [
+{ #category : #'public-messaging' }
+IPKernelProxy >> kernelShoutdown [
 	| message |
-	message := IPKernelInfoRequestMsg new.
-	message code: aStringWithCode.
-	self sendMessage: message.
-	self receiveWireMessage 
+	message := IPKernelShutdownMsg new.
+	self sendMessage: message onSocket: control.
+	"self receiveWireMessage should be done after idle messag on iopub"
 
 	
+]
+
+{ #category : #'kernel-management' }
+IPKernelProxy >> kernelStatus [
+	^ kernelStatus
 ]
 
 { #category : #accessing }
@@ -221,7 +238,7 @@ IPKernelProxy >> metadata [
 	^ self subclassResponsibility 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private-messaging' }
 IPKernelProxy >> pushMessageFrame:messageData [ 
 
 	(messageData =  (self messageDelimiter asByteArray))
@@ -233,7 +250,7 @@ IPKernelProxy >> pushMessageFrame:messageData [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private-messaging' }
 IPKernelProxy >> receiveWireMessage [
 	|more|
 	self wireMessage: IPWireMessage new.
@@ -250,13 +267,13 @@ IPKernelProxy >> receiveWireMessage [
 								(IPMsg newFromWireMessage: self wireMessage ) inspect ] ] ].	
 ]
 
-{ #category : #'message sends' }
-IPKernelProxy >> sendMessage: anIPRequest [
+{ #category : #'private-messaging' }
+IPKernelProxy >> sendMessage: anIPRequest onSocket: aZmqSocket [
 	| aRequest |
 	
 	aRequest := IPWireMessage newFromMessage: anIPRequest sharedKey: sharedKey.
-	shell ifNotNil: [ 
-		shell  
+	aZmqSocket ifNotNil: [ 
+		aZmqSocket  
 				send: aRequest uuid flags:ZmqApiConstants  zmqSendMore;
 				send: aRequest uuid flags:ZmqApiConstants  zmqSendMore;
 	 			send: self messageDelimiter asByteArray flags:ZmqApiConstants  zmqSendMore;
@@ -282,32 +299,57 @@ IPKernelProxy >> startHeartbeatThread [
 	] forkNamed:'ipharo-proxy-echo' 
 ]
 
-{ #category : #utility }
+{ #category : #'kernel-management' }
 IPKernelProxy >> startKernel [
 	"starts the Kernel"
-
+	kernelStatus := #starting.
 	self buildConnectionConfigFile.
 	kernelPipe := LibC pipe: self buildKernelStartCommand mode: 'r'.
 ]
 
 { #category : #initialization }
 IPKernelProxy >> startSubscriberProcessor [
-	subscriber := IPIOSubscriberProcessor new: ioPub sharedKey: sharedKey
+	subscriber := IPIOSubscriberProcessor new: ioPub sharedKey: sharedKey.
+	"I am the responsible for reply message handling in iopub
+	and also a subclass can hancle a reply message"
+	subscriber addHandlersFromPragmasInClass: self class superclass handlerInstance: self.
+	subscriber addHandlersFromPragmasInClass: self class handlerInstance: self  
 ]
 
-{ #category : #utility }
+{ #category : #'message-handlers-shell' }
+IPKernelProxy >> statusReply: anIPMessage [
+	<ipharo: #status>
+	
+	kernelStatus := anIPMessage content execution_state.
+
+	
+
+
+]
+
+{ #category : #'kernel-management' }
 IPKernelProxy >> stopKernel [
 	"should execute stop command"
-	LibC pipeClose: kernelPipe 
+	
+	self kernelShoutdown.
+
+	"close sockets"
+	shell close.
+	ioPub close.
+	control close.
+	stdin close.
+	subscriber stop.
+	LibC pipeClose: kernelPipe.
+	
 
 ]
 
-{ #category : #'message sends' }
+{ #category : #'private-messaging' }
 IPKernelProxy >> wireMessage [
 	^ wireMessage
 ]
 
-{ #category : #'message sends' }
+{ #category : #'private-messaging' }
 IPKernelProxy >> wireMessage: aWireMessage [
 
 	wireMessage := aWireMessage.

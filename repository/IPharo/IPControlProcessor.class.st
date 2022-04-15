@@ -19,7 +19,7 @@ IPControlProcessor >> execute: aWireMessage [
 	| message session|
 	
 	message := IPMsg newFromWireMessage: aWireMessage.
-	session := IPSession getSessionForMessage: message.
+	session := message session.
 	session dapServer pluggableCompilationBlock: session pluggableCompilationBlock.
 	self publish: session kernelStatusBusyMessage.
 	self handleRequest: message.	
@@ -42,7 +42,7 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 	((aMessage content command = #scopes) and:[prevMessage  notNil]) ifTrue:[ 
 		"now we now whap scope we have to return its time to set the correct source...
 		it is a hack because jupyterlab always ask for sourceRef = 0"
-		session := IPSession getSessionForMessage: prevMessage.
+		session :=  prevMessage session.
 		session dapServer setCodeForFrameId: aMessage content arguments frameId.
 		self executeDebugRequest: prevMessage.
 		prevMessage := nil.
@@ -53,7 +53,7 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 
 
 
-	session := IPSession getSessionForMessage: aMessage.
+	session := aMessage session.
 	response := session debugReplyMsg.
 	clnSocket := session dapClientSocket.
 	data:={} asSCJsonObject.
@@ -76,7 +76,7 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 IPControlProcessor >> executeShutdown: aMessage [
 	<ipharo: #shutdown_request>
 	| session |
-	session := IPSession getSessionForMessage: aMessage.
+	session := aMessage session.
 	session dapServer stop.
 	Smalltalk snapshot: false andQuit: true 
 ]
