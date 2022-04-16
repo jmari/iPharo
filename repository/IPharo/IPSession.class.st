@@ -272,6 +272,14 @@ IPSession >> doNotSendDisplayOutputToken [
 ]
 
 { #category : #evaluation }
+IPSession >> eval: sourceCode [
+	"used to call always evaluate without debugging action"
+	| compiledMethod |
+	compiledMethod := self pluggableCompilationBlock value: sourceCode.
+	^ 	compiledMethod  valueWithReceiver: self arguments: {self} 	 
+]
+
+{ #category : #evaluation }
 IPSession >> evaluate: sourceCode [
 
 	| compiledMethod |
@@ -446,6 +454,14 @@ IPSession >> initializeMessageHeader: aMessage [
 				username: self username.
 
 	^ aMessage 
+]
+
+{ #category : #'messages-shell' }
+IPSession >> inspectReplyMessage [
+	 | msg |
+	msg := IPInspectReplyMsg newReplyingToWireMessage: self currentMessage wireMessage. 
+	self initializeMessageHeader: msg.
+	^ msg 
 ]
 
 { #category : #'workspace-variables' }

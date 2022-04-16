@@ -204,6 +204,17 @@ IPKernelProxy >> initializeClientPorts [
 ]
 
 { #category : #'public-messaging' }
+IPKernelProxy >> inspectRequest: aStringWithCode cursorPos: anInteger [
+	| message |
+	message := IPInspectRequestMsg new.
+	message code: aStringWithCode cursorPos: anInteger. 
+	self sendMessage: message onSocket: shell.
+	self receiveMessageOnSocket: shell 
+
+	
+]
+
+{ #category : #'public-messaging' }
 IPKernelProxy >> isCompleteRequest: code [
 	| message |
 	message := IPIsCompleteRequestMsg new.

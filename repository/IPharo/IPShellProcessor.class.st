@@ -136,6 +136,24 @@ IPShellProcessor >> executeHistoryRequest: aMessage [
 ]
 
 { #category : #'message-handling' }
+IPShellProcessor >> executeInspectRequest: aMessage [
+	<ipharo: #inspect_request>
+	
+	| session inspectReplyMsg code|
+
+	session := aMessage session.
+	inspectReplyMsg := session inspectReplyMessage.
+	code := self inspectablePart: aMessage content code pos: aMessage content cursor_pos.
+	[ inspectReplyMsg content 
+			data: (session eval: code) asSCJsonObject;
+			found:true.
+	  ] on:Exception do:[ 
+		inspectReplyMsg content status: 'error' ].
+	self sendMessage: inspectReplyMsg
+	
+]
+
+{ #category : #'message-handling' }
 IPShellProcessor >> executeIsCompleteRequest: aMessage [
 	<ipharo: #is_complete_request>
 	
@@ -175,6 +193,24 @@ IPShellProcessor >> executeUpdateState: aMessage [
 	       
 	(IPharoKernel instance commManager commChannelAt:(aMessage content at:#comm_id)) commListeners  
 	 do:[ :aListener | response := aListener model state: (aMessage content at:#state) ]
+]
+
+{ #category : #utils }
+IPShellProcessor >> inspectablePart: aStringWithSourCode pos: cursorPos [
+	| stopBackCharacters stopForwardCharacters pos start end |
+	stopBackCharacters := { $=. $[. $(. ${. $.. $|. }.
+	stopForwardCharacters := { $.. Character space }.
+	pos := cursorPos.
+	start := 1.
+	[ pos > 0 and:[ start = 1 ] ] whileTrue:[ 
+		(stopBackCharacters includes: (aStringWithSourCode at: pos )) ifTrue:[ start := pos].
+		pos := pos - 1 ].
+	pos := cursorPos.
+	end := aStringWithSourCode size.
+	[ pos > 0 and:[ end = aStringWithSourCode size ]] whileTrue:[ 
+		(stopForwardCharacters includes: (aStringWithSourCode at: pos )) ifTrue:[ end := pos].
+		pos := pos + 1 ].
+	^ aStringWithSourCode copyFrom: start to: end 
 ]
 
 { #category : #accessing }
