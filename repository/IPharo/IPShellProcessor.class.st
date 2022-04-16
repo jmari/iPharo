@@ -104,13 +104,47 @@ IPShellProcessor >> executeExecuteRequest: aMessage [
 ]
 
 { #category : #'message-handling' }
+IPShellProcessor >> executeHistoryRequest: aMessage [
+	<ipharo: #history_request>
+	
+	| session historyMsg result from to pattern |
+
+	session := aMessage session.
+	historyMsg := session historyReplayMessage.
+	result :={}.
+	aMessage content hist_access_type = #tail ifTrue:[
+		from := session history size - aMessage content n.
+		from := from > 0 ifTrue:[from] ifFalse:[ 1 ].
+		to := session history size.
+		result := session history copyFrom:from to:to ].
+	
+	aMessage content hist_access_type = #range ifTrue:[
+		from := aMessage content start.
+		to := aMessage content stop.
+		result := session history copyFrom:from to:to  ].
+	
+	aMessage content hist_access_type = #search ifTrue:[
+		pattern := aMessage content pattern.
+		result := (self history select:[ :h | pattern matches: h last first ])
+						collect:[ :h | 
+							aMessage content output = true
+							ifTrue:[ h ]
+							ifFalse: [ { h first. h second. h last first } ] ] ].
+	historyMsg content history: result asArray.
+	self flag:#todo " pending. include duplicated history.  Default is false, but doesn't seems useful".
+	self sendMessage: historyMsg
+]
+
+{ #category : #'message-handling' }
 IPShellProcessor >> executeIsCompleteRequest: aMessage [
 	<ipharo: #is_complete_request>
 	
-	| response |
-
-	response := IPIsCompleteReplyMsg newReplyingToWireMessage: self wireMessage.
-	self sendMessage: response
+	| session isCompleteReplyMsg |
+	
+	session := aMessage session.
+	isCompleteReplyMsg := session isCompleteReplayMessage.
+	[ self class compiler source: aMessage content code;parseExpression  ] on:Exception do:[ isCompleteReplyMsg content status: 'invalid' ].
+	self sendMessage: isCompleteReplyMsg
 	
 ]
 

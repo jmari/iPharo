@@ -144,6 +144,18 @@ IPKernelProxy >> executeRequest: aStringWithCode [
 	
 ]
 
+{ #category : #'public-messaging' }
+IPKernelProxy >> historyLast: anInteger [
+	| message |
+	message := IPHistoryRequestMsg  new.
+	message content hist_access_type: #tail.
+	message content n:3.
+	self sendMessage: message onSocket: shell.
+	self receiveMessageOnSocket: shell 
+
+	
+]
+
 { #category : #initialization }
 IPKernelProxy >> initialize [
 	super initialize.
@@ -188,6 +200,17 @@ IPKernelProxy >> initializeClientPorts [
 								ip: (kernelConfig at:#ip)
 								port: (kernelConfig at:#iopub_port)).
 	ioPub subscribeAll.
+	
+]
+
+{ #category : #'public-messaging' }
+IPKernelProxy >> isCompleteRequest: code [
+	| message |
+	message := IPIsCompleteRequestMsg new.
+	message content code: code.
+	self sendMessage: message onSocket: shell.
+	self receiveMessageOnSocket: shell 
+
 	
 ]
 

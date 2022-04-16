@@ -40,7 +40,8 @@ Class {
 		'debuggerServer',
 		'dapServerPort',
 		'clientSocket',
-		'dapResponder'
+		'dapResponder',
+		'history'
 	],
 	#classInstVars : [
 		'sessions'
@@ -157,7 +158,11 @@ IPSession >> commUpdateMessage [
 IPSession >> compileAndEvaluate: aMessage [
 	| result |
 	self display reset.
-	result := self evaluate: aMessage content code.
+	self history add:{
+			self id.
+			self executionCounter. 
+			{ aMessage content code.
+			  result := self evaluate: aMessage content code } }.
 	result = self doNotSendDisplayOutputToken
 		ifFalse:[ self publishExecutionResult: result ]
 	
@@ -372,6 +377,21 @@ IPSession >> hasBindingThatBeginsWith: aString [
 ]
 
 { #category : #accessing }
+IPSession >> history [
+
+	^ history ifNil:[ history := OrderedCollection new ]
+
+]
+
+{ #category : #'messages-shell' }
+IPSession >> historyReplayMessage [
+	 | msg |
+	msg := IPHistoryReplyMsg newReplyingToWireMessage: self currentMessage wireMessage. 
+	self initializeMessageHeader: msg.
+	^ msg 
+]
+
+{ #category : #accessing }
 IPSession >> id [
 	^ id
 ]
@@ -431,6 +451,14 @@ IPSession >> initializeMessageHeader: aMessage [
 { #category : #'workspace-variables' }
 IPSession >> interactive [ 
 	^ false
+]
+
+{ #category : #'messages-shell' }
+IPSession >> isCompleteReplayMessage [
+	 | msg |
+	msg := IPIsCompleteReplyMsg newReplyingToWireMessage: self currentMessage wireMessage. 
+	self initializeMessageHeader: msg.
+	^ msg 
 ]
 
 { #category : #'messages-shell' }
