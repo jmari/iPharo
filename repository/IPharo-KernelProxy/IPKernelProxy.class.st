@@ -33,7 +33,8 @@ Class {
 		'wireMessage',
 		'subscriber',
 		'sharedKey',
-		'kernelStatus'
+		'kernelStatus',
+		'sessionId'
 	],
 	#category : #'IPharo-KernelProxy-Core'
 }
@@ -67,6 +68,7 @@ IPKernelProxy >> completeRequest: aStringWithCode cursorPos: anInteger [
 	message := IPCompleteRequestMsg new.
 	message code: aStringWithCode cursorPos: anInteger. 
 	self sendMessage: message onSocket: shell.
+	self receiveMessageOnSocket: shell 
 
 	
 ]
@@ -126,7 +128,7 @@ IPKernelProxy >> executableOptions [
 IPKernelProxy >> executeReply: anIPMessage [
 	<ipharo: #execute_result>
 	anIPMessage inspect.
-	self receiveWireMessage 
+	self receiveMessageOnSocket: shell 
 
 ]
 
@@ -135,8 +137,9 @@ IPKernelProxy >> executeRequest: aStringWithCode [
 	| message |
 	message := IPExecuteRequestMsg new.
 	message code: aStringWithCode.
-	self sendMessage: message  onSocket: shell..
-	"self receiveWireMessage should be done after idle message" 
+	self sendMessage: message  onSocket: shell.
+	self receiveMessageOnSocket: shell
+	
 
 	
 ]
@@ -188,32 +191,24 @@ IPKernelProxy >> initializeClientPorts [
 	
 ]
 
-{ #category : #'message-handlers-control' }
-IPKernelProxy >> kernelInfoReply: anIPMessage [
-	<ipharo: #kernel_info_reply>
-	
-	self receiveWireMessage 
-
-]
-
 { #category : #'public-messaging' }
 IPKernelProxy >> kernelInfoRequest [
 	| message |
 	message := IPKernelInfoRequestMsg new.
-	self sendMessage: message onSocket: shell.
-	"self receiveWireMessage should be done after idle messag on iopub"
+	self sendMessage: message onSocket: control.
+	self receiveMessageOnSocket: control 
 
 	
 ]
 
 { #category : #'public-messaging' }
-IPKernelProxy >> kernelShoutdown [
-	| message |
+IPKernelProxy >> kernelShutdown [
+	| message shutdownMsg |
 	message := IPKernelShutdownMsg new.
 	self sendMessage: message onSocket: control.
 	"self receiveWireMessage should be done after idle messag on iopub"
-
-	
+	shutdownMsg :=self receiveMessageOnSocket: control.
+	IPSession finalizeSession: shutdownMsg header session  
 ]
 
 { #category : #'kernel-management' }
@@ -251,26 +246,27 @@ IPKernelProxy >> pushMessageFrame:messageData [
 ]
 
 { #category : #'private-messaging' }
-IPKernelProxy >> receiveWireMessage [
-	|more|
+IPKernelProxy >> receiveMessageOnSocket: aZmqSocket [
+	|more messageData |
 	self wireMessage: IPWireMessage new.
 	more := 1.
+	
 	[more = 1] whileTrue:[
-		shell receiveIfAvailable: [ :messageData|  
-							more:= shell getOption: ZmqApiConstants zmqRcvMore.
-							messageData isEmpty 
+			messageData := aZmqSocket waitTilReceive.  
+			more:= aZmqSocket getOption: ZmqApiConstants zmqRcvMore.
+			messageData isEmpty 
 							ifTrue:[							
 									Processor yield.
-									(Delay forMilliseconds: 500) wait ]
+									(Delay forMilliseconds: 100) wait ]
 							ifFalse:[ self pushMessageFrame:messageData ].
-							more = 0 ifTrue: [ 
-								(IPMsg newFromWireMessage: self wireMessage ) inspect ] ] ].	
+							more = 0 ifTrue: [ ^ (IPMsg newFromWireMessage: self wireMessage) inspect;yourself ] ] .	
 ]
 
 { #category : #'private-messaging' }
 IPKernelProxy >> sendMessage: anIPRequest onSocket: aZmqSocket [
 	| aRequest |
-	
+	"set current session id"
+	anIPRequest header session: self sessionId.
 	aRequest := IPWireMessage newFromMessage: anIPRequest sharedKey: sharedKey.
 	aZmqSocket ifNotNil: [ 
 		aZmqSocket  
@@ -282,6 +278,12 @@ IPKernelProxy >> sendMessage: anIPRequest onSocket: aZmqSocket [
 				send: aRequest parentHeader flags:ZmqApiConstants  zmqSendMore;
  				send: aRequest metadata flags:ZmqApiConstants  zmqSendMore;
 				send: aRequest content ]
+]
+
+{ #category : #accessing }
+IPKernelProxy >> sessionId [ 
+
+	^ sessionId ifNil:[ sessionId := self hash hex ]
 ]
 
 { #category : #initialization }
@@ -327,21 +329,25 @@ IPKernelProxy >> statusReply: anIPMessage [
 
 ]
 
-{ #category : #'kernel-management' }
-IPKernelProxy >> stopKernel [
-	"should execute stop command"
-	
-	self kernelShoutdown.
-
+{ #category : #finalization }
+IPKernelProxy >> stop [
+	self kernelShutdown.
+	LibC pipeClose: kernelPipe.
 	"close sockets"
 	shell close.
 	ioPub close.
 	control close.
 	stdin close.
 	subscriber stop.
-	LibC pipeClose: kernelPipe.
 	
 
+	
+
+]
+
+{ #category : #'as yet unclassified' }
+IPKernelProxy >> timeout [
+	^ 10000 "ms"
 ]
 
 { #category : #'private-messaging' }

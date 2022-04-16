@@ -39,7 +39,8 @@ Class {
 		'pluggableEvaluationBlock',
 		'debuggerServer',
 		'dapServerPort',
-		'clientSocket'
+		'clientSocket',
+		'dapResponder'
 	],
 	#classInstVars : [
 		'sessions'
@@ -49,6 +50,9 @@ Class {
 
 { #category : #accessing }
 IPSession class >> finalizeSession: sessionId [
+	| aSession |
+	aSession := self sessions at: sessionId.
+	aSession dapServer ifNotNil:[ aSession dapServer isRunning ifTrue:[ aSession dapServer stop ] ] . 
 	self sessions removeKey: sessionId
 
 ]
@@ -433,6 +437,14 @@ IPSession >> interactive [
 IPSession >> kernelInfoReplayMessage [
 	 | msg |
 	msg := IPKernelInfoReplyMsg newReplyingToWireMessage: self currentMessage wireMessage. 
+	self initializeMessageHeader: msg.
+	^ msg 
+]
+
+{ #category : #'message-control' }
+IPSession >> kernelShutdownReplyMsg [
+	 | msg |
+	msg := IPKernelShutdownReplyMsg  newReplyingToWireMessage: self currentMessage wireMessage. 
 	self initializeMessageHeader: msg.
 	^ msg 
 ]

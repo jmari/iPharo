@@ -40,5 +40,5 @@ Zmq4Api class >> apiZmqSendToSocket: socketPointer message: messagePointer withF
 { #category : #'as yet unclassified' }
 Zmq4Api class >> terminateContextPointer: aZmqApiContextPointer [
 	self apiZmqContextShutdown: aZmqApiContextPointer.
-	self apiZmqContextDestroy: aZmqApiContextPointer.
+	"self apiZmqContextDestroy: aZmqApiContextPointer." "destroy hang the proccess..."
 ]

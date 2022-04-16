@@ -8,7 +8,8 @@ Class {
 		'parked',
 		'monitor',
 		'resultHandler',
-		'dataAvailable'
+		'dataAvailable',
+		'timeout'
 	],
 	#category : #'ZeroMQ-Core'
 }
@@ -263,6 +264,16 @@ ZmqSocket >> socketTypeName [
 	self subclassResponsibility
 ]
 
+{ #category : #accessing }
+ZmqSocket >> timeout [ 
+	^ timeout ifNil:[ timeout := 10000 ] 
+]
+
+{ #category : #accessing }
+ZmqSocket >> timeout: inMilliseconds [ 
+	^ timeout :=  inMilliseconds
+]
+
 { #category : #waiting }
 ZmqSocket >> wait [
 	|more|
@@ -281,15 +292,18 @@ ZmqSocket >> waitForUnpark [
 
 { #category : #'as yet unclassified' }
 ZmqSocket >> waitTilReceive [
-	|msg|
+	|msg tm |
 	msg := nil.
-	[ msg notNil and:[msg size > 0] ] whileFalse:[ 
+	tm := self timeout.
+	[ msg notNil and:[ msg notEmpty ] ] whileFalse:[ 
 							self receiveIfAvailable: [ :messageData|  
-							messageData size > 0 
+							messageData notEmpty 
 							ifTrue:[msg := messageData]
 							ifFalse:[							
 									Processor yield.
-									(Delay forMilliseconds: 500) wait].
+									tm := tm - 100.
+									tm < 0 ifTrue:[ ZmqTimeoutError new signal ].
+									(Delay forMilliseconds: 100) wait].
 							]].
 	^ msg
 		

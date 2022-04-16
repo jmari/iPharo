@@ -43,8 +43,7 @@ ZmqContext class >> new [
 
 { #category : #'system startup' }
 ZmqContext class >> shutDown [
-	instance ifNotNil: [instance parkForSnapshot].
-	Smalltalk garbageCollect.
+	instance ifNotNil: [ instance parkForSnapshot ] 
 	
 ]
 
@@ -93,7 +92,7 @@ ZmqContext >> initialize [
 
 { #category : #testing }
 ZmqContext >> isTerminated [
-	^false.
+	^ false.
 ]
 
 { #category : #private }

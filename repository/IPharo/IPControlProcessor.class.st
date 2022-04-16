@@ -75,8 +75,10 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 { #category : #'message-handling' }
 IPControlProcessor >> executeShutdown: aMessage [
 	<ipharo: #shutdown_request>
-	| session |
+	| session response |
 	session := aMessage session.
+	response := session kernelShutdownReplyMsg.
+	self sendMessage: response. 
 	session dapServer stop.
 	Smalltalk snapshot: false andQuit: true 
 ]
