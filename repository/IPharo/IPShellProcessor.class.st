@@ -1,3 +1,7 @@
+"
+I'm a message processor for the Shell channel, I process messages comming from the shell socket, I have a thread who reads the socket stream and composes a wire message, once I have a full message receive search for a handler to execute the message.
+Almost all of the messages are processed by me, specially remark to the execute request, Comm messaging (for widgets), complete, inspect... 
+"
 Class {
 	#name : #IPShellProcessor,
 	#superclass : #IPMessageProcessor,

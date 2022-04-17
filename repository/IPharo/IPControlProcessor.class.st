@@ -1,3 +1,8 @@
+"
+I'm a message processor for the Control channel, I process messages comming from the control socket, I have a thread who reads the socket stream and composes a wire message, once I have a full message receive search for a handler to execute the message.
+I am responsible for debugger and shutdown messages. 
+ 
+"
 Class {
 	#name : #IPControlProcessor,
 	#superclass : #IPMessageProcessor,
@@ -65,11 +70,6 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 	Processor yield.
 	(Delay forDuration: 10 milliSecond ) wait.
 
-
-
-	
-
-	 
 ]
 
 { #category : #'message-handling' }
@@ -81,13 +81,6 @@ IPControlProcessor >> executeShutdown: aMessage [
 	self sendMessage: response. 
 	session dapServer stop.
 	Smalltalk snapshot: false andQuit: true 
-]
-
-{ #category : #initialization }
-IPControlProcessor >> initialize [ 
-	super initialize.
-	
-
 ]
 
 { #category : #accessing }

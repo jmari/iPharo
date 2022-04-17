@@ -1,3 +1,6 @@
+"
+I store the basic info about a handler for a jupyter message implementation inside a method
+"
 Class {
 	#name : #IPHandler,
 	#superclass : #Object,

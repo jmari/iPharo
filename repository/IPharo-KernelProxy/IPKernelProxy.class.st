@@ -1,23 +1,7 @@
 "
-I want to be the kernel Proxy in the future, please do not use me.
-I have to start the IPharo kernel and provide messaging for commands execution.
+I am a kernel Proxy, it means I can interface a a client (notebook) with the Kernel. I can configure and start a kernel and keep the connection alive. 
 
-
-Public API and Key Messages
-
-   One simple example is simply gorgeous.
- 
-Internal Representation and Key Implementation Points.
-
-    Instance Variables
-	control:		<Object>
-	heartbeat:		<Object>
-	ioPub:		<Object>
-	shell:		<Object>
-	stdin:		<Object>
-
-
-    Implementation Points
+I am the handler for the ioPub messages received by my ioSubscriber processor, I also implement an interface for easing the message sending and receive the reply message from the kernel.
 "
 Class {
 	#name : #IPKernelProxy,
@@ -38,6 +22,55 @@ Class {
 	],
 	#category : #'IPharo-KernelProxy-Core'
 }
+
+{ #category : #'as yet unclassified' }
+IPKernelProxy class >> buildKernelProxyFromConfigFile: aFilename [
+	| kernelConfig className rs myclass methodTemplate methodSource |
+	rs :=aFilename asFileReference readStream.
+	kernelConfig := SCMaterializer materializeFrom:  rs.
+	rs close.
+	
+	className := 'IP', 
+	(kernelConfig display_name select:[:char| char charCode >48 and:[ (char charCode < 128 ) and:[ (char = Character space) not ] ] ]), 'KernelProxy'.
+	myclass := IPKernelProxy 
+		subclass: className asSymbol
+		instanceVariableNames: ''
+		classVariableNames: ''
+		package: 'IPharo-KernelProxy-Core'.
+	
+	methodTemplate :='displayName
+	^ ''{1}'''.
+	methodSource := methodTemplate format:{kernelConfig display_name}.
+	myclass compile:methodSource.
+	methodTemplate :='executableFileName
+	^ ''{1}'''.
+	methodSource := methodTemplate format:{kernelConfig argv first}.
+	myclass compile:methodSource.
+	methodSource :='executableOptions
+	^ {',
+	('. ' join:(kernelConfig argv allButFirst allButLast collect:[:o| '''',o asString,'''' ])) ,
+	'. self connectionFileName}'.
+	myclass compile:methodSource.
+	methodTemplate :='metadata
+	^ ''{1}'''.
+	methodSource := methodTemplate format:{kernelConfig metadata}.
+	myclass compile:methodSource.
+	methodTemplate :='language
+	^ ''{1}'''.
+	methodSource := methodTemplate format:{kernelConfig language}.
+	myclass compile:methodSource.
+
+]
+
+{ #category : #tests }
+IPKernelProxy class >> test1 [
+	self buildKernelProxyFromConfigFile: '/Users/Cat/anaconda3/envs/jupyterlab-debugger/share/jupyter/kernels/xpython/kernel.json'
+]
+
+{ #category : #tests }
+IPKernelProxy class >> test2 [
+	self buildKernelProxyFromConfigFile: '/Users/Cat/anaconda3/envs/jupyterlab-debugger/share/jupyter/kernels/python3/kernel.json'
+]
 
 { #category : #utility }
 IPKernelProxy >> buildConnectionConfigFile [
@@ -318,6 +351,12 @@ IPKernelProxy >> sendMessage: anIPRequest onSocket: aZmqSocket [
 IPKernelProxy >> sessionId [ 
 
 	^ sessionId ifNil:[ sessionId := self hash hex ]
+]
+
+{ #category : #accessing }
+IPKernelProxy >> sessionId: aSessionId [
+
+	sessionId := aSessionId
 ]
 
 { #category : #initialization }

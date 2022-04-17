@@ -1,5 +1,7 @@
 "
-I store the execution environment for a User, I implement playground variables, compile and evaluate the code. 
+I store the execution environment for a User, I implement playground variables, compile and evaluate the code. Contrary of what you probably think, there is only one session object because the notebook ecosystem creates one instance of the kernel per notebook.
+
+I also instantiate the DAPServer (tcp debuger server) and I am a gateway between ZmqSockets and tcp socket, debugger command are processed by the Control Processor who passes the message to the dap server using session dapServer reference, control processor deals with the zmq receiving and sending commands to the dap server and I am responsible of the dap answer and publish this answer... it's so complex.
 
 - I am a message factory, because all the answering messages need session information to build the wire message to the client. 
 
@@ -441,7 +443,7 @@ IPSession >> initializeDapServer [
 				dapServerPort := debuggerServer start.
 				self startDapResponder.
 				debuggerServer ]
-			ifAbsent:[ debuggerServer := NoDebugServerPresent new ] ]
+			ifAbsent:[ debuggerServer := IPDummyDAPServer new ] ]
 ]
 
 { #category : #initialization }
@@ -595,6 +597,8 @@ IPSession >> setBindings: aDictionary [
 
 { #category : #dap }
 IPSession >> startDapResponder [
+	"dap responder receive messages emited by dap server through TCP socket 
+	and redistribute then by ZmqSockets (pub and control)"
 	| event response collectionOfMessages |
 	[
 		[self dapServer isRunning] whileTrue:[

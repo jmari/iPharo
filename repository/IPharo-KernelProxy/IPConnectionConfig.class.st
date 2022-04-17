@@ -1,3 +1,6 @@
+"
+I am a Json object to store the configuration file, it specifies the socket addresses and ports and the shared key
+"
 Class {
 	#name : #IPConnectionConfig,
 	#superclass : #SCJsonObject,

@@ -1,3 +1,6 @@
+"
+I am an Message abstraction of the wireMessage, I help you to handle the complications of a binary format, so you deal with me to understand what the notebook is asking for and for message composition to reply him. 
+"
 Class {
 	#name : #IPMsg,
 	#superclass : #Object,

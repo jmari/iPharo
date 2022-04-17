@@ -20,7 +20,7 @@ Class {
 { #category : #'instance creation' }
 IPWireMessage class >> newFromMessage: anIPMessage [
 	|instance serializer|
-	serializer := SCSerializer new.
+	serializer := SCSerializer new maxDepth:100.
 	instance := self new.
 	"be sure message type is the correct msgType
 	uuid is set in the IPMessageProcessor #execute: method"

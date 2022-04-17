@@ -1,3 +1,12 @@
+"
+I'm a message processor, I process messages comming from a ZmqSocket, I have a thread who reads the socket stream and composes a wire message, once I have a full message receive search for a handler to execute the message. 
+
+For the Class part:  Initialization is done by #new:aZmqSocket or #new:aZmqSocket sharedKey: a string. The IPharoKernel has one processor per socket. They are created by #new:socket (sharedKey is not assigned) so when my thread receives a new message and stores it in the state using #wireMessage: the sharedKey will be nil. A wireMessage uses this key to calculate the hmac, if the key is nil, it uses the IPharoKernel key established on the kernel startup process. 
+
+I'm responsible of message processing, requesting a message and responding using a handler.
+
+My subclasses declare their handlers, there is one subcless per socket
+"
 Class {
 	#name : #IPMessageProcessor,
 	#superclass : #Object,
