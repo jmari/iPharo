@@ -4,6 +4,9 @@ I am a Json object to store the configuration file, it specifies the socket addr
 Class {
 	#name : #IPConnectionConfig,
 	#superclass : #SCJsonObject,
+	#classVars : [
+		'initialPort'
+	],
 	#category : #'IPharo-KernelProxy-Core'
 }
 
@@ -15,16 +18,19 @@ IPConnectionConfig >> asJson [
 { #category : #initialization }
 IPConnectionConfig >> initialize [ 
 	super initialize.
-	"we need to set the shared key because wireMessage uses it"
 
+	initialPort ifNil:[initialPort := 50000].
+	"we need to set the shared key because wireMessage uses it"
 	self 
-		control_port:50160;
-		hb_port:42540;
-		iopub_port: 40885;
-		shell_port:57503;
-		stdin_port:52597;
+		control_port: initialPort ;
+		hb_port: initialPort + 1;
+		iopub_port: initialPort + 2;
+		shell_port: initialPort + 3;
+		stdin_port: initialPort + 4;
 		ip:'127.0.0.1';
 		signature_scheme:'hmac-sha256';
 		transport: 'tcp' ;
-		key: (SHA256 hashMessage: self hash asString) hex
+		key: (SHA256 hashMessage: self hash asString) hex.
+	"for the next kernel proxy"
+	initialPort := initialPort + 5.
 ]

@@ -25,13 +25,14 @@ Class {
 
 { #category : #'as yet unclassified' }
 IPKernelProxy class >> buildKernelProxyFromConfigFile: aFilename [
-	| kernelConfig className rs myclass methodTemplate methodSource |
+	| kernelConfig className rs myclass methodTemplate methodSource path kernelName |
+	path := aFilename asPath.
+	kernelName := (path at: path size - 1) asCamelCase.
 	rs :=aFilename asFileReference readStream.
 	kernelConfig := SCMaterializer materializeFrom:  rs.
 	rs close.
 	
-	className := 'IP', 
-	(kernelConfig display_name select:[:char| char charCode >48 and:[ (char charCode < 128 ) and:[ (char = Character space) not ] ] ]), 'KernelProxy'.
+	className := 'IP', kernelName, 'KernelProxy'.
 	myclass := IPKernelProxy 
 		subclass: className asSymbol
 		instanceVariableNames: ''
@@ -74,12 +75,13 @@ IPKernelProxy class >> test2 [
 
 { #category : #utility }
 IPKernelProxy >> buildConnectionConfigFile [
-	| ws |
-	ws := self connectionFileName asFileReference writeStream.
+	| ws reference |
+	reference := self connectionFileName asFileReference.
+	reference ifExists: [ reference delete ].
+	reference ensureCreateFile.
+	ws := reference writeStream.
 	ws << self connectionConfig asJson. 
 	ws close
-	
-	
 ]
 
 { #category : #utility }
@@ -350,13 +352,7 @@ IPKernelProxy >> sendMessage: anIPRequest onSocket: aZmqSocket [
 { #category : #accessing }
 IPKernelProxy >> sessionId [ 
 
-	^ sessionId ifNil:[ sessionId := self hash hex ]
-]
-
-{ #category : #accessing }
-IPKernelProxy >> sessionId: aSessionId [
-
-	sessionId := aSessionId
+	^ sessionId ifNil:[ sessionId := UUID new hex asString asUppercase ]
 ]
 
 { #category : #initialization }

@@ -10,7 +10,7 @@ IPKernelShutdownMsg >> initialize [
 	self msgType: #shutdown_request.
 	self parentHeader: '{}' asByteArray .
 	self metadata: SCJsonObject new.
-	self content: content = {
+	self content:  {
     	'restart' -> false } asSCJsonObject 
 
 ]
