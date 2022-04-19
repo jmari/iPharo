@@ -49,7 +49,7 @@ IPKernelProxy class >> buildKernelProxyFromConfigFile: aFilename [
 	myclass compile:methodSource.
 	methodSource :='executableOptions
 	^ {',
-	('. ' join:(kernelConfig argv allButFirst allButLast collect:[:o| '''',o asString,'''' ])) ,
+	('. ' join:((kernelConfig argv allButFirst select:[:o| (o asString includesSubstring:'connection_file') not]) collect:[:o| '''',o asString,'''' ])) ,
 	'. self connectionFileName}'.
 	myclass compile:methodSource.
 	methodTemplate :='metadata
@@ -71,6 +71,11 @@ IPKernelProxy class >> test1 [
 { #category : #tests }
 IPKernelProxy class >> test2 [
 	self buildKernelProxyFromConfigFile: '/Users/Cat/anaconda3/envs/jupyterlab-debugger/share/jupyter/kernels/python3/kernel.json'
+]
+
+{ #category : #tests }
+IPKernelProxy class >> test3 [
+	self buildKernelProxyFromConfigFile: '/Users/Cat/Library/Jupyter/kernels/javascript/kernel.json'
 ]
 
 { #category : #utility }
@@ -264,8 +269,8 @@ IPKernelProxy >> isCompleteRequest: code [
 IPKernelProxy >> kernelInfoRequest [
 	| message |
 	message := IPKernelInfoRequestMsg new.
-	self sendMessage: message onSocket: control.
-	self receiveMessageOnSocket: control 
+	self sendMessage: message onSocket: shell.
+	self receiveMessageOnSocket: shell 
 
 	
 ]
