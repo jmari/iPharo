@@ -29,11 +29,11 @@ IPExecuteRequestMsg >> initialize [
 	super initialize.
 	self msgType: #execute_request.
 	self parentHeader: '{}' asByteArray .
-	self metadata:{} asSCJsonObject.
+	self metadata: SCJsonObject new.
 	self content: {
 		#silent -> false.
 		#store_history -> true.
-		#user_expressions->{} asSCJsonObject.
+		#user_expressions-> SCJsonObject new.
 		#allow_stdin -> true.
 		#stop_on_error -> false} asSCJsonObject.
 ]

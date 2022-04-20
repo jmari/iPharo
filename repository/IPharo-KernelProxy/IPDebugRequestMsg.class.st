@@ -1,7 +1,7 @@
 Class {
 	#name : #IPDebugRequestMsg,
 	#superclass : #IPMsg,
-	#category : #'IPharo-Messages-Control'
+	#category : #'IPharo-KernelProxy-Messages-Control'
 }
 
 { #category : #initialization }
@@ -10,5 +10,5 @@ IPDebugRequestMsg >> initialize [
 	self msgType: #debug_request.
 	self parentHeader: '{}' asByteArray .
 	self metadata: SCJsonObject new.
-	self content: {} asSCJsonObject. 
+	self content: SCJsonObject new. 
 ]

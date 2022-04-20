@@ -97,6 +97,7 @@ IPKernelProxy >> buildKernelStartCommand [
 	self executableOptions do:[ :op |
 		ws << ' '.
 		ws << op ].
+	ws << (' 2> ', self className , '.err').
 	^ ws contents	
 	
 	
@@ -168,7 +169,7 @@ IPKernelProxy >> executableOptions [
 IPKernelProxy >> executeReply: anIPMessage [
 	<ipharo: #execute_result>
 	anIPMessage inspect.
-	self receiveMessageOnSocket: shell 
+	
 
 ]
 
@@ -344,7 +345,6 @@ IPKernelProxy >> sendMessage: anIPRequest onSocket: aZmqSocket [
 	aRequest := IPWireMessage newFromMessage: anIPRequest sharedKey: sharedKey.
 	aZmqSocket ifNotNil: [ 
 		aZmqSocket  
-				send: aRequest uuid flags:ZmqApiConstants  zmqSendMore;
 				send: aRequest uuid flags:ZmqApiConstants  zmqSendMore;
 	 			send: self messageDelimiter asByteArray flags:ZmqApiConstants  zmqSendMore;
  				send: aRequest hmac flags:ZmqApiConstants  zmqSendMore;
