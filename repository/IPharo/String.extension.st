@@ -2,7 +2,9 @@ Extension { #name : #String }
 
 { #category : #'*IPharo-Core' }
 String >> asJupyterDataWithExtent: size [
-	^ 'text/html'-> ('<pre>',(self asString  copyReplaceAll: String cr with: '<br/>'),'</pre>') 
+	^ {
+		'text/html'-> ('<pre>',(self asString  copyReplaceAll: String cr with: '<br>'),'</pre>').
+		'text/plain'-> self asString  } asSCJsonObject 
 ]
 
 { #category : #'*IPharo-Core' }

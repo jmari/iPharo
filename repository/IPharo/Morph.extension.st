@@ -13,5 +13,5 @@ Morph >> asBase64PNGSize: size [
 
 { #category : #'*IPharo-Core' }
 Morph >> asJupyterDataWithExtent: size [
-	^ 'image/png' -> (self asBase64PNGSize:size  )
+	^ {'image/png' -> (self asBase64PNGSize:size  ) }  asSCJsonObject 
 ]

@@ -11,7 +11,7 @@ RSCanvas >> asSvgWithExtent: aPoint [
 	svgStream := WriteStream on:String new.
 	self extent: aPoint.
 	self ipSvgExporter exportToStream: svgStream.
-	^ 'text/html' -> svgStream contents 
+	^ {'text/html' -> svgStream contents } asSCJsonObject 
 ]
 
 { #category : #'*IPharo-Roassal3' }

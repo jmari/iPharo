@@ -25,5 +25,5 @@ SequenceableCollection >> asJupyterDataWithExtent:aPoint [
 		htmlStream nextPutAll:'</tr>'].
 	htmlStream nextPutAll:'</table>'.
 	
-	^ 'text/html' -> htmlStream contents 
+	^ { 'text/html' -> htmlStream contents } asSCJsonObject 
 ]

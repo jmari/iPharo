@@ -71,7 +71,7 @@ IPDisplay >> buildDisplayDataModel: data [
 	aJupyterData := (interaction and:[data respondsTo:#asJupyterInteractiveDataWithExtent:]) 
 							ifTrue:[data asJupyterInteractiveDataWithExtent: self extent]
 							ifFalse:[data asJupyterDataWithExtent: self extent].	
-	dataModel data at:aJupyterData key put:aJupyterData value.
+	dataModel data addAll: aJupyterData.
 	dataModel metadata:{
  						aJupyterData key -> {
     									'width' -> self extent x.

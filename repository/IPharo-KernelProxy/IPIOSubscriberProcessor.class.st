@@ -13,6 +13,7 @@ IPIOSubscriberProcessor >> execute: aWireMessage [
 	| message session|
 	message := IPMsg newFromWireMessage: aWireMessage.
 	session := message session.
+	message inspect.
 	self handleRequest: message.	
 
 	
