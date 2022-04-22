@@ -1,7 +1,7 @@
 Class {
 	#name : #IPDebugRequestMsg,
 	#superclass : #IPMsg,
-	#category : #'IPharo-KernelProxy-Messages-Control'
+	#category : #'IPharo-Messages-Control'
 }
 
 { #category : #initialization }

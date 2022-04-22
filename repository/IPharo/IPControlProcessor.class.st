@@ -53,7 +53,7 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 		prevMessage := nil.
 		"this delay is super important...dont ask me why"
 		Processor yield.
-		(Delay forDuration: 10 milliSecond ) wait.
+		(Delay forDuration: 100 milliSecond ) wait.
 		].
 
 
@@ -68,7 +68,7 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 	clnSocket sendData: dapRequest.
 	" RESPONSE LOOP IS DONE BY A THREAD STARTED BY SESSION"
 	Processor yield.
-	(Delay forDuration: 10 milliSecond ) wait.
+	(Delay forDuration: 100 milliSecond ) wait.
 
 ]
 

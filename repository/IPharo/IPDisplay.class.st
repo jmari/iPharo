@@ -72,11 +72,12 @@ IPDisplay >> buildDisplayDataModel: data [
 							ifTrue:[data asJupyterInteractiveDataWithExtent: self extent]
 							ifFalse:[data asJupyterDataWithExtent: self extent].	
 	dataModel data addAll: aJupyterData.
-	dataModel metadata:{
- 						aJupyterData key -> {
-    									'width' -> self extent x.
-    									'height' -> self extent y } asSCJsonObject.
-										} asSCJsonObject.
+	dataModel metadata: (
+		SCJsonObject newFromAssociations: (
+ 						aJupyterData keys collect:[:k|
+							k-> {'width' -> self extent x.
+    								'height' -> self extent y } asSCJsonObject ]
+										)).
 	uuid:= UUID new hex asString asUppercase.
 	dataModel transient: {#display_id -> uuid} asSCJsonObject.
 	self class cachedObjects 

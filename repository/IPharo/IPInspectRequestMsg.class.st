@@ -1,7 +1,7 @@
 Class {
 	#name : #IPInspectRequestMsg,
 	#superclass : #IPMsg,
-	#category : #'IPharo-KernelProxy-Messages-Shell'
+	#category : #'IPharo-Messages-Shell'
 }
 
 { #category : #initialization }

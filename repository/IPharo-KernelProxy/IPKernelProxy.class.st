@@ -103,13 +103,13 @@ IPKernelProxy >> buildKernelStartCommand [
 	
 ]
 
-{ #category : #'public-messaging' }
+{ #category : #'public-api' }
 IPKernelProxy >> completeRequest: aStringWithCode cursorPos: anInteger [
 	| message |
 	message := IPCompleteRequestMsg new.
 	message code: aStringWithCode cursorPos: anInteger. 
 	self sendMessage: message onSocket: shell.
-	self receiveMessageOnSocket: shell 
+	^ self receiveMessageOnSocket: shell 
 
 	
 ]
@@ -129,6 +129,15 @@ IPKernelProxy >> connectionFileName [
 IPKernelProxy >> connectionStringFor:transport ip:anIp port:aPort [
 	"build the connection string for a zmq socket"
 	^ transport asString , '://' , anIp asString, ':' ,aPort asString
+]
+
+{ #category : #'public-api-debug' }
+IPKernelProxy >> debugRequest: dapContent [
+	| message |
+	message := IPDebugRequestMsg new.
+	message content: dapContent.
+	self sendMessage: message  onSocket: control.
+	^ self receiveMessageOnSocket: control
 ]
 
 { #category : #'kernel-management' }
@@ -181,26 +190,26 @@ IPKernelProxy >> executeReply: anIPMessage [
 
 ]
 
-{ #category : #'public-messaging' }
+{ #category : #'public-api' }
 IPKernelProxy >> executeRequest: aStringWithCode [
 	| message |
 	message := IPExecuteRequestMsg new.
 	message code: aStringWithCode.
 	self sendMessage: message  onSocket: shell.
-	self receiveMessageOnSocket: shell
+	^ self receiveMessageOnSocket: shell
 	
 
 	
 ]
 
-{ #category : #'public-messaging' }
+{ #category : #'public-api' }
 IPKernelProxy >> historyLast: anInteger [
 	| message |
 	message := IPHistoryRequestMsg  new.
 	message content hist_access_type: #tail.
 	message content n:3.
 	self sendMessage: message onSocket: shell.
-	self receiveMessageOnSocket: shell 
+	^ self receiveMessageOnSocket: shell 
 
 	
 ]
@@ -252,46 +261,47 @@ IPKernelProxy >> initializeClientPorts [
 	
 ]
 
-{ #category : #'public-messaging' }
+{ #category : #'public-api' }
 IPKernelProxy >> inspectRequest: aStringWithCode cursorPos: anInteger [
 	| message |
 	message := IPInspectRequestMsg new.
 	message code: aStringWithCode cursorPos: anInteger. 
 	self sendMessage: message onSocket: shell.
-	self receiveMessageOnSocket: shell 
+	^ self receiveMessageOnSocket: shell 
 
 	
 ]
 
-{ #category : #'public-messaging' }
+{ #category : #'public-api' }
 IPKernelProxy >> isCompleteRequest: code [
 	| message |
 	message := IPIsCompleteRequestMsg new.
 	message content code: code.
 	self sendMessage: message onSocket: shell.
-	self receiveMessageOnSocket: shell 
+	^ self receiveMessageOnSocket: shell 
 
 	
 ]
 
-{ #category : #'public-messaging' }
+{ #category : #'public-api' }
 IPKernelProxy >> kernelInfoRequest [
 	| message |
 	message := IPKernelInfoRequestMsg new.
 	self sendMessage: message onSocket: shell.
-	self receiveMessageOnSocket: shell 
+	^ self receiveMessageOnSocket: shell 
 
 	
 ]
 
-{ #category : #'public-messaging' }
+{ #category : #'public-api' }
 IPKernelProxy >> kernelShutdown [
 	| message shutdownMsg |
 	message := IPKernelShutdownMsg new.
 	self sendMessage: message onSocket: control.
 	"self receiveWireMessage should be done after idle messag on iopub"
 	shutdownMsg :=self receiveMessageOnSocket: control.
-	IPSession finalizeSession: shutdownMsg header session  
+	IPSession finalizeSession: shutdownMsg header session .
+	^ shutdownMsg
 ]
 
 { #category : #'kernel-management' }
@@ -342,7 +352,7 @@ IPKernelProxy >> receiveMessageOnSocket: aZmqSocket [
 									Processor yield.
 									(Delay forMilliseconds: 100) wait ]
 							ifFalse:[ self pushMessageFrame:messageData ].
-							more = 0 ifTrue: [ ^ (IPMsg newFromWireMessage: self wireMessage) inspect;yourself ] ] .	
+							more = 0 ifTrue: [ ^ IPMsg newFromWireMessage: self wireMessage] ] .	
 ]
 
 { #category : #'private-messaging' }

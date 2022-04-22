@@ -165,7 +165,7 @@ IPShellProcessor >> executeIsCompleteRequest: aMessage [
 	
 	session := aMessage session.
 	isCompleteReplyMsg := session isCompleteReplayMessage.
-	[ self class compiler source: aMessage content code;parseExpression  ] on:Exception do:[ isCompleteReplyMsg content status: 'invalid' ].
+	[ self class compiler source: aMessage content code;parseExpression  ] on:Exception do:[ :e| e inspect.isCompleteReplyMsg content status: 'invalid' ].
 	self sendMessage: isCompleteReplyMsg
 	
 ]
