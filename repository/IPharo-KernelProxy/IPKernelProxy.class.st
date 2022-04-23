@@ -177,7 +177,7 @@ IPKernelProxy >> executableOptions [
 { #category : #'message-handlers-shell' }
 IPKernelProxy >> executeInput: anIPMessage [
 	<ipharo: #execute_input>
-	anIPMessage inspect.
+
 	
 
 ]
@@ -185,7 +185,7 @@ IPKernelProxy >> executeInput: anIPMessage [
 { #category : #'message-handlers-shell' }
 IPKernelProxy >> executeReply: anIPMessage [
 	<ipharo: #execute_result>
-	anIPMessage inspect.
+
 	
 
 ]
