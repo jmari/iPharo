@@ -42,12 +42,12 @@ BaselineOfIPharo >> createKernelFile [
 		first := (listOfKernels at: index) findString: ' ' startingAt: 12.
 		last := (listOfKernels at: index) findString: 'kernels'.
 		kernelPath := (listOfKernels at:index) copyFrom: first +2 to: last + 7.
-		kernelsDir := (FileSystem root / kernelPath / 'pharo') createDirectory.  
-		fileRef := kernelsDir / 'kernel.json'.  
-		[ fileRef := fileRef ensureCreateFile.
-		stream := fileRef writeStream.
-		stream nextPutAll: self kernelFileContents.
-		stream close ] 
+		[	kernelsDir := (FileSystem root / kernelPath / 'pharo') createDirectory.  
+			fileRef := kernelsDir / 'kernel.json'.  
+			fileRef := fileRef ensureCreateFile.
+			stream := fileRef writeStream.
+			stream nextPutAll: self kernelFileContents.
+			stream close ] 
 	on:Error 
 	do:[ Transcript crShow:('Pharo Could not create the file ',fileRef,' not enough permissions' ) ] ]
 
