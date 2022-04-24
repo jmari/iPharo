@@ -15,7 +15,8 @@ BaselineOfIPharo >> baseline: spec [
 		spec
 			package: 'ZeroMQ';
 			package: 'IPharo' with: [ 
-				spec requires: #('ZeroMQ' 'SCouchDB' 'NonCryptographicHashes')];	
+				spec requires: #('ZeroMQ' 'SCouchDB' 'NonCryptographicHashes')];
+			package: 'IPharo-KernelProxy' with: [ spec requires: #('IPharo')  ];	
 			package: 'IPharo-DAP' with:[
 				spec requires: #('IPharo');
 					preLoadDoIt: #pharoDAP];
@@ -72,7 +73,7 @@ BaselineOfIPharo >> getKernelFileReference [
 { #category : #protocol }
 BaselineOfIPharo >> groups: spec [
 	spec 
-		group: 'default' with: #('IPharo');
+		group: 'default' with: #('IPharo' 'IPharo-KernelProxy');
 		group: 'zmq' with: #('ZeroMQ');
 		group: 'dap' with: #('IPharo-DAP');
 		group: 'roassal3' with: #('IPharo-Roassal3'); 

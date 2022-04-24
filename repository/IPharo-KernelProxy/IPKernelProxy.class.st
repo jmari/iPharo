@@ -78,6 +78,12 @@ IPKernelProxy class >> test3 [
 	self buildKernelProxyFromConfigFile: '/Users/Cat/Library/Jupyter/kernels/javascript/kernel.json'
 ]
 
+{ #category : #'message-handlers' }
+IPKernelProxy >> addHandler: aMessageHandler [
+	subscriber addHandlersFromPragmasInClass: aMessageHandler class handlerInstance: aMessageHandler.
+	
+]
+
 { #category : #utility }
 IPKernelProxy >> buildConnectionConfigFile [
 	| ws reference |
@@ -114,6 +120,17 @@ IPKernelProxy >> completeRequest: aStringWithCode cursorPos: anInteger [
 	
 ]
 
+{ #category : #'public-api-async' }
+IPKernelProxy >> completeRequest: aStringWithCode cursorPos: anInteger onSucceed: aBlockWithOneArgument [
+	| message |
+	message := IPCompleteRequestMsg new.
+	message code: aStringWithCode cursorPos: anInteger. 
+	self sendMessage: message onSocket: shell.
+	[ aBlockWithOneArgument value: (self receiveMessageOnSocket: shell) ] fork
+
+	
+]
+
 { #category : #accessing }
 IPKernelProxy >> connectionConfig [
 	^ connectionConfig ifNil:[ connectionConfig := IPConnectionConfig new initialize]
@@ -138,6 +155,15 @@ IPKernelProxy >> debugRequest: dapContent [
 	message content: dapContent.
 	self sendMessage: message  onSocket: control.
 	^ self receiveMessageOnSocket: control
+]
+
+{ #category : #'public-api-debug' }
+IPKernelProxy >> debugRequest: dapContent onSucceed: aBlockWithOneArgument [
+	| message |
+	message := IPDebugRequestMsg new.
+	message content: dapContent.
+	self sendMessage: message  onSocket: control.
+	[ aBlockWithOneArgument value: (self receiveMessageOnSocket: control) ] fork
 ]
 
 { #category : #'kernel-management' }
@@ -174,22 +200,6 @@ IPKernelProxy >> executableOptions [
 	^ self subclassResponsibility 
 ]
 
-{ #category : #'message-handlers-shell' }
-IPKernelProxy >> executeInput: anIPMessage [
-	<ipharo: #execute_input>
-
-	
-
-]
-
-{ #category : #'message-handlers-shell' }
-IPKernelProxy >> executeReply: anIPMessage [
-	<ipharo: #execute_result>
-
-	
-
-]
-
 { #category : #'public-api' }
 IPKernelProxy >> executeRequest: aStringWithCode [
 	| message |
@@ -197,6 +207,18 @@ IPKernelProxy >> executeRequest: aStringWithCode [
 	message code: aStringWithCode.
 	self sendMessage: message  onSocket: shell.
 	^ self receiveMessageOnSocket: shell
+	
+
+	
+]
+
+{ #category : #'public-api-async' }
+IPKernelProxy >> executeRequest: aStringWithCode onSucceed: aBlockWithOneArgument [
+	| message |
+	message := IPExecuteRequestMsg new.
+	message code: aStringWithCode.
+	self sendMessage: message  onSocket: shell.
+	[ aBlockWithOneArgument value: (self receiveMessageOnSocket: shell) ] fork
 	
 
 	
@@ -210,6 +232,18 @@ IPKernelProxy >> historyLast: anInteger [
 	message content n:3.
 	self sendMessage: message onSocket: shell.
 	^ self receiveMessageOnSocket: shell 
+
+	
+]
+
+{ #category : #'public-api-async' }
+IPKernelProxy >> historyLast: anInteger onSucceed: aBlockWithOneArgument [
+	| message |
+	message := IPHistoryRequestMsg  new.
+	message content hist_access_type: #tail.
+	message content n:3.
+	self sendMessage: message onSocket: shell.
+	[ aBlockWithOneArgument value: (self receiveMessageOnSocket: shell) ] fork
 
 	
 ]
@@ -272,6 +306,17 @@ IPKernelProxy >> inspectRequest: aStringWithCode cursorPos: anInteger [
 	
 ]
 
+{ #category : #'public-api-async' }
+IPKernelProxy >> inspectRequest: aStringWithCode cursorPos: anInteger onSucceed: aBlockWithOneArgument [
+	| message |
+	message := IPInspectRequestMsg new.
+	message code: aStringWithCode cursorPos: anInteger. 
+	self sendMessage: message onSocket: shell.
+	[ aBlockWithOneArgument value: (self receiveMessageOnSocket: shell) ] fork
+
+	
+]
+
 { #category : #'public-api' }
 IPKernelProxy >> isCompleteRequest: code [
 	| message |
@@ -279,6 +324,17 @@ IPKernelProxy >> isCompleteRequest: code [
 	message content code: code.
 	self sendMessage: message onSocket: shell.
 	^ self receiveMessageOnSocket: shell 
+
+	
+]
+
+{ #category : #'public-api-async' }
+IPKernelProxy >> isCompleteRequest: code onSucceed: aBlockWithOneArgument [
+	| message |
+	message := IPIsCompleteRequestMsg new.
+	message content code: code.
+	self sendMessage: message onSocket: shell.
+	[ aBlockWithOneArgument value: (self receiveMessageOnSocket: shell) ] fork
 
 	
 ]
@@ -293,6 +349,16 @@ IPKernelProxy >> kernelInfoRequest [
 	
 ]
 
+{ #category : #'public-api-async' }
+IPKernelProxy >> kernelInfoRequestOnSucceed: aBlockWithOneArgument [
+	| message |
+	message := IPKernelInfoRequestMsg new.
+	self sendMessage: message onSocket: shell.
+	[ aBlockWithOneArgument value: (self receiveMessageOnSocket: shell) ] fork
+
+	
+]
+
 { #category : #'public-api' }
 IPKernelProxy >> kernelShutdown [
 	| message shutdownMsg |
@@ -302,6 +368,18 @@ IPKernelProxy >> kernelShutdown [
 	shutdownMsg :=self receiveMessageOnSocket: control.
 	IPSession finalizeSession: shutdownMsg header session .
 	^ shutdownMsg
+]
+
+{ #category : #'public-api-async' }
+IPKernelProxy >> kernelShutdownOnSucceed: aBlockWithOneArgument [
+	| message shutdownMsg |
+	message := IPKernelShutdownMsg new.
+	self sendMessage: message onSocket: control.
+	[ 
+		shutdownMsg :=self receiveMessageOnSocket: control.
+		IPSession finalizeSession: shutdownMsg header session .
+		aBlockWithOneArgument value: shutdownMsg ] fork
+	
 ]
 
 { #category : #'kernel-management' }
@@ -410,7 +488,7 @@ IPKernelProxy >> startSubscriberProcessor [
 	subscriber addHandlersFromPragmasInClass: self class handlerInstance: self  
 ]
 
-{ #category : #'message-handlers-shell' }
+{ #category : #'message-handlers' }
 IPKernelProxy >> statusReply: anIPMessage [
 	<ipharo: #status>
 	

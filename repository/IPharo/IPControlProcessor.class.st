@@ -45,7 +45,7 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 		prevMessage:= aMessage.
 		^ self].
 	((aMessage content command = #scopes) and:[prevMessage  notNil]) ifTrue:[ 
-		"now we now whap scope we have to return its time to set the correct source...
+		"now we now what scope we have to return its time to set the correct source...
 		it is a hack because jupyterlab always ask for sourceRef = 0"
 		session :=  prevMessage session.
 		session dapServer setCodeForFrameId: aMessage content arguments frameId.

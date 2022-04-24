@@ -12,6 +12,13 @@ IPKernelProxyTest >> setUp [
 	kernelProxy := IPIPharoKernelProxy new
 ]
 
+{ #category : #accessing }
+IPKernelProxyTest >> sourceCode [
+	^ 'a:=0.
+	b:=1.
+	c:=2'
+]
+
 { #category : #'system startup' }
 IPKernelProxyTest >> tearDown [
 	kernelProxy stop

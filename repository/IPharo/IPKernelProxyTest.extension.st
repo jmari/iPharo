@@ -11,7 +11,7 @@ IPKernelProxyTest >> testDebugInfoRequest [
 
 { #category : #'*IPharo' }
 IPKernelProxyTest >> testFullDebugSeqRequest [
-	| dapMsg debugInfoMessage path |
+	| dapMsg debugInfoMessage path stackFrame |
 	dapMsg := DAPDebugInfoRequest new.
 	debugInfoMessage := kernelProxy debugRequest: dapMsg.
 	self assert: debugInfoMessage content success equals: true.
@@ -28,15 +28,14 @@ IPKernelProxyTest >> testFullDebugSeqRequest [
 	
 	dapMsg := DAPDumpCellRequest new.
 	dapMsg arguments:{
-		#code->'a:=1.
-		b:=2'} asDictionary .
+		#code-> self sourceCode} asDictionary .
 	debugInfoMessage := kernelProxy debugRequest: dapMsg.
 	self assert:  debugInfoMessage content body sourcePath notNil.
-	path := #path->debugInfoMessage content body sourcePath.
+	path := debugInfoMessage content body sourcePath.
 	dapMsg := DAPSetBreakpointsRequest new.
 	dapMsg arguments:{
 		#source ->{
-			#path->debugInfoMessage content body sourcePath.
+			#path-> path.
 		} asDictionary.
 		#breakpoints ->{{#line->1} asDictionary} } asDictionary.
 	debugInfoMessage := kernelProxy debugRequest: dapMsg.
@@ -46,39 +45,51 @@ IPKernelProxyTest >> testFullDebugSeqRequest [
 	self assert: debugInfoMessage content success equals: true.
 	
 	
-	debugInfoMessage := kernelProxy executeRequest: 'a:=1.
-		b:=2'.
-	debugInfoMessage inspect.
+	debugInfoMessage := kernelProxy executeRequest: self sourceCode.
 	self assert:  debugInfoMessage content status equals:#ok.
 
 	"inspect variables two times....behaviour of jupyterLab is so strange"
 	dapMsg := DAPInspectVariablesRequest new.
 	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-	debugInfoMessage inspect.
 	self assert: debugInfoMessage content success equals: true.
 
 	dapMsg := DAPInspectVariablesRequest new.
 	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-	debugInfoMessage inspect.
 	self assert: debugInfoMessage content success equals: true.
 
 	dapMsg := DAPStackTraceRequest new arguments: {#threadId->1} asDictionary.
 	debugInfoMessage := kernelProxy debugRequest: dapMsg.
 	self assert: debugInfoMessage content success equals: true.
+	stackFrame := debugInfoMessage content body stackFrames first id.
 
 	dapMsg := DAPSourceRequest new arguments: 
-	{#source->{
-		#sourceReference->0.
+	{#sourceReference->0. 
+	 #source->{
+		"jupyterLab always ask for sourceReference 0 so that the only way to recover the correct source block is waiting for the next call scope"
 		#path-> path
-		} asDictionary
-	} asDictionary.
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-	self assert: debugInfoMessage content success equals: true.
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-	self assert: debugInfoMessage content success equals: true.
+		} asSCJsonObject 
+	} asSCJsonObject .
 	
-	debugInfoMessage inspect.
-	(Delay forMilliseconds: 3000) wait 
+	debugInfoMessage := kernelProxy debugRequest: dapMsg onSucceed: [ :aMsg | aMsg inspect ].
+	dapMsg := DAPScopesRequest new arguments:  {#frameId->stackFrame} asDictionary.
+	debugInfoMessage := kernelProxy debugRequest: dapMsg.
+	
+	dapMsg := DAPStepOutRequest  new arguments:  {#threadId->0} asDictionary.
+	debugInfoMessage := kernelProxy debugRequest: dapMsg.
+
+	dapMsg := DAPSourceRequest new arguments: 
+	{#sourceReference->0. 
+	#source->{
+		#path-> path
+		} asSCJsonObject 
+	} asSCJsonObject.
+	debugInfoMessage := kernelProxy debugRequest: dapMsg.
+	
+	dapMsg := DAPDisconnectResquest  new .
+	debugInfoMessage := kernelProxy debugRequest: dapMsg.
+	
+	
+	(Delay forMilliseconds: 3000) wait
 		
 	
 

@@ -73,19 +73,21 @@ IPMessageProcessor >> execute: anIPMessage [
 
 { #category : #'message-handlers' }
 IPMessageProcessor >> handleRequest: anIPMsg [
-	[ | handler |
-	handler := self handlerFor: anIPMsg.
-	handler executeWithArguments: anIPMsg ]
+   | collectionOfHandlers |
+	[collectionOfHandlers := self handlerFor: anIPMsg.
+	 collectionOfHandlers do:[ :aHandler |
+		aHandler executeWithArguments: anIPMsg ] ]
 		on: Error
 		do: [ :ipError | self debug: ipError ] 
 ]
 
 { #category : #'message-handlers' }
 IPMessageProcessor >> handlerFor: aIPMsg [
-
-	^ handlers
-		detect: [ :handler | handler methodName = aIPMsg msgType ]
-		ifNone: [ IPNonExistentHandler signal: aIPMsg msgType ]
+	| collectionOfHandlers |
+	collectionOfHandlers := handlers
+		select:  [ :handler | handler methodName = aIPMsg msgType ].
+	collectionOfHandlers isEmpty ifTrue: [ IPNonExistentHandler signal: aIPMsg msgType ].
+	^ collectionOfHandlers
 ]
 
 { #category : #initialize }
