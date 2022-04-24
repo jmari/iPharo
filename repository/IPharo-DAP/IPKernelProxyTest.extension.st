@@ -1,6 +1,6 @@
 Extension { #name : #IPKernelProxyTest }
 
-{ #category : #'*IPharo' }
+{ #category : #'*IPharo-DAP' }
 IPKernelProxyTest >> testDebugInfoRequest [
 	| dapMsg debugInfoMessage |
 	dapMsg := DAPDebugInfoRequest new.
@@ -9,7 +9,7 @@ IPKernelProxyTest >> testDebugInfoRequest [
 	
 ]
 
-{ #category : #'*IPharo' }
+{ #category : #'*IPharo-DAP' }
 IPKernelProxyTest >> testFullDebugSeqRequest [
 	| dapMsg debugInfoMessage path stackFrame |
 	dapMsg := DAPDebugInfoRequest new.
