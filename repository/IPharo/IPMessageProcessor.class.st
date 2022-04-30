@@ -43,14 +43,8 @@ IPMessageProcessor >> addHandler: aDAPHandler [
 ]
 
 { #category : #'message-handlers' }
-IPMessageProcessor >> addHandlersFromPragmasIn: handlerInstance [
-	self addHandlersFromPragmasInClass: handlerInstance class handlerInstance:handlerInstance
-		
-]
-
-{ #category : #'message-handlers' }
-IPMessageProcessor >> addHandlersFromPragmasInClass: class handlerInstance: handlerInstance [ 
-	(Pragma allNamed: #ipharo: in: class)
+IPMessageProcessor >> addHandlersFromPragma: aSymbol inClass: class handlerInstance: handlerInstance [ 
+	(Pragma allNamed: aSymbol in: class)
 		do: [ :pragma | 
 			self
 				addHandler:
@@ -59,6 +53,17 @@ IPMessageProcessor >> addHandlersFromPragmasInClass: class handlerInstance: hand
 						methodName: pragma arguments first;
 						messageSelector: pragma methodSelector;
 						yourself) ]
+]
+
+{ #category : #'message-handlers' }
+IPMessageProcessor >> addHandlersFromPragmasIn: handlerInstance [
+	self addHandlersFromPragmasInClass: handlerInstance class handlerInstance:handlerInstance
+		
+]
+
+{ #category : #'message-handlers' }
+IPMessageProcessor >> addHandlersFromPragmasInClass: class handlerInstance: handlerInstance [ 
+	self addHandlersFromPragma: #ipharo inClass: class handlerInstance: handlerInstance 
 ]
 
 { #category : #hooks }

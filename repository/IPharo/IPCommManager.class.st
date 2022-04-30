@@ -1,7 +1,9 @@
 "
 I'm part of the kernel, it uses me. There must be just one instance of me and published by the Kernel on #commManager accessor.
 
-I manage the comm channels, register/unregister a comm channel. Every instance of a IPComm is auto-registered at creation time. Widgets use the comm channel, everyone of them is listening for its channel. 
+I manage the comm channels, register/unregister a comm channel. Every instance of a IPComm is auto-registered at creation time. Widgets use the comm channel, everyone of them is listening for its channel.
+
+I also keep the default commManager in a class variable. Default comm manager is used by Comms for""autoregistration"" when the instance is created by new. KernelProxy has also a commManager to keep the client side comms so default comm manager will KernelProxy commManager or IPharoKernel commManager.
 
 Public API and Key Messages
 
@@ -27,7 +29,11 @@ Class {
 	#instVars : [
 		'commChanels',
 		'commMsgHandlers',
-		'targetClasses'
+		'targetClasses',
+		'publisher'
+	],
+	#classInstVars : [
+		'defaultCommManager'
 	],
 	#category : #'IPharo-Comm'
 }
@@ -50,6 +56,18 @@ IPCommManager >> commChannels [
 IPCommManager >> initialize [
 	super initialize.
 	self targetInstances at: 'jupyter.widget' put: IPWidget
+]
+
+{ #category : #accessing }
+IPCommManager >> publisher [
+
+	^ publisher
+]
+
+{ #category : #accessing }
+IPCommManager >> publisher: anObject [
+
+	publisher := anObject
 ]
 
 { #category : #'comm handlers' }

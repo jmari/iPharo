@@ -15,7 +15,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #IPWidget,
-	#superclass : #Object,
+	#superclass : #IPCommListener,
 	#instVars : [
 		'model',
 		'comm',
@@ -844,6 +844,13 @@ IPWidget >> notifyChangeInState: k oldValue:oV newValue:nV [
 IPWidget >> onChangingState: aBlockWithOneArgument [
 	"argument is the changed property k and v"
 	self listeners add:aBlockWithOneArgument 
+]
+
+{ #category : #'comm-listener' }
+IPWidget >> onDataReceived: data [
+
+	(data at:#method) = 'update' ifTrue:[ self updateState:(data at:#state)].
+	(data at:#method) = 'request_state' ifTrue:[ self comm update:self model state].	
 ]
 
 { #category : #'comm-actions' }

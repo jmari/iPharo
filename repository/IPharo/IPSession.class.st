@@ -34,7 +34,6 @@ Class {
 		'bindings',
 		'cachedObjects',
 		'display',
-		'widgetsFactory',
 		'currentMessage',
 		'request',
 		'sem',
@@ -43,7 +42,10 @@ Class {
 		'dapServerPort',
 		'clientSocket',
 		'dapResponder',
-		'history'
+		'history',
+		'commManager',
+		'publisher',
+		'widgetFactory'
 	],
 	#classInstVars : [
 		'sessions'
@@ -56,14 +58,14 @@ IPSession class >> finalizeSession: sessionId [
 	| aSession |
 	aSession := self sessions at: sessionId.
 	aSession dapServer ifNotNil:[ aSession dapServer isRunning ifTrue:[ aSession dapServer stop ] ] . 
+	aSession commManager commChannels removeAll.
 	self sessions removeKey: sessionId
 
 ]
 
 { #category : #accessing }
 IPSession class >> finalizeSessions [
-	self sessions do:[:aSession | aSession dapServer ifNotNil:[
-		  aSession dapServer isRunning ifTrue:[ aSession dapServer stop ] ] ]. 
+	self sessions keysDo:[:aSessionId | self finalizeSession: aSessionId ]. 
 	self sessions removeAll
 
 ]
@@ -82,6 +84,11 @@ IPSession class >> getSessionForMessage: aMessage [
 	
 		
 									
+]
+
+{ #category : #'as yet unclassified' }
+IPSession class >> registerSession: aSession [
+	self sessions at: aSession id put: aSession
 ]
 
 { #category : #accessing }
@@ -128,8 +135,21 @@ IPSession >> commCloseMessage [
 IPSession >> commInfoReplyMessage [
 	 | msg |
 	msg := IPCommInfoReplyMsg newReplyingToWireMessage: self currentMessage wireMessage. 
+	msg content: {#comms -> self commManager commChannels asSCJsonObject} asSCJsonObject. 
 	self initializeMessageHeader: msg.
 	^ msg 
+]
+
+{ #category : #accessing }
+IPSession >> commManager [
+	"commManager is used by comm"
+	^ commManager ifNil:[commManager := IPCommManager new ]
+]
+
+{ #category : #accessing }
+IPSession >> commManager: anObject [
+
+	commManager := anObject
 ]
 
 { #category : #'message-comm' }
@@ -182,7 +202,7 @@ IPSession >> completeReplyMsg [
 { #category : #accessing }
 IPSession >> currentMessage [
 
-	^ currentMessage
+	^ currentMessage 
 ]
 
 { #category : #accessing }
@@ -363,6 +383,12 @@ IPSession >> extractDapRequest [
 	Processor yield.
 	(Delay forDuration: 5 milliSecond ) wait.
 	 ^ result .
+]
+
+{ #category : #finalization }
+IPSession >> finalize [ 
+	self class finalizeSession: self id
+
 ]
 
 { #category : #'workspace-variables' }
@@ -559,6 +585,18 @@ IPSession >> publishExecutionResult: result [
 	self display publish: executionResult
 ]
 
+{ #category : #accessing }
+IPSession >> publisher [
+	"publisher is used by comm"
+	^ publisher ifNil:[ publisher := IPharoKernel instance publisher ]
+]
+
+{ #category : #accessing }
+IPSession >> publisher: anObject [
+
+	publisher := anObject
+]
+
 { #category : #'public-api' }
 IPSession >> request: requestString [
 	| msg |
@@ -645,6 +683,6 @@ IPSession >> username: anObject [
 ]
 
 { #category : #'public-api' }
-IPSession >> widgetsFactory [
-	^ widgetsFactory ifNil:[widgetsFactory := IPWidgetFactory onSession: self]
+IPSession >> widgetFactory [
+	^ widgetFactory ifNil:[widgetFactory := IPWidgetFactory onSession: self]
 ]

@@ -7,6 +7,23 @@ Class {
 	#category : #'IPharo-KernelProxy-Core'
 }
 
+{ #category : #'as yet unclassified' }
+IPMsgHandler >> commCloseHandler: anIPMessage [
+	<ipharo: #comm_close>
+]
+
+{ #category : #'as yet unclassified' }
+IPMsgHandler >> commMessageHandler: anIPMessage [
+	<ipharo: #comm_msg>
+	anIPMessage inspect
+]
+
+{ #category : #'as yet unclassified' }
+IPMsgHandler >> commOpenHandler: anIPMessage [
+	<ipharo: #comm_open>
+	anIPMessage inspect.
+]
+
 { #category : #'message-handlers' }
 IPMsgHandler >> debugEventHandler: anIPMessage [
 	<ipharo: #debug_event>

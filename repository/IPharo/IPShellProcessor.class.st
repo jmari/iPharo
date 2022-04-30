@@ -30,8 +30,11 @@ IPShellProcessor >> execute: aWireMessage [
 { #category : #'message-handling-comm' }
 IPShellProcessor >> executeCommCloseRequest: aMessage [
 	<ipharo: #comm_close>
-	
-	IPharoKernel instance commManager unregisterComm: (aMessage content at:#comm_id).
+	| data comm |
+	comm :=(aMessage session commManager commChannelAt:(aMessage content at:#comm_id)). 
+	data := aMessage content at:#data.
+	comm data: data.
+	aMessage session commManager unregisterComm: (aMessage content at:#comm_id).
 	"NO-RESPONSE"
 ]
 
@@ -39,10 +42,7 @@ IPShellProcessor >> executeCommCloseRequest: aMessage [
 IPShellProcessor >> executeCommInfoRequest: aMessage [
 	<ipharo:#comm_info_request>
 	
-	| response session |
-	session := aMessage session.
-	response := session commInfoReplyMessage.
-	self sendMessage: response
+	self sendMessage: aMessage session commInfoReplyMessage.
 	
 ]
 
@@ -51,21 +51,23 @@ IPShellProcessor >> executeCommMsgRequest: aMessage [
 	<ipharo:#comm_msg> 
 	
 	| comm data |
-	
-	comm :=(IPharoKernel instance commManager commChannelAt:(aMessage content at:#comm_id)). 
+	aMessage inspect.
+	comm :=(aMessage session commManager commChannelAt:(aMessage content at:#comm_id)). 
 	data := aMessage content at:#data.
-	(data at:#method) = 'update' ifTrue:[ comm commListeners do:[:l| l updateState:(data at:#state)]].
-	(data at:#method) = 'request_state' ifTrue:[ comm commListeners 
-		do:[:l| comm update:l model state]].	 
+	comm data: data.
+ 	comm commListeners do:[:l| l onDataReceived: data ].
+
 
 ]
 
 { #category : #'message-handling-comm' }
 IPShellProcessor >> executeCommOpenRequest: aMessage [
 	<ipharo: #comm_open>
-	
-	IPComm new:(aMessage content at:#comm_id) onSession: aMessage session
-
+	| instance |
+	aMessage inspect.
+	instance := IPComm new:(aMessage content at:#comm_id) onSession: aMessage session.
+	instance targetName: (aMessage content at:#target_name).
+	instance data: (aMessage content at:#data).
 	"NO-RESPONSE"
 
 	
@@ -184,7 +186,7 @@ IPShellProcessor >> executeKernelInfoRequest: aMessage [
 IPShellProcessor >> executeRequestState: aMessage [ 
 	<ipharo: #request_state>
 	
-	(IPharoKernel instance commManager commChannelAt:(aMessage content at:#comm_id)) 
+	(aMessage session commManager commChannelAt:(aMessage content at:#comm_id)) 
 	commListeners do:[:aMsgHandler|
 		aMsgHandler comm update: aMsgHandler model state].
 ]
@@ -195,7 +197,7 @@ IPShellProcessor >> executeUpdateState: aMessage [
 
 	| response | 
 	       
-	(IPharoKernel instance commManager commChannelAt:(aMessage content at:#comm_id)) commListeners  
+	(aMessage session commManager commChannelAt:(aMessage content at:#comm_id)) commListeners  
 	 do:[ :aListener | response := aListener model state: (aMessage content at:#state) ]
 ]
 

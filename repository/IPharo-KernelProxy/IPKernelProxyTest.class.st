@@ -32,6 +32,18 @@ IPKernelProxyTest >> testKernelInfoRequest [
 ]
 
 { #category : #tests }
+IPKernelProxyTest >> testWidget [
+	| widget |
+	kernelProxy addHandler:  IPMsgHandler new. 
+	widget := kernelProxy session widgetFactory floatProgress. 
+	widget setProperty: #value value: 5.0.
+	(Delay forMilliseconds: 60000) wait.
+	self assert: widget isNotNil.
+	
+	
+]
+
+{ #category : #tests }
 IPKernelProxyTest >> testisCompleteRequest [
 	| isCompleteMessage code |
 	code :='a:=0'.

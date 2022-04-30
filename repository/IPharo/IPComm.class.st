@@ -5,26 +5,17 @@ Class {
 		'uuid',
 		'targetName',
 		'commMsgListener',
-		'session'
+		'session',
+		'data'
 	],
 	#category : #'IPharo-Comm'
 }
 
 { #category : #'instance creation' }
-IPComm class >> new [
-	|instance|
-	instance := super new.
-	IPharoKernel instance commManager registerComm: instance.
-	^ instance 
-	
-]
-
-{ #category : #'instance creation' }
 IPComm class >> new: anUUID [
 	|instance|
-	instance := super new.
+	instance := self new.
 	instance uuid: anUUID.
-	IPharoKernel instance commManager registerComm: instance.
 	^ instance 
 	
 ]
@@ -33,7 +24,9 @@ IPComm class >> new: anUUID [
 IPComm class >> new: anUUID onSession: anIPSession [
 	|instance|
 	instance := self new: anUUID.
-	^ instance session: anIPSession
+	instance session: anIPSession.
+	anIPSession commManager registerComm: instance.
+	^ instance
 	
 ]
 
@@ -41,7 +34,9 @@ IPComm class >> new: anUUID onSession: anIPSession [
 IPComm class >> onSession: anIPSession [
 	|instance|
 	instance := self new.
-	^ instance session: anIPSession
+	instance session: anIPSession.
+	anIPSession commManager registerComm: instance.
+	^ instance
 	
 ]
 
@@ -74,6 +69,25 @@ IPComm >> commListeners [
 	^ commMsgListener ifNil:[ commMsgListener:= OrderedCollection new]
 ]
 
+{ #category : #accessing }
+IPComm >> commManager [
+
+	^ self session commManager 
+]
+
+{ #category : #accessing }
+IPComm >> data [ 
+	"data stores the last data received in this channel for testing purpose
+	because data should be hadled by the classes listening to this comm channel inside
+	#onDataEvent:"
+	^ data ifNil:[ data := SCJsonObject new  ]
+]
+
+{ #category : #accessing }
+IPComm >> data: aJsonObject [
+	data := aJsonObject 
+]
+
 { #category : #'instance creation' }
 IPComm >> open [
 
@@ -93,7 +107,13 @@ IPComm >> open: data [
 
 { #category : #'comm handlers' }
 IPComm >> publish: aResult [
-	IPharoKernel instance publisher publish: aResult
+	self publisher publish: aResult
+]
+
+{ #category : #accessing }
+IPComm >> publisher [
+
+	^ self session publisher
 ]
 
 { #category : #'comm handlers' }
@@ -117,9 +137,10 @@ IPComm >> session [
 ]
 
 { #category : #accessing }
-IPComm >> session: anObject [
+IPComm >> session: anIPSession [
 
-	session := anObject
+	session := anIPSession
+	
 ]
 
 { #category : #accessing }

@@ -38,303 +38,297 @@ IPWidgetFactory class >> onSession: anIPSession [
 	
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> accordion [
+	<jupyterWidget: #Accordion>
+	^ self createWidgetWithModel: IPAccordionModel newInstance.
 
-	^ IPWidget
-		  onSession: self session
-		  model: IPAccordionModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> boundedFloatText [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPBoundedFloatTextModel newInstance
+	<jupyterWidget: #BoundedFloatText>
+	
+	^ self createWidgetWithModel: IPBoundedFloatTextModel newInstance.
+	
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> boundedIntText [
+<jupyterWidget: #BoundedIntText>
+	^ self createWidgetWithModel:  IPBoundedIntTextModel newInstance.
 
-	^ IPWidget
-		  onSession: self session
-		  model: IPBoundedIntTextModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> box [
-
-	^ IPWidget onSession: self session model: IPBoxModel newInstance
+	<jupyterWidget: #Box>
+	^ self createWidgetWithModel:  IPBoxModel newInstance.
+	
+	
+	
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> button [
-
-	^ IPWidget onSession: self session model: IPButtonModel newInstance
+	<jupyterWidget: #Button>
+	^ self createWidgetWithModel:  IPButtonModel newInstance.
+	
+	
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> buttonStyle [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPButtonStyleModel newInstance
+	<jupyterWidget: #ButtonStyle>
+	^ self createWidgetWithModel:  IPButtonStyleModel newInstance.
+	
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> checkbox [
+	<jupyterWidget: #Checkbox>
+	^ self createWidgetWithModel:  IPCheckboxModel newInstance.
 
-	^ IPWidget onSession: self session model: IPCheckboxModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> colorPicker [
+	<jupyterWidget: #ColorPicker>
+	^ self createWidgetWithModel: IPColorPickerModel newInstance.
 
-	^ IPWidget
-		  onSession: self session
-		  model: IPColorPickerModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> controller [
+	<jupyterWidget: #Controller>
+	^ self createWidgetWithModel:  IPControllerModel newInstance.
 
-	^ IPWidget
-		  onSession: self session
-		  model: IPControllerModel newInstance
+	
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> controllerAxis [
+	<jupyterWidget: #ControllerAxis>
+	^ self createWidgetWithModel:   IPControllerAxisModel newInstance.
 
-	^ IPWidget
-		  onSession: self session
-		  model: IPControllerAxisModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> controllerButton [
+	<jupyterWidget: #ControllerButton>
+	^ self createWidgetWithModel:   IPControllerButtonModel newInstance.
 
-	^ IPWidget
-		  onSession: self session
-		  model: IPControllerButtonModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #creation }
+IPWidgetFactory >> createWidgetWithModel: modelInstance [
+	^ IPWidget
+		  onSession: self session
+		  model: modelInstance
+
+
+]
+
+{ #category : #factory }
 IPWidgetFactory >> datePicker [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPDatePickerModel newInstance
+	<jupyterWidget: #DatePicker>
+	^ self createWidgetWithModel:   IPDatePickerModel newInstance.
+	
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> descriptionStyle [
+	<jupyterWidget: #DescriptionStyle>
+	^ self createWidgetWithModel: IPDescriptionStyleModel newInstance.
 
-	^ IPWidget
-		  onSession: self session
-		  model: IPDescriptionStyleModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> directionalLink [
+	<jupyterWidget: #DirectionalLink>
+	^ self createWidgetWithModel:  IPDirectionalLinkModel newInstance.
 
-	^ IPWidget
-		  onSession: self session
-		  model: IPDirectionalLinkModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> dropdown [
-
-	^ IPWidget onSession: self session model: IPDropdownModel newInstance
+	<jupyterWidget: #dropdown>
+	^ self createWidgetWithModel:  IPDropdownModel newInstance.
+	
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> floatLogSlider [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPFloatLogSliderModel newInstance
+	<jupyterWidget: #FloatLogSlider>
+	^ self createWidgetWithModel: IPFloatLogSliderModel newInstance.
+	
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> floatProgress [
+	<jupyterWidget: #FloatProgress>
+	^ self createWidgetWithModel:  IPFloatProgressModel newInstance.
 
-	^ IPWidget
-		  onSession: self session
-		  model: IPFloatProgressModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> floatRangeSlider [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPFloatRangeSliderModel newInstance
+	<jupyterWidget: #FloatRangeSlider>
+	^ self createWidgetWithModel:  IPFloatRangeSliderModel newInstance.
+	
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> floatSlider [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPFloatSliderModel newInstance
+	<jupyterWidget: #FloatSlider>
+	^ self createWidgetWithModel:  IPFloatSliderModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> floatText [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPFloatTextModel newInstance
+	<jupyterWidget: #FloatText>
+	^ self createWidgetWithModel:  IPFloatTextModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> gridBox [
-
-	^ IPWidget onSession: self session model: IPGridBoxModel newInstance
+	<jupyterWidget: #GridBox>
+	^ self createWidgetWithModel:  IPGridBoxModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> hBox [
-
-	^ IPWidget onSession: self session model: IPHBoxModel newInstance
+	<jupyterWidget: #HBox>
+	^ self createWidgetWithModel:  IPHBoxModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> html [
-
-	^ IPWidget onSession: self session model: IPHTMLModel newInstance
+	<jupyterWidget: #Html>
+	^ self createWidgetWithModel:  IPHTMLModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> htmlMath [
-
-	^ IPWidget onSession: self session model: IPHTMLMathModel newInstance
+	<jupyterWidget: #HtmlMath>
+	^ self createWidgetWithModel: IPHTMLMathModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> image [
-
-	^ IPWidget onSession: self session model: IPImageModel newInstance
+	<jupyterWidget: #Image>
+	^ self createWidgetWithModel:  IPImageModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
+IPWidgetFactory >> initialize [ 
+	super initialize.
+	"kernel should be able to create widget classes"
+	IPharoKernel instance publisher 
+									addHandlersFromPragma: #jupyterWidget: 
+									inClass: self class 
+									handlerInstance: self 
+]
+
+{ #category : #factory }
 IPWidgetFactory >> intProgress [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPIntProgressModel newInstance
+	<jupyterWidget: #IntProgress>
+	^ self createWidgetWithModel:  IPIntProgressModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> intRangeSlider [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPIntRangeSliderModel newInstance
+	<jupyterWidget: #IntRangeSlider>
+	^ self createWidgetWithModel:  IPIntRangeSliderModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> intSlider [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPIntSliderModel newInstance
+	<jupyterWidget: #IntSlider>
+	^ self createWidgetWithModel:  IPIntSliderModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> intText [
-
-	^ IPWidget onSession: self session model: IPIntTextModel newInstance
+	<jupyterWidget: #IntText>
+	^ self createWidgetWithModel:  IPIntTextModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> label [
-
-	^ IPWidget onSession: self session model: IPLabelModel newInstance
+	<jupyterWidget: #Label>
+	^ self createWidgetWithModel:  IPLabelModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> layout [
-
-	^ IPWidget onSession: self session model: IPLayoutModel newInstance
+	<jupyterWidget: #Layout>
+	^ self createWidgetWithModel:  IPLayoutModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> link [
-
-	^ IPWidget onSession: self session model: IPLinkModel newInstance
+	<jupyterWidget: #Link>
+	^ self createWidgetWithModel:  IPLinkModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> output [
-
-	^ IPWidget onSession: self session model: IPOutputModel newInstance
+	<jupyterWidget: #Output>
+	^ self createWidgetWithModel:  IPOutputModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> password [
-
-	^ IPWidget onSession: self session model: IPPasswordModel newInstance
+	<jupyterWidget: #Password>
+	^ self createWidgetWithModel:  IPPasswordModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> play [
-
-	^ IPWidget onSession: self session model: IPPlayModel newInstance
+	<jupyterWidget: #Play>
+	^ self createWidgetWithModel:  IPPlayModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> progressStyle [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPProgressStyleModel newInstance
+	<jupyterWidget: #ProgressStyle>
+	^ self createWidgetWithModel:  IPProgressStyleModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> radioButtons [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPRadioButtonsModel newInstance
+	<jupyterWidget: #RadioButtons>
+	^ self createWidgetWithModel: IPRadioButtonsModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> select [
-
-	^ IPWidget onSession: self session model: IPSelectModel newInstance
+	<jupyterWidget: #Select>
+	^ self createWidgetWithModel: IPSelectModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> selectMultiple [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPSelectMultipleModel newInstance
+	<jupyterWidget: #SelectMultiple>
+	^ self createWidgetWithModel:  IPSelectMultipleModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> selectionRangeSlider [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPSelectionRangeSliderModel newInstance
+	<jupyterWidget: #SelectionRangeSlider>
+	^ self createWidgetWithModel:  IPSelectionRangeSliderModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> selectionSlider [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPSelectionSliderModel newInstance
+	<jupyterWidget: #SelectionSlider>
+	^ self createWidgetWithModel:  IPSelectionSliderModel newInstance
 ]
 
 { #category : #accessing }
 IPWidgetFactory >> session [
-
+	"session is used by comm"
 	^ session
 ]
 
@@ -344,70 +338,62 @@ IPWidgetFactory >> session: anObject [
 	session := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> sliderStyle [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPSliderStyleModel newInstance
+	<jupyterWidget: #SliderStyle>
+	^ self createWidgetWithModel: IPSliderStyleModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> tab [
-
-	^ IPWidget onSession: self session model: IPTabModel newInstance
+	<jupyterWidget: #Tab>
+	^ self createWidgetWithModel: IPTabModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> text [
-
-	^ IPWidget onSession: self session model: IPTextModel newInstance
+	<jupyterWidget: #Text>
+	^ self createWidgetWithModel: IPTextModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> textarea [
-
-	^ IPWidget onSession: self session model: IPTextareaModel newInstance
+	<jupyterWidget: #Textarea>
+	^ self createWidgetWithModel: IPTextareaModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> toggleButton [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPToggleButtonModel newInstance
+	<jupyterWidget: #ToggleButton>
+	^ self createWidgetWithModel: IPToggleButtonModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> toggleButtons [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPToggleButtonsModel newInstance
+	<jupyterWidget: #ToggleButtons>
+	^ self createWidgetWithModel:  IPToggleButtonsModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> toggleButtonsStyle [
-
-	^ IPWidget
-		  onSession: self session
-		  model: IPToggleButtonsStyleModel newInstance
+	<jupyterWidget: #ToggleButtonsStyle>
+	^ self createWidgetWithModel: IPToggleButtonsStyleModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> vBox [
-
-	^ IPWidget onSession: self session model: IPVBoxModel newInstance
+	<jupyterWidget: #VBox>
+	^ self createWidgetWithModel: IPVBoxModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> valid [
-
-	^ IPWidget onSession: self session model: IPValidModel newInstance
+	<jupyterWidget: #Valid>
+	^ self createWidgetWithModel: IPValidModel newInstance
 ]
 
-{ #category : #accessing }
+{ #category : #factory }
 IPWidgetFactory >> video [
-
-	^ IPWidget onSession: self session model: IPVideoModel newInstance
+	<jupyterWidget: #Video>
+	^ self createWidgetWithModel: IPVideoModel newInstance
 ]

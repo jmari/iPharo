@@ -8,6 +8,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'heartbeat',
+		'timeout',
 		'shell',
 		'control',
 		'stdin',
@@ -18,7 +19,8 @@ Class {
 		'subscriber',
 		'sharedKey',
 		'kernelStatus',
-		'sessionId'
+		'session',
+		'username'
 	],
 	#category : #'IPharo-KernelProxy-Core'
 }
@@ -107,6 +109,66 @@ IPKernelProxy >> buildKernelStartCommand [
 	^ ws contents	
 	
 	
+]
+
+{ #category : #'public-api-comm' }
+IPKernelProxy >> commCloseRequest: uuid [
+	^ self commCloseRequest: uuid data: SCJsonObject new. 
+]
+
+{ #category : #'public-api-comm' }
+IPKernelProxy >> commCloseRequest: uuid data: aJsonDict [
+	| message |
+	message := IPCommCloseMsg new.
+	message content at:#comm_id put: uuid.
+	message content at:#data put: aJsonDict.
+	self sendMessage: message  onSocket: shell.
+	^ self receiveMessageOnSocket: shell
+]
+
+{ #category : #'public-api-comm' }
+IPKernelProxy >> commInfoRequest [
+	| message |
+	message := IPCommInfoRequestMsg new.
+	self sendMessage: message  onSocket: shell.
+	^ self receiveMessageOnSocket: shell
+]
+
+{ #category : #'public-api-comm' }
+IPKernelProxy >> commInfoRequest: targetName [
+	| message |
+	message := IPCommInfoRequestMsg new.
+	message content at:#target_name put:targetName.
+	self sendMessage: message  onSocket: shell.
+	^ self receiveMessageOnSocket: shell
+]
+
+{ #category : #'public-api-comm' }
+IPKernelProxy >> commMessageRequest: aMessage [
+	| message |
+	message := IPCommMsg new.
+	message content at:#comm_id put: aMessage.
+	self sendMessage: message  onSocket: shell.
+	^ self receiveMessageOnSocket: shell
+]
+
+{ #category : #'public-api-comm' }
+IPKernelProxy >> commMessageRequest: uuid data: aJsonDict [
+	| message |
+	message := IPCommMsg new.
+	message content at:#comm_id put: uuid.
+	message content at:#data put: aJsonDict.
+	self sendMessage: message  onSocket: shell.
+	^ self receiveMessageOnSocket: shell
+]
+
+{ #category : #'public-api-comm' }
+IPKernelProxy >> commOpenRequest: uuid [
+	| message |
+	message := IPCommOpenMsg new.
+	message content at:#comm_id put: uuid.
+	self sendMessage: message  onSocket: shell.
+	^ self receiveMessageOnSocket: shell
 ]
 
 { #category : #'public-api' }
@@ -404,6 +466,16 @@ IPKernelProxy >> metadata [
 	^ self subclassResponsibility 
 ]
 
+{ #category : #finalization }
+IPKernelProxy >> publish: anIPMessage [
+	"kernel proxy send the message trough the shell socket, kernel reply on iopub"
+	self sendMessage: anIPMessage onSocket: shell 
+	
+
+	
+
+]
+
 { #category : #'private-messaging' }
 IPKernelProxy >> pushMessageFrame:messageData [ 
 
@@ -437,8 +509,12 @@ IPKernelProxy >> receiveMessageOnSocket: aZmqSocket [
 IPKernelProxy >> sendMessage: anIPRequest onSocket: aZmqSocket [
 	| aRequest |
 	"set current session id"
-	anIPRequest header session: self sessionId.
+	anIPRequest header session: self session id.
+	anIPRequest header username: self session username.
+	anIPRequest header timestamp: self session startTime. 
 	aRequest := IPWireMessage newFromMessage: anIPRequest sharedKey: sharedKey.
+	anIPRequest wireMessage: aRequest.
+	self session currentMessage: anIPRequest.
 	aZmqSocket ifNotNil: [ 
 		aZmqSocket  
 				send: aRequest uuid flags:ZmqApiConstants  zmqSendMore;
@@ -451,9 +527,23 @@ IPKernelProxy >> sendMessage: anIPRequest onSocket: aZmqSocket [
 ]
 
 { #category : #accessing }
-IPKernelProxy >> sessionId [ 
-
-	^ sessionId ifNil:[ sessionId := UUID new hex asString asUppercase ]
+IPKernelProxy >> session [
+	|aMsg aRequest|
+	^ session ifNil:[
+		session := IPSession new 
+							username: self username;
+							id: UUID new hex asString asUppercase;
+							startTime: DateAndTime now.
+		session publisher: self.
+		aMsg := IPKernelInfoRequestMsg new.
+		aMsg header session: session id.
+		aMsg header username: session username.
+		aMsg header timestamp: session startTime. 
+		aRequest := IPWireMessage newFromMessage: aMsg  sharedKey: sharedKey.
+		aMsg wireMessage: aRequest.
+		session currentMessage: aMsg.
+		IPSession registerSession: session.
+		session  ]
 ]
 
 { #category : #initialization }
@@ -515,19 +605,37 @@ IPKernelProxy >> stop [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 IPKernelProxy >> timeout [
-	^ 10000 "ms"
+	^ timeout ifNil:[ timeout :=10000 "ms"]
+]
+
+{ #category : #accessing }
+IPKernelProxy >> timeout: timeInMilliseconds [
+	timeout :=timeInMilliseconds "ms"
+]
+
+{ #category : #accessing }
+IPKernelProxy >> username [
+
+	^ username ifNil:[ username := self className , self class allInstances size asString ]
+]
+
+{ #category : #accessing }
+IPKernelProxy >> username: anObject [
+
+	username := anObject
 ]
 
 { #category : #'private-messaging' }
 IPKernelProxy >> wireMessage [
+	"received message"
 	^ wireMessage
 ]
 
 { #category : #'private-messaging' }
 IPKernelProxy >> wireMessage: aWireMessage [
-
+	"used by receiveMessageOnSocket: "
 	wireMessage := aWireMessage.
 	wireMessage sharedKey: sharedKey
 ]

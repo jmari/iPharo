@@ -118,11 +118,6 @@ IPharoKernel class >> version [
 	^ '0.1.0'
 ]
 
-{ #category : #'comm handlers' }
-IPharoKernel >> commManager [
-	^ commManager ifNil:[commManager := IPCommManager new ]
-]
-
 { #category : #initialization }
 IPharoKernel >> config [
 	^ config 
@@ -265,7 +260,6 @@ IPharoKernel >> stop [
 	stop := true.
 	self processors values do:[:each| each stop].
 	self processors removeAll.
-	self commManager commChannels removeAll.
 	IPSession finalizeSessions.
 	IPDisplay resetCache.
 	[ZmqContext terminate] on:Error do:[:e|].
