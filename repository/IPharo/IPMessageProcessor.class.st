@@ -63,7 +63,7 @@ IPMessageProcessor >> addHandlersFromPragmasIn: handlerInstance [
 
 { #category : #'message-handlers' }
 IPMessageProcessor >> addHandlersFromPragmasInClass: class handlerInstance: handlerInstance [ 
-	self addHandlersFromPragma: #ipharo inClass: class handlerInstance: handlerInstance 
+	self addHandlersFromPragma: #ipharo: inClass: class handlerInstance: handlerInstance 
 ]
 
 { #category : #hooks }
