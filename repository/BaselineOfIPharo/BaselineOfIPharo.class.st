@@ -49,7 +49,7 @@ BaselineOfIPharo >> createKernelFile [
 			stream nextPutAll: self kernelFileContents.
 			stream close ] 
 	on:Error 
-	do:[ Transcript crShow:('Pharo Could not create the file on ',kernelPath fullName,' not enough permissions' ) ] ]
+	do:[ Transcript crShow:('Pharo Could not create the file on ',kernelPath,' not enough permissions' ) ] ]
 
 
 ]
