@@ -41,7 +41,7 @@ BaselineOfIPharo >> createKernelFile [
 	2 to:listOfKernels size do:[ :index |
 		first := (listOfKernels at: index) findString: ' ' startingAt: 12.
 		last := (listOfKernels at: index) findString: 'kernels'.
-		kernelPath := (listOfKernels at:index) copyFrom: first +2 to: last + 7.
+		kernelPath := ((listOfKernels at:index) copyFrom: first +2 to: last + 7) trimBoth.
 		[	kernelsDir := (FileSystem root / kernelPath / 'pharo') createDirectory.  
 			fileRef := kernelsDir / 'kernel.json'.  
 			fileRef := fileRef ensureCreateFile.
