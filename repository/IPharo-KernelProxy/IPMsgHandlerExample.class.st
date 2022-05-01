@@ -1,31 +1,28 @@
-"
-I am an example of how can we implement a MessageHandler for our application. Create a class  like mw, using pragma <ipharo: #message_type> inside the hendler methods
-"
 Class {
-	#name : #IPMsgHandler,
+	#name : #IPMsgHandlerExample,
 	#superclass : #Object,
 	#category : #'IPharo-KernelProxy-Core'
 }
 
 { #category : #'as yet unclassified' }
-IPMsgHandler >> commCloseHandler: anIPMessage [
+IPMsgHandlerExample >> commCloseHandler: anIPMessage [
 	<ipharo: #comm_close>
 ]
 
 { #category : #'as yet unclassified' }
-IPMsgHandler >> commMessageHandler: anIPMessage [
+IPMsgHandlerExample >> commMessageHandler: anIPMessage [
 	<ipharo: #comm_msg>
 	anIPMessage inspect
 ]
 
 { #category : #'as yet unclassified' }
-IPMsgHandler >> commOpenHandler: anIPMessage [
+IPMsgHandlerExample >> commOpenHandler: anIPMessage [
 	<ipharo: #comm_open>
 	anIPMessage inspect.
 ]
 
 { #category : #'message-handlers' }
-IPMsgHandler >> debugEventHandler: anIPMessage [
+IPMsgHandlerExample >> debugEventHandler: anIPMessage [
 	<ipharo: #debug_event>
 
 	
@@ -33,7 +30,7 @@ IPMsgHandler >> debugEventHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPMsgHandler >> displayDataHanler: anIPMessage [
+IPMsgHandlerExample >> displayDataHanler: anIPMessage [
 	<ipharo: #display_data>
 
 	
@@ -41,7 +38,7 @@ IPMsgHandler >> displayDataHanler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPMsgHandler >> errorHandler: anIPMessage [
+IPMsgHandlerExample >> errorHandler: anIPMessage [
 	<ipharo: #error>
 
 	
@@ -49,7 +46,7 @@ IPMsgHandler >> errorHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPMsgHandler >> executeHandler: anIPMessage [
+IPMsgHandlerExample >> executeHandler: anIPMessage [
 	<ipharo: #execute_result>
 
 	
@@ -57,7 +54,7 @@ IPMsgHandler >> executeHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPMsgHandler >> executeInputHandler: anIPMessage [
+IPMsgHandlerExample >> executeInputHandler: anIPMessage [
 	<ipharo: #execute_input>
 
 	
@@ -65,7 +62,7 @@ IPMsgHandler >> executeInputHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPMsgHandler >> executeResultHandler: anIPMessage [
+IPMsgHandlerExample >> executeResultHandler: anIPMessage [
 	<ipharo: #execute_result>
 
 	
@@ -73,7 +70,7 @@ IPMsgHandler >> executeResultHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPMsgHandler >> kernelSatatusHandler: anIPMessage [
+IPMsgHandlerExample >> kernelSatatusHandler: anIPMessage [
 	<ipharo: #status>
 
 	
@@ -81,7 +78,7 @@ IPMsgHandler >> kernelSatatusHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPMsgHandler >> streamHandler: anIPMessage [
+IPMsgHandlerExample >> streamHandler: anIPMessage [
 	<ipharo: #stream>
 
 	
@@ -89,7 +86,7 @@ IPMsgHandler >> streamHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPMsgHandler >> updateDisplayDataHandler: anIPMessage [
+IPMsgHandlerExample >> updateDisplayDataHandler: anIPMessage [
 	<ipharo: #update_display_data>
 
 	

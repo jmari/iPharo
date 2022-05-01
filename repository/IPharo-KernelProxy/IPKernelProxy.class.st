@@ -65,6 +65,20 @@ IPKernelProxy class >> buildKernelProxyFromConfigFile: aFilename [
 
 ]
 
+{ #category : #'as yet unclassified' }
+IPKernelProxy class >> generateAvailableKernelProxyClasses [
+	| listOfKernels first last  kernelPath outString |
+	
+	outString := LibC resultOfCommand: 'jupyter kernelspec list'.
+	listOfKernels := outString findTokens: Character lf.
+	listOfKernels allButFirst do:[ :line |
+		first := line findString: ' ' startingAt: 12.
+		kernelPath := (line copyFrom:first to: line size) trimBoth.
+		self buildKernelProxyFromConfigFile: kernelPath , '/kernel.json' ]
+
+
+]
+
 { #category : #tests }
 IPKernelProxy class >> test1 [
 	self buildKernelProxyFromConfigFile: '/Users/Cat/anaconda3/envs/jupyterlab-debugger/share/jupyter/kernels/xpython/kernel.json'
@@ -82,6 +96,7 @@ IPKernelProxy class >> test3 [
 
 { #category : #'message-handlers' }
 IPKernelProxy >> addHandler: aMessageHandler [
+
 	subscriber addHandlersFromPragmasInClass: aMessageHandler class handlerInstance: aMessageHandler.
 	
 ]
@@ -123,33 +138,26 @@ IPKernelProxy >> commCloseRequest: uuid data: aJsonDict [
 	message content at:#comm_id put: uuid.
 	message content at:#data put: aJsonDict.
 	self sendMessage: message  onSocket: shell.
-	^ self receiveMessageOnSocket: shell
+	
 ]
 
 { #category : #'public-api-comm' }
 IPKernelProxy >> commInfoRequest [
-	| message |
-	message := IPCommInfoRequestMsg new.
-	self sendMessage: message  onSocket: shell.
-	^ self receiveMessageOnSocket: shell
+	^ self commInfoRequest: nil
 ]
 
 { #category : #'public-api-comm' }
 IPKernelProxy >> commInfoRequest: targetName [
 	| message |
 	message := IPCommInfoRequestMsg new.
-	message content at:#target_name put:targetName.
+	targetName ifNotNil:[ message content at:#target_name put: targetName].
 	self sendMessage: message  onSocket: shell.
 	^ self receiveMessageOnSocket: shell
 ]
 
 { #category : #'public-api-comm' }
-IPKernelProxy >> commMessageRequest: aMessage [
-	| message |
-	message := IPCommMsg new.
-	message content at:#comm_id put: aMessage.
-	self sendMessage: message  onSocket: shell.
-	^ self receiveMessageOnSocket: shell
+IPKernelProxy >> commMessageRequest: uuid [
+	^ self commMessageRequest: uuid data: SCJsonObject new 
 ]
 
 { #category : #'public-api-comm' }
@@ -159,16 +167,22 @@ IPKernelProxy >> commMessageRequest: uuid data: aJsonDict [
 	message content at:#comm_id put: uuid.
 	message content at:#data put: aJsonDict.
 	self sendMessage: message  onSocket: shell.
-	^ self receiveMessageOnSocket: shell
+
 ]
 
 { #category : #'public-api-comm' }
 IPKernelProxy >> commOpenRequest: uuid [
+	^ self commOpenRequest: uuid targetName: nil 
+]
+
+{ #category : #'public-api-comm' }
+IPKernelProxy >> commOpenRequest: uuid targetName: targetName [
 	| message |
 	message := IPCommOpenMsg new.
 	message content at:#comm_id put: uuid.
+	targetName ifNotNil:[ message content at:#target_name put: targetName].
 	self sendMessage: message  onSocket: shell.
-	^ self receiveMessageOnSocket: shell
+
 ]
 
 { #category : #'public-api' }
@@ -625,6 +639,11 @@ IPKernelProxy >> username [
 IPKernelProxy >> username: anObject [
 
 	username := anObject
+]
+
+{ #category : #accessing }
+IPKernelProxy >> widgetFactory [ 
+	^ self session widgetFactory
 ]
 
 { #category : #'private-messaging' }

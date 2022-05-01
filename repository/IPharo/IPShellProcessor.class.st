@@ -51,12 +51,11 @@ IPShellProcessor >> executeCommMsgRequest: aMessage [
 	<ipharo:#comm_msg> 
 	
 	| comm data |
-	aMessage inspect.
 	comm :=(aMessage session commManager commChannelAt:(aMessage content at:#comm_id)). 
 	data := aMessage content at:#data.
 	comm data: data.
  	comm commListeners do:[:l| l onDataReceived: data ].
-
+	"NO-RESPONSE-ON-SHELL"
 
 ]
 
@@ -64,7 +63,6 @@ IPShellProcessor >> executeCommMsgRequest: aMessage [
 IPShellProcessor >> executeCommOpenRequest: aMessage [
 	<ipharo: #comm_open>
 	| instance |
-	aMessage inspect.
 	instance := IPComm new:(aMessage content at:#comm_id) onSession: aMessage session.
 	instance targetName: (aMessage content at:#target_name).
 	instance data: (aMessage content at:#data).
@@ -189,6 +187,7 @@ IPShellProcessor >> executeRequestState: aMessage [
 	(aMessage session commManager commChannelAt:(aMessage content at:#comm_id)) 
 	commListeners do:[:aMsgHandler|
 		aMsgHandler comm update: aMsgHandler model state].
+	"NO-RESPONSE-ON-SHELL"
 ]
 
 { #category : #'message-handling-comm' }

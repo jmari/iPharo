@@ -41,6 +41,18 @@ IPWidget class >> onSession: anIPSession model: aModel [
 	^ i
 ]
 
+{ #category : #'instance creation' }
+IPWidget class >> onSession: anIPSession model: aModel commId: uuid [
+	| i |
+	i := self basicNew.
+	i initialize.
+	i comm: (IPComm new: uuid onSession:anIPSession).
+	i comm addCommListener: i.
+	i model: aModel.
+	i openComm.
+	^ i
+]
+
 { #category : #'state-accessors' }
 IPWidget >> alignContent [
 	^ self getProperty: #align_content
@@ -848,7 +860,7 @@ IPWidget >> onChangingState: aBlockWithOneArgument [
 
 { #category : #'comm-listener' }
 IPWidget >> onDataReceived: data [
-
+	data at:#method ifAbsent:[ ^ self ]. 
 	(data at:#method) = 'update' ifTrue:[ self updateState:(data at:#state)].
 	(data at:#method) = 'request_state' ifTrue:[ self comm update:self model state].	
 ]
