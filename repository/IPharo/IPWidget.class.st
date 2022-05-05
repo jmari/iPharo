@@ -1268,7 +1268,7 @@ IPWidget >> updateState: aJsonDict [
 						newValue: newValue.
 			newValue := event newValue].
 		self model state at:k put: event newValue.
-		"if you Change the value in the event block, it must be notify to the client"
+		"if you Change the value in the event block, it must be notified to the client"
 		event newValue = newValue ifFalse:[self sendUpdate:( k -> event newValue)] ]
 		
 ]

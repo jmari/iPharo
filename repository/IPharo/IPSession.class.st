@@ -465,10 +465,12 @@ IPSession >> initializeDapServer [
 	^ debuggerServer ifNil:[
 		Smalltalk at: #DAPServer 
 			ifPresent:[ :aDAPclass |
-				debuggerServer := aDAPclass new.
-				dapServerPort := debuggerServer start.
-				self startDapResponder.
-				debuggerServer ]
+				IPharoKernel isStarted ifTrue:[
+					debuggerServer := aDAPclass new.
+					dapServerPort := debuggerServer start.
+					self startDapResponder.
+					debuggerServer ]
+				ifFalse:[ debuggerServer := IPDummyDAPServer new ] ]
 			ifAbsent:[ debuggerServer := IPDummyDAPServer new ] ]
 ]
 

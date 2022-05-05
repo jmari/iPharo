@@ -67,7 +67,7 @@ IPKernelProxy class >> buildKernelProxyFromConfigFile: aFilename [
 
 { #category : #'as yet unclassified' }
 IPKernelProxy class >> generateAvailableKernelProxyClasses [
-	| listOfKernels first last  kernelPath outString |
+	| listOfKernels first kernelPath outString |
 	
 	outString := LibC resultOfCommand: 'jupyter kernelspec list'.
 	listOfKernels := outString findTokens: Character lf.
@@ -332,6 +332,7 @@ IPKernelProxy >> initialize [
 	self startHeartbeatThread.
 	self startSubscriberProcessor. 
 	self startKernel.
+	self session
 
 	
 
@@ -542,21 +543,16 @@ IPKernelProxy >> sendMessage: anIPRequest onSocket: aZmqSocket [
 
 { #category : #accessing }
 IPKernelProxy >> session [
-	|aMsg aRequest|
+	|aMsg|
 	^ session ifNil:[
+		"need to get the id session from the kernel"
 		session := IPSession new 
 							username: self username;
 							id: UUID new hex asString asUppercase;
 							startTime: DateAndTime now.
+		aMsg := self kernelInfoRequest.
+		session := IPSession getSessionForMessage: aMsg.
 		session publisher: self.
-		aMsg := IPKernelInfoRequestMsg new.
-		aMsg header session: session id.
-		aMsg header username: session username.
-		aMsg header timestamp: session startTime. 
-		aRequest := IPWireMessage newFromMessage: aMsg  sharedKey: sharedKey.
-		aMsg wireMessage: aRequest.
-		session currentMessage: aMsg.
-		IPSession registerSession: session.
 		session  ]
 ]
 
@@ -580,6 +576,7 @@ IPKernelProxy >> startKernel [
 	"starts the Kernel"
 	kernelStatus := #starting.
 	self buildConnectionConfigFile.
+"	OSEnvironment current setEnv: 'PYTHONPATH' value:'/Users/Cat/anaconda3/lib/python3.6/'."
 	kernelPipe := LibC pipe: self buildKernelStartCommand mode: 'r'.
 ]
 

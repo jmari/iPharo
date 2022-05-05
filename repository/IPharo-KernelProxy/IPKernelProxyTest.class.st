@@ -26,6 +26,7 @@ IPKernelProxyTest >> sourceCode [
 
 { #category : #'system startup' }
 IPKernelProxyTest >> tearDown [
+	(Delay forMilliseconds: 3000) wait.
 	kernelProxy stop
 ]
 
@@ -57,8 +58,12 @@ IPKernelProxyTest >> testKernelInfoRequest [
 
 { #category : #tests }
 IPKernelProxyTest >> testKernelWidget [
-	| widget response handler |
+	| widget handler |
 	handler := IPWidgetMsgHandler new. 
+
+	handler on:#comm_msg do:[:aMessage|
+		aMessage inspect ].
+
 	kernelProxy addHandler:  handler.
 	kernelProxy executeRequest: '
 	widget:=self widgetFactory intSlider
@@ -71,11 +76,9 @@ IPKernelProxyTest >> testKernelWidget [
                                 continuousUpdate:false;
                                 orientation:''horizontal'';
                                 readout:true;
-                                readoutFormat:''d''.
-	widget value:5'
-	onSucceed:[
-		widget := handler register values first.
-		self assert: widget value equals:5.]
+                                readoutFormat:''d''.'
+	onSucceed:[ :am | am inspect ].
+	(Delay forMilliseconds: 2000) wait.
 	
 	
 	

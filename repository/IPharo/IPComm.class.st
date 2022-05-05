@@ -96,10 +96,10 @@ IPComm >> open [
 ]
 
 { #category : #'instance creation' }
-IPComm >> open: data [
+IPComm >> open: someData [
 
 	self publish: (self session commOpenMessage 
-															data: data;
+															data: someData;
 															commID: self uuid;
 															targetName: self targetName;
 															yourself)

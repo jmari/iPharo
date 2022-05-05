@@ -93,6 +93,12 @@ IPharoKernel class >> instance [
 ]
 
 { #category : #'instance creation' }
+IPharoKernel class >> isStarted [
+	^ instance notNil and:[ instance processors isNotEmpty ]
+	
+]
+
+{ #category : #'instance creation' }
 IPharoKernel class >> new [
 	instance ifNotNil:[instance stop].
 	instance := self basicNew.
@@ -115,7 +121,7 @@ IPharoKernel class >> shutDown [
 
 { #category : #versions }
 IPharoKernel class >> version [
-	^ '0.1.0'
+	^ '1.0.0'
 ]
 
 { #category : #initialization }

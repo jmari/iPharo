@@ -46,14 +46,6 @@ IPMsgHandlerExample >> errorHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPMsgHandlerExample >> executeHandler: anIPMessage [
-	<ipharo: #execute_result>
-
-	
-
-]
-
-{ #category : #'message-handlers' }
 IPMsgHandlerExample >> executeInputHandler: anIPMessage [
 	<ipharo: #execute_input>
 
