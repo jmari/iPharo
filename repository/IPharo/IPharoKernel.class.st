@@ -109,7 +109,7 @@ IPharoKernel class >> new [
 
 { #category : #'as yet unclassified' }
 IPharoKernel class >> protocolVersion [
-	^ '5.0.0'
+	^ '5.1.0'
 ]
 
 { #category : #'system startup' }
@@ -243,10 +243,10 @@ IPharoKernel >> shell [
 
 { #category : #accessing }
 IPharoKernel >> start [
- 	self processors at:#shell put: (IPShellProcessor new: shell).
-	self processors at:#ctrl put: (IPControlProcessor new:control).
-	self processors at:#stdin put: (IPStdInProcessor new:stdin).
-	self processors at:#iopub put: (IPIOPubProcessor new:ioPub).
+ 	self processors at:#shell put: (IPShellRouterProcessor new: shell).
+	self processors at:#ctrl put: (IPControlRouterProcessor new:control).
+	self processors at:#stdin put: (IPStdInRouterProcessor new:stdin).
+	self processors at:#iopub put: (IPIOPublisherProcessor new:ioPub).
 	self heartbeatThread.
 	IPSession finalizeSessions
 

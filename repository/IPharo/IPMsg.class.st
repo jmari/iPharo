@@ -12,7 +12,6 @@ Class {
 		'content',
 		'metadata',
 		'uuid',
-		'msgUUID',
 		'wireMessage'
 	],
 	#category : #'IPharo-Core'
@@ -54,7 +53,7 @@ IPMsg >> content: anObject [
 { #category : #accessing }
 IPMsg >> header [
 	^ header ifNil:[ header := {
-                'msg_id' -> self msgUUID.
+                'msg_id' -> self uuid.
                 'date' -> DateAndTime now asString. 
                 'msg_type' -> self msgType.
                 'version' -> '5.0'.
@@ -94,11 +93,6 @@ IPMsg >> msgType [
 { #category : #accessing }
 IPMsg >> msgType: anObject [
 	msg_type := anObject
-]
-
-{ #category : #accessing }
-IPMsg >> msgUUID [
- 	^ msgUUID ifNil:[ UUID new hex asString asUppercase ].
 ]
 
 { #category : #accessing }

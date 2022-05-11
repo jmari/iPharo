@@ -6,7 +6,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 IPCommUpdateMsg >> commID [
-	^ self content at:#comm_id ifAbsentPut:[ self msgUUID ]
+	^ self content at:#comm_id ifAbsentPut:[ self uuid ]
 ]
 
 { #category : #'as yet unclassified' }

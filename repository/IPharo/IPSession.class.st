@@ -295,7 +295,7 @@ IPSession >> doNotSendDisplayOutputToken [
 
 { #category : #evaluation }
 IPSession >> eval: sourceCode [
-	"used to call always evaluate without debugging action"
+	"use if you want evaluate without debugging action (inspect)"
 	| compiledMethod |
 	compiledMethod := self pluggableCompilationBlock value: sourceCode.
 	^ 	compiledMethod  valueWithReceiver: self arguments: {self} 	 
@@ -487,6 +487,14 @@ IPSession >> initializeMessageHeader: aMessage [
 ]
 
 { #category : #'messages-shell' }
+IPSession >> inputReplayMessage [
+	 | msg |
+	msg := IPInputReplyMsg newReplyingToWireMessage: self currentMessage wireMessage. 
+	self initializeMessageHeader: msg.
+	^ msg 
+]
+
+{ #category : #'messages-shell' }
 IPSession >> inspectReplyMessage [
 	 | msg |
 	msg := IPInspectReplyMsg newReplyingToWireMessage: self currentMessage wireMessage. 
@@ -497,6 +505,22 @@ IPSession >> inspectReplyMessage [
 { #category : #'workspace-variables' }
 IPSession >> interactive [ 
 	^ false
+]
+
+{ #category : #'message-control' }
+IPSession >> interruptErrorReplyMsg [
+	 | msg |
+	msg := IPInterruptErrorReplyMsg  newReplyingToWireMessage: self currentMessage wireMessage. 
+	self initializeMessageHeader: msg.
+	^ msg 
+]
+
+{ #category : #'message-control' }
+IPSession >> interruptReplyMsg [
+	 | msg |
+	msg := IPInterruptReplyMsg  newReplyingToWireMessage: self currentMessage wireMessage. 
+	self initializeMessageHeader: msg.
+	^ msg 
 ]
 
 { #category : #'messages-shell' }

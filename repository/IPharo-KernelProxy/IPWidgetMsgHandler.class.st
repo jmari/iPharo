@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'register'
 	],
-	#category : #'IPharo-KernelProxy-Widgets'
+	#category : #'IPharo-KernelProxy-MessageHandling'
 }
 
 { #category : #'message-handlers' }

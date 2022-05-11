@@ -70,7 +70,7 @@ IPKernelProxyTest >> testFullDebugSeqRequest [
 		} asSCJsonObject 
 	} asSCJsonObject .
 	
-	debugInfoMessage := kernelProxy debugRequest: dapMsg onSucceed: [ :aMsg | aMsg inspect ].
+	debugInfoMessage := kernelProxy debugRequest: dapMsg.
 	dapMsg := DAPScopesRequest new arguments:  {#frameId->stackFrame} asDictionary.
 	debugInfoMessage := kernelProxy debugRequest: dapMsg.
 	

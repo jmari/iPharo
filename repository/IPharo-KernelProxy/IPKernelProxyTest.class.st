@@ -14,7 +14,8 @@ IPKernelProxyTest class >> defaultTimeLimit [
 
 { #category : #'system startup' }
 IPKernelProxyTest >> setUp [
-	kernelProxy := IPIPharoKernelProxy new
+	kernelProxy := IPIPharoKernelProxy new.
+
 ]
 
 { #category : #accessing }
@@ -26,15 +27,16 @@ IPKernelProxyTest >> sourceCode [
 
 { #category : #'system startup' }
 IPKernelProxyTest >> tearDown [
-	(Delay forMilliseconds: 3000) wait.
-	kernelProxy stop
+	kernelProxy stop.
+	"give him time to receive the shutDown message"
+	(Delay forMilliseconds: 3000) wait.	
 ]
 
 { #category : #tests }
 IPKernelProxyTest >> testClientWidget [
 	| widget handler|
 	handler := IPWidgetMsgHandler new. 
-	kernelProxy addHandler:  handler.
+	kernelProxy addHandlerToIOSubscriber:  handler.
 	widget := kernelProxy widgetFactory floatProgress. 
 	widget setProperty: #value value: 5.0.
 
@@ -53,19 +55,20 @@ IPKernelProxyTest >> testClientWidget [
 IPKernelProxyTest >> testKernelInfoRequest [
 	| info |
 	info := kernelProxy kernelInfoRequest.
-	self assert:info content debugger equals: true
+	(Delay forMilliseconds: 5000) wait.
+	info inspect.
+	self assert:info uuid notNil
 ]
 
 { #category : #tests }
 IPKernelProxyTest >> testKernelWidget [
-	| widget handler |
+	| widget handler aFutureMsg response receivedMessages|
+	receivedMessages := OrderedCollection new.
 	handler := IPWidgetMsgHandler new. 
-
-	handler on:#comm_msg do:[:aMessage|
-		aMessage inspect ].
-
-	kernelProxy addHandler:  handler.
-	kernelProxy executeRequest: '
+	handler onMessage:#comm_msg do:[:aMessage|
+		receivedMessages add:aMessage  ].
+	kernelProxy addHandlerToIOSubscriber:  handler.
+	aFutureMsg := kernelProxy executeRequest: '
 	widget:=self widgetFactory intSlider
                                 value:7;
                                 min:0;
@@ -76,8 +79,12 @@ IPKernelProxyTest >> testKernelWidget [
                                 continuousUpdate:false;
                                 orientation:''horizontal'';
                                 readout:true;
-                                readoutFormat:''d''.'
-	onSucceed:[ :am | am inspect ].
+                                readoutFormat:''d''.'.
+	aFutureMsg  
+		onSuccessDo:[:r | response := r ];
+		onFailureDo: [:e| e signal].
+	[ aFutureMsg isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	response inspect.
 	(Delay forMilliseconds: 2000) wait.
 	
 	
@@ -85,13 +92,30 @@ IPKernelProxyTest >> testKernelWidget [
 ]
 
 { #category : #tests }
-IPKernelProxyTest >> testisCompleteRequest [
-	| isCompleteMessage code |
-	code :='a:=0'.
-	isCompleteMessage := kernelProxy isCompleteRequest: code.
-	self assert: isCompleteMessage content status equals: #complete.
+IPKernelProxyTest >> testisCompleteInvalidRequest [
+	| isCompleteMessage code response|
+		
 	code :='a:=10.
 	[a >= 0] whileTrue:['.
 	isCompleteMessage := kernelProxy isCompleteRequest: code.
-	self assert: isCompleteMessage content status equals: #invalid
+	isCompleteMessage 
+		onSuccessDo:[:r | response := r ];
+		onFailureDo: [:e | e inspect ].
+	[ isCompleteMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	self assert: response content status equals: #invalid
+]
+
+{ #category : #tests }
+IPKernelProxyTest >> testisCompleteRequest [
+	| isCompleteMessage code response|
+	code :='a:=0'.
+	isCompleteMessage := kernelProxy isCompleteRequest: code.
+	isCompleteMessage 
+		onSuccessDo:[:r | response := r ];
+		onFailureDo: [:e| e inspect].
+	[ isCompleteMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	
+		
+	self assert: response content status equals: #complete.
+	
 ]

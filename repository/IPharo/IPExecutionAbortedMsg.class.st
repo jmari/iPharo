@@ -1,6 +1,6 @@
 Class {
 	#name : #IPExecutionAbortedMsg,
-	#superclass : #IPExecuteRequestReplayMsg,
+	#superclass : #IPExecuteRequestReplyMsg,
 	#category : #'IPharo-Messages-Shell'
 }
 

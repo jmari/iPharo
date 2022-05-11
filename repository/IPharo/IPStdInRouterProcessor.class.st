@@ -4,13 +4,13 @@ I'm a message processor for the stdin channel, I process messages comming from t
 I handle imput replay message 
 "
 Class {
-	#name : #IPStdInProcessor,
+	#name : #IPStdInRouterProcessor,
 	#superclass : #IPMessageProcessor,
 	#category : #'IPharo-Core'
 }
 
 { #category : #hooks }
-IPStdInProcessor >> execute: aWireMessage [
+IPStdInRouterProcessor >> execute: aWireMessage [
 	| message |
 	
 	message := IPMsg newFromWireMessage: aWireMessage.
@@ -18,7 +18,7 @@ IPStdInProcessor >> execute: aWireMessage [
 ]
 
 { #category : #'as yet unclassified' }
-IPStdInProcessor >> executeInputReplay: aMessage [
+IPStdInRouterProcessor >> executeInputReplay: aMessage [
 	<ipharo: #input_reply>
 	
 	| session |
@@ -27,6 +27,6 @@ IPStdInProcessor >> executeInputReplay: aMessage [
 ]
 
 { #category : #accessing }
-IPStdInProcessor >> threadName [
+IPStdInRouterProcessor >> threadName [
 	^ 'ipharo-stdin' 
 ]

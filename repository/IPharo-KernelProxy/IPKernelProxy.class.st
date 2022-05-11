@@ -12,15 +12,20 @@ Class {
 		'shell',
 		'control',
 		'stdin',
-		'ioPub',
+		'ioSub',
 		'connectionConfig',
 		'kernelPipe',
 		'wireMessage',
-		'subscriber',
+		'ioSubProcessor',
 		'sharedKey',
 		'kernelStatus',
 		'session',
-		'username'
+		'username',
+		'shellProcessor',
+		'controlProcessor',
+		'stdinProcessor',
+		'mutex',
+		'stop'
 	],
 	#category : #'IPharo-KernelProxy-Core'
 }
@@ -95,9 +100,30 @@ IPKernelProxy class >> test3 [
 ]
 
 { #category : #'message-handlers' }
-IPKernelProxy >> addHandler: aMessageHandler [
+IPKernelProxy >> addHandlerToControlDealer: aMessageHandler [
 
-	subscriber addHandlersFromPragmasInClass: aMessageHandler class handlerInstance: aMessageHandler.
+	controlProcessor addHandlersFromPragmasInClass: aMessageHandler class handlerInstance: aMessageHandler.
+	
+]
+
+{ #category : #'message-handlers' }
+IPKernelProxy >> addHandlerToIOSubscriber: aMessageHandler [
+
+	ioSubProcessor addHandlersFromPragmasInClass: aMessageHandler class handlerInstance: aMessageHandler.
+	
+]
+
+{ #category : #'message-handlers' }
+IPKernelProxy >> addHandlerToShellDealer: aMessageHandler [
+
+	shellProcessor addHandlersFromPragmasInClass: aMessageHandler class handlerInstance: aMessageHandler.
+	
+]
+
+{ #category : #'message-handlers' }
+IPKernelProxy >> addHandlerToStdInDealer: aMessageHandler [
+
+	stdinProcessor addHandlersFromPragmasInClass: aMessageHandler class handlerInstance: aMessageHandler.
 	
 ]
 
@@ -126,83 +152,75 @@ IPKernelProxy >> buildKernelStartCommand [
 	
 ]
 
-{ #category : #'public-api-comm' }
+{ #category : #'public-api-shell-dealer' }
 IPKernelProxy >> commCloseRequest: uuid [
 	^ self commCloseRequest: uuid data: SCJsonObject new. 
 ]
 
-{ #category : #'public-api-comm' }
+{ #category : #'public-api-shell-dealer' }
 IPKernelProxy >> commCloseRequest: uuid data: aJsonDict [
 	| message |
 	message := IPCommCloseMsg new.
 	message content at:#comm_id put: uuid.
 	message content at:#data put: aJsonDict.
-	self sendMessage: message  onSocket: shell.
+	[ self sendMessage: message  onSocket: shell ] future.
 	
 ]
 
-{ #category : #'public-api-comm' }
+{ #category : #'public-api-shell-dealer' }
 IPKernelProxy >> commInfoRequest [
 	^ self commInfoRequest: nil
 ]
 
-{ #category : #'public-api-comm' }
+{ #category : #'public-api-shell-dealer' }
 IPKernelProxy >> commInfoRequest: targetName [
-	| message |
-	message := IPCommInfoRequestMsg new.
-	targetName ifNotNil:[ message content at:#target_name put: targetName].
-	self sendMessage: message  onSocket: shell.
-	^ self receiveMessageOnSocket: shell
+	| queryMessage |
+	queryMessage := IPCommInfoRequestMsg new.
+	targetName ifNotNil:[ queryMessage content at:#target_name put: targetName].
+	^ [ self sendMessage: queryMessage onSocket: shell.
+		 self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #comm_info_reply ] future
+	
+	
+
 ]
 
-{ #category : #'public-api-comm' }
+{ #category : #'public-api-shell-dealer' }
 IPKernelProxy >> commMessageRequest: uuid [
 	^ self commMessageRequest: uuid data: SCJsonObject new 
 ]
 
-{ #category : #'public-api-comm' }
+{ #category : #'public-api-shell-dealer' }
 IPKernelProxy >> commMessageRequest: uuid data: aJsonDict [
 	| message |
 	message := IPCommMsg new.
 	message content at:#comm_id put: uuid.
 	message content at:#data put: aJsonDict.
-	self sendMessage: message  onSocket: shell.
+	^ [ self sendMessage: message  onSocket: shell ] future.
 
 ]
 
-{ #category : #'public-api-comm' }
+{ #category : #'public-api-shell-dealer' }
 IPKernelProxy >> commOpenRequest: uuid [
 	^ self commOpenRequest: uuid targetName: nil 
 ]
 
-{ #category : #'public-api-comm' }
+{ #category : #'public-api-shell-dealer' }
 IPKernelProxy >> commOpenRequest: uuid targetName: targetName [
 	| message |
 	message := IPCommOpenMsg new.
 	message content at:#comm_id put: uuid.
 	targetName ifNotNil:[ message content at:#target_name put: targetName].
-	self sendMessage: message  onSocket: shell.
+	^ [self sendMessage: message  onSocket: shell] future.
 
 ]
 
-{ #category : #'public-api' }
+{ #category : #'public-api-shell-dealer' }
 IPKernelProxy >> completeRequest: aStringWithCode cursorPos: anInteger [
-	| message |
-	message := IPCompleteRequestMsg new.
-	message code: aStringWithCode cursorPos: anInteger. 
-	self sendMessage: message onSocket: shell.
-	^ self receiveMessageOnSocket: shell 
-
-	
-]
-
-{ #category : #'public-api-async' }
-IPKernelProxy >> completeRequest: aStringWithCode cursorPos: anInteger onSucceed: aBlockWithOneArgument [
-	| message |
-	message := IPCompleteRequestMsg new.
-	message code: aStringWithCode cursorPos: anInteger. 
-	self sendMessage: message onSocket: shell.
-	[ aBlockWithOneArgument value: (self receiveMessageOnSocket: shell) ] fork
+	| queryMessage |
+	queryMessage := IPCompleteRequestMsg new.
+	queryMessage code: aStringWithCode cursorPos: anInteger. 
+	^ [self sendMessage: queryMessage onSocket: shell.
+		self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #complete_reply ] future
 
 	
 ]
@@ -224,22 +242,14 @@ IPKernelProxy >> connectionStringFor:transport ip:anIp port:aPort [
 	^ transport asString , '://' , anIp asString, ':' ,aPort asString
 ]
 
-{ #category : #'public-api-debug' }
+{ #category : #'public-api-control-dealer' }
 IPKernelProxy >> debugRequest: dapContent [
-	| message |
-	message := IPDebugRequestMsg new.
-	message content: dapContent.
-	self sendMessage: message  onSocket: control.
-	^ self receiveMessageOnSocket: control
-]
-
-{ #category : #'public-api-debug' }
-IPKernelProxy >> debugRequest: dapContent onSucceed: aBlockWithOneArgument [
-	| message |
-	message := IPDebugRequestMsg new.
-	message content: dapContent.
-	self sendMessage: message  onSocket: control.
-	[ aBlockWithOneArgument value: (self receiveMessageOnSocket: control) ] fork
+	| queryMessage |
+	queryMessage := IPDebugRequestMsg new.
+	queryMessage content: dapContent.
+	^ [ self sendMessage: queryMessage onSocket: control.
+		 self receiveMessageOnProcessor: controlProcessor  replyingTo: queryMessage ofType: #debug_reply ] future
+	
 ]
 
 { #category : #'kernel-management' }
@@ -276,61 +286,41 @@ IPKernelProxy >> executableOptions [
 	^ self subclassResponsibility 
 ]
 
-{ #category : #'public-api' }
+{ #category : #'public-api-shell-dealer' }
 IPKernelProxy >> executeRequest: aStringWithCode [
-	| message |
-	message := IPExecuteRequestMsg new.
-	message code: aStringWithCode.
-	self sendMessage: message  onSocket: shell.
-	^ self receiveMessageOnSocket: shell
+	| queryMessage |
+	queryMessage := IPExecuteRequestMsg new.
+	queryMessage code: aStringWithCode.
+	^ [ self sendMessage: queryMessage  onSocket: shell.
+		 self receiveMessageOnProcessor: ioSubProcessor  replyingTo: queryMessage ofType: #execute_result ] future
+	
 	
 
 	
 ]
 
-{ #category : #'public-api-async' }
-IPKernelProxy >> executeRequest: aStringWithCode onSucceed: aBlockWithOneArgument [
-	| message |
-	message := IPExecuteRequestMsg new.
-	message code: aStringWithCode.
-	self sendMessage: message  onSocket: shell.
-	[ aBlockWithOneArgument value: (self receiveMessageOnSocket: shell) ] fork
-	
-
-	
-]
-
-{ #category : #'public-api' }
+{ #category : #'public-api-shell-dealer' }
 IPKernelProxy >> historyLast: anInteger [
-	| message |
-	message := IPHistoryRequestMsg  new.
-	message content hist_access_type: #tail.
-	message content n:3.
-	self sendMessage: message onSocket: shell.
-	^ self receiveMessageOnSocket: shell 
-
-	
-]
-
-{ #category : #'public-api-async' }
-IPKernelProxy >> historyLast: anInteger onSucceed: aBlockWithOneArgument [
-	| message |
-	message := IPHistoryRequestMsg  new.
-	message content hist_access_type: #tail.
-	message content n:3.
-	self sendMessage: message onSocket: shell.
-	[ aBlockWithOneArgument value: (self receiveMessageOnSocket: shell) ] fork
-
-	
+	| queryMessage |
+	queryMessage := IPHistoryRequestMsg  new.
+	queryMessage content at:#hist_access_type put:#tail.
+	queryMessage content at:#n put: anInteger.
+	^ [self sendMessage: queryMessage onSocket: shell.
+		self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #history_reply ] future
 ]
 
 { #category : #initialization }
 IPKernelProxy >> initialize [
 	super initialize.
+	mutex := Mutex new.
 	ZmqContext current.
+	TKTConfiguration runner reset.
 	self initializeClientPorts. 
 	self startHeartbeatThread.
 	self startSubscriberProcessor. 
+	self startShellProcessor.
+	self startStdInProcessor.
+	self startControlProcessor.
 	self startKernel.
 	self session
 
@@ -349,7 +339,7 @@ IPKernelProxy >> initializeClientPorts [
 	shell := ZmqDealerSocket new. 
 	control := ZmqDealerSocket new. 
 	stdin := ZmqDealerSocket new. 
-	ioPub := ZmqSubscriberSocket new.
+	ioSub := ZmqSubscriberSocket new.
 	
 	kernelConfig := self connectionConfig.
 	sharedKey := (kernelConfig at:#key).
@@ -365,73 +355,66 @@ IPKernelProxy >> initializeClientPorts [
 	shell connect: (self connectionStringFor:(kernelConfig at:#transport)
 								ip: (kernelConfig at:#ip)
 								port: (kernelConfig at:#shell_port)).
-	ioPub connect: (self connectionStringFor:(kernelConfig at:#transport)
+	ioSub connect: (self connectionStringFor:(kernelConfig at:#transport)
 								ip: (kernelConfig at:#ip)
 								port: (kernelConfig at:#iopub_port)).
-	ioPub subscribeAll.
+	ioSub subscribeAll.
 	
 ]
 
-{ #category : #'public-api' }
+{ #category : #'public-api-stdin' }
+IPKernelProxy >> inputRequestHandler: anIPMessage [
+	<ipharo: #input_request>
+	| userResponse msgReply |
+	userResponse :=anIPMessage content password 
+		ifTrue:[ UIManager default requestPassword: anIPMessage content prompt ]
+		ifFalse:[ UIManager default request: anIPMessage content prompt ].
+	msgReply := self session inputReplayMessage.
+	msgReply content at:#value put:userResponse.
+	self sendMessage:  msgReply onSocket: stdin 
+]
+
+{ #category : #'public-api-shell-dealer' }
 IPKernelProxy >> inspectRequest: aStringWithCode cursorPos: anInteger [
-	| message |
-	message := IPInspectRequestMsg new.
-	message code: aStringWithCode cursorPos: anInteger. 
-	self sendMessage: message onSocket: shell.
-	^ self receiveMessageOnSocket: shell 
+	| queryMessage |
+	queryMessage := IPInspectRequestMsg new.
+	queryMessage code: aStringWithCode cursorPos: anInteger. 
+	^ [ self sendMessage: queryMessage onSocket: shell.
+		 self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #inspect_reply ] future
+
 
 	
 ]
 
-{ #category : #'public-api-async' }
-IPKernelProxy >> inspectRequest: aStringWithCode cursorPos: anInteger onSucceed: aBlockWithOneArgument [
-	| message |
-	message := IPInspectRequestMsg new.
-	message code: aStringWithCode cursorPos: anInteger. 
-	self sendMessage: message onSocket: shell.
-	[ aBlockWithOneArgument value: (self receiveMessageOnSocket: shell) ] fork
-
+{ #category : #'public-api-control-dealer' }
+IPKernelProxy >> interruptRequest [
+	| queryMessage |
+	queryMessage := IPInterruptRequestMsg new.
+	^ [ self sendMessage: queryMessage onSocket: control.
+		 self receiveMessageOnProcessor: controlProcessor  replyingTo: queryMessage ofType: #interrupt_reply ] future
 	
 ]
 
-{ #category : #'public-api' }
+{ #category : #'public-api-shell-dealer' }
 IPKernelProxy >> isCompleteRequest: code [
-	| message |
-	message := IPIsCompleteRequestMsg new.
-	message content code: code.
-	self sendMessage: message onSocket: shell.
-	^ self receiveMessageOnSocket: shell 
+	| queryMessage |
+	queryMessage := IPIsCompleteRequestMsg new.
+	queryMessage content code: code.
+	^ [ self sendMessage: queryMessage onSocket: shell.
+		 self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #is_complete_reply ] future
+	
 
 	
 ]
 
-{ #category : #'public-api-async' }
-IPKernelProxy >> isCompleteRequest: code onSucceed: aBlockWithOneArgument [
-	| message |
-	message := IPIsCompleteRequestMsg new.
-	message content code: code.
-	self sendMessage: message onSocket: shell.
-	[ aBlockWithOneArgument value: (self receiveMessageOnSocket: shell) ] fork
-
-	
-]
-
-{ #category : #'public-api' }
+{ #category : #'public-api-shell-dealer' }
 IPKernelProxy >> kernelInfoRequest [
-	| message |
-	message := IPKernelInfoRequestMsg new.
-	self sendMessage: message onSocket: shell.
-	^ self receiveMessageOnSocket: shell 
-
+	| queryMessage |
+	queryMessage := IPKernelInfoRequestMsg new.
+	^ [ self sendMessage: queryMessage onSocket: shell.
+		self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #kernel_info_reply ] future
 	
-]
-
-{ #category : #'public-api-async' }
-IPKernelProxy >> kernelInfoRequestOnSucceed: aBlockWithOneArgument [
-	| message |
-	message := IPKernelInfoRequestMsg new.
-	self sendMessage: message onSocket: shell.
-	[ aBlockWithOneArgument value: (self receiveMessageOnSocket: shell) ] fork
+	
 
 	
 ]
@@ -441,25 +424,12 @@ IPKernelProxy >> kernelShutdown [
 	| message shutdownMsg |
 	message := IPKernelShutdownMsg new.
 	self sendMessage: message onSocket: control.
-	"self receiveWireMessage should be done after idle messag on iopub"
 	shutdownMsg :=self receiveMessageOnSocket: control.
 	IPSession finalizeSession: shutdownMsg header session .
 	^ shutdownMsg
 ]
 
-{ #category : #'public-api-async' }
-IPKernelProxy >> kernelShutdownOnSucceed: aBlockWithOneArgument [
-	| message shutdownMsg |
-	message := IPKernelShutdownMsg new.
-	self sendMessage: message onSocket: control.
-	[ 
-		shutdownMsg :=self receiveMessageOnSocket: control.
-		IPSession finalizeSession: shutdownMsg header session .
-		aBlockWithOneArgument value: shutdownMsg ] fork
-	
-]
-
-{ #category : #'kernel-management' }
+{ #category : #accessing }
 IPKernelProxy >> kernelStatus [
 	^ kernelStatus
 ]
@@ -504,20 +474,38 @@ IPKernelProxy >> pushMessageFrame:messageData [
 ]
 
 { #category : #'private-messaging' }
+IPKernelProxy >> receiveMessageOnProcessor: aMessageProcessor replyingTo: aRequestMessage ofType: msgType [
+	| myReply receiver|
+	"This is so complex but you send a msg trough a socket and you receive asynchronously by other
+	so the solution is to evaluate each message and check if it is the reply for our message.
+	#handleFor returns a collection of (method) handlers, first handler receiver should be the 
+	assigned IPMsgHandler in the #initialize of the processor, so the first handler added to the 
+	processor is the correct one...this design sucks"
+	myReply := nil.
+	receiver := ((aMessageProcessor handlerFor:msgType) first) receiver.
+	receiver onMessage:msgType do:[ :replyMsg |
+	 (((replyMsg parentHeader at:#msg_id) = aRequestMessage uuid) and:[
+		(replyMsg header at:#msg_type) = msgType ]) ifTrue:[ myReply := replyMsg] ].
+	[ myReply isNil ] whileTrue:[ (Delay forMilliseconds: 50) wait ].
+	receiver removeListenerFor: msgType.
+	^ myReply 
+]
+
+{ #category : #'private-messaging' }
 IPKernelProxy >> receiveMessageOnSocket: aZmqSocket [
 	|more messageData |
+	mutex critical:[
 	self wireMessage: IPWireMessage new.
 	more := 1.
-	
 	[more = 1] whileTrue:[
 			messageData := aZmqSocket waitTilReceive.  
 			more:= aZmqSocket getOption: ZmqApiConstants zmqRcvMore.
 			messageData isEmpty 
 							ifTrue:[							
 									Processor yield.
-									(Delay forMilliseconds: 100) wait ]
+									(Delay forMilliseconds: 50) wait ]
 							ifFalse:[ self pushMessageFrame:messageData ].
-							more = 0 ifTrue: [ ^ IPMsg newFromWireMessage: self wireMessage] ] .	
+							more = 0 ifTrue: [ ^ IPMsg newFromWireMessage: self wireMessage] ] ].	
 ]
 
 { #category : #'private-messaging' }
@@ -531,43 +519,64 @@ IPKernelProxy >> sendMessage: anIPRequest onSocket: aZmqSocket [
 	anIPRequest wireMessage: aRequest.
 	self session currentMessage: anIPRequest.
 	aZmqSocket ifNotNil: [ 
-		aZmqSocket  
+		mutex critical:[
+			aZmqSocket  
 				send: aRequest uuid flags:ZmqApiConstants  zmqSendMore;
 	 			send: self messageDelimiter asByteArray flags:ZmqApiConstants  zmqSendMore;
  				send: aRequest hmac flags:ZmqApiConstants  zmqSendMore;
  				send: aRequest header flags:ZmqApiConstants  zmqSendMore;
 				send: aRequest parentHeader flags:ZmqApiConstants  zmqSendMore;
  				send: aRequest metadata flags:ZmqApiConstants  zmqSendMore;
-				send: aRequest content ]
+				send: aRequest content ] ].
+
 ]
 
 { #category : #accessing }
 IPKernelProxy >> session [
-	|aMsg|
+	| aFutureMsg |
 	^ session ifNil:[
 		"need to get the id session from the kernel"
 		session := IPSession new 
 							username: self username;
 							id: UUID new hex asString asUppercase;
 							startTime: DateAndTime now.
-		aMsg := self kernelInfoRequest.
-		session := IPSession getSessionForMessage: aMsg.
-		session publisher: self.
+		
+		aFutureMsg := self kernelInfoRequest.
+		
+		aFutureMsg 
+			onSuccessDo:[ :aMsg |
+				session := IPSession getSessionForMessage: aMsg.
+				session publisher: self ];
+			onFailureDo:[ :err | err signal ].
+		[aFutureMsg isFinished] whileFalse: [(Delay forMilliseconds: 50) wait].
 		session  ]
 ]
 
 { #category : #initialization }
+IPKernelProxy >> startControlProcessor [
+	controlProcessor := IPControlDealerProcessor new: control sharedKey: sharedKey.
+	self addHandlerToControlDealer:  IPControlMsgHandler new.
+	
+	"I am the responsible for reply message handling in control socket
+	and also a subclass can handle a reply message"
+	
+
+]
+
+{ #category : #initialization }
 IPKernelProxy >> startHeartbeatThread [
-	[	|echoData stop|
+
+	[	|echoData  error|
 		echoData := #[1 2 3]. 
 		stop := false.
-		[ stop ] whileFalse:[
+		error:=false.
+		[ stop | error] whileFalse:[
 			heartbeat send: echoData.
 			(Delay forMilliseconds: 5000) wait.
 			heartbeat receiveIfAvailable: [ :echo|  
 				(echoData = echo) ifFalse:[
-					stop := true ] ] ].
-		IPHeartbeatError signal. 
+					error := true ] ] ].
+		error ifTrue:[ IPHeartbeatError signal]. 
 	] forkNamed:'ipharo-proxy-echo' 
 ]
 
@@ -581,15 +590,34 @@ IPKernelProxy >> startKernel [
 ]
 
 { #category : #initialization }
-IPKernelProxy >> startSubscriberProcessor [
-	subscriber := IPIOSubscriberProcessor new: ioPub sharedKey: sharedKey.
-	"I am the responsible for reply message handling in iopub
-	and also a subclass can hancle a reply message"
-	subscriber addHandlersFromPragmasInClass: self class superclass handlerInstance: self.
-	subscriber addHandlersFromPragmasInClass: self class handlerInstance: self  
+IPKernelProxy >> startShellProcessor [
+	shellProcessor := IPShellDealerProcessor new: shell sharedKey: sharedKey.
+	"I am the responsible for reply message handling in shell socket
+	and also a subclass can handle a reply message"
+	
+
 ]
 
-{ #category : #'message-handlers' }
+{ #category : #initialization }
+IPKernelProxy >> startStdInProcessor [
+	stdinProcessor := IPStdInDealerProcessor new: stdin sharedKey: sharedKey.
+	"I am the responsible for reply message handling in shell socket
+	and also a subclass can handle a reply message"
+	
+
+]
+
+{ #category : #initialization }
+IPKernelProxy >> startSubscriberProcessor [
+	ioSubProcessor := IPIOPubSubscriberProcessor new: ioSub sharedKey: sharedKey.
+	"I am the responsible for reply message handling in iopub
+	and also a subclass can handle a reply message
+	You should add your habler class, I only respond to status msg"
+	ioSubProcessor addHandlersFromPragmasInClass: self class superclass handlerInstance: self.
+	ioSubProcessor addHandlersFromPragmasInClass: self class handlerInstance: self  
+]
+
+{ #category : #'public-api-iopub-sub' }
 IPKernelProxy >> statusReply: anIPMessage [
 	<ipharo: #status>
 	
@@ -604,16 +632,16 @@ IPKernelProxy >> statusReply: anIPMessage [
 IPKernelProxy >> stop [
 	self kernelShutdown.
 	LibC pipeClose: kernelPipe.
+	stop := true.
+	ioSubProcessor stop.
+	shellProcessor stop.
+	stdinProcessor stop.
+	controlProcessor stop.
 	"close sockets"
+	ioSub close.
 	shell close.
-	ioPub close.
-	control close.
 	stdin close.
-	subscriber stop.
-	
-
-	
-
+	control close.
 ]
 
 { #category : #accessing }

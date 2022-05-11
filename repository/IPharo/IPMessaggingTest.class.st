@@ -54,7 +54,7 @@ IPMessaggingTest >> setUp [
 
 { #category : #'as yet unclassified' }
 IPMessaggingTest >> shellProcessor [
-	^ IPShellProcessor new.
+	^ IPShellRouterProcessor new.
 ]
 
 { #category : #initialization }

@@ -3,21 +3,22 @@ I'm a message processor for the Shell channel, I process messages comming from t
 Almost all of the messages are processed by me, specially remark to the execute request, Comm messaging (for widgets), complete, inspect... 
 "
 Class {
-	#name : #IPShellProcessor,
+	#name : #IPShellRouterProcessor,
 	#superclass : #IPMessageProcessor,
 	#instVars : [
-		'completer'
+		'completer',
+		'currentEvaluatedProcess'
 	],
 	#category : #'IPharo-Core'
 }
 
 { #category : #accessing }
-IPShellProcessor >> completion [
+IPShellRouterProcessor >> completion [
 	^ completer ifNil:[completer := IPCompletion new]
 ]
 
 { #category : #running }
-IPShellProcessor >> execute: aWireMessage [
+IPShellRouterProcessor >> execute: aWireMessage [
 	| message session|
 
 	message := IPMsg newFromWireMessage: aWireMessage.
@@ -28,7 +29,7 @@ IPShellProcessor >> execute: aWireMessage [
 ]
 
 { #category : #'message-handling-comm' }
-IPShellProcessor >> executeCommCloseRequest: aMessage [
+IPShellRouterProcessor >> executeCommCloseRequest: aMessage [
 	<ipharo: #comm_close>
 	| data comm |
 	comm :=(aMessage session commManager commChannelAt:(aMessage content at:#comm_id)). 
@@ -39,7 +40,7 @@ IPShellProcessor >> executeCommCloseRequest: aMessage [
 ]
 
 { #category : #'message-handling-comm' }
-IPShellProcessor >> executeCommInfoRequest: aMessage [
+IPShellRouterProcessor >> executeCommInfoRequest: aMessage [
 	<ipharo:#comm_info_request>
 	
 	self sendMessage: aMessage session commInfoReplyMessage.
@@ -47,7 +48,7 @@ IPShellProcessor >> executeCommInfoRequest: aMessage [
 ]
 
 { #category : #'message-handling-comm' }
-IPShellProcessor >> executeCommMsgRequest: aMessage [ 
+IPShellRouterProcessor >> executeCommMsgRequest: aMessage [ 
 	<ipharo:#comm_msg> 
 	
 	| comm data |
@@ -60,7 +61,7 @@ IPShellProcessor >> executeCommMsgRequest: aMessage [
 ]
 
 { #category : #'message-handling-comm' }
-IPShellProcessor >> executeCommOpenRequest: aMessage [
+IPShellRouterProcessor >> executeCommOpenRequest: aMessage [
 	<ipharo: #comm_open>
 	| instance |
 	instance := IPComm new:(aMessage content at:#comm_id) onSession: aMessage session.
@@ -74,7 +75,7 @@ IPShellProcessor >> executeCommOpenRequest: aMessage [
 ]
 
 { #category : #private }
-IPShellProcessor >> executeCompleteRequest: aMessage [
+IPShellRouterProcessor >> executeCompleteRequest: aMessage [
 	<ipharo: #complete_request>
 	
 	| response completionList session |
@@ -91,24 +92,26 @@ IPShellProcessor >> executeCompleteRequest: aMessage [
 ]
 
 { #category : #'message-handling' }
-IPShellProcessor >> executeExecuteRequest: aMessage [
+IPShellRouterProcessor >> executeExecuteRequest: aMessage [
 	<ipharo: #execute_request>
 	
 	| response session  |
 
 	session :=  aMessage session.
 	self publish: (session executeInputMessage	code:aMessage content code).	
-	[ session compileAndEvaluate: aMessage.  
+	[ 
+	currentEvaluatedProcess := [session compileAndEvaluate: aMessage.  
 	  self sendMessage: session executionOkMessage.
-	  session increaseExecutionCounter] 
-	on: Exception do:[ :e | 
+	  session increaseExecutionCounter] forkAndWait .
+	
+	] on: Exception do:[ :e | 
 			response := (session executionErrorMessage 	exceptionObject: e).
 			self publish: (session executeErrorMessage content: response content).
 			self sendMessage: response ]
 ]
 
 { #category : #'message-handling' }
-IPShellProcessor >> executeHistoryRequest: aMessage [
+IPShellRouterProcessor >> executeHistoryRequest: aMessage [
 	<ipharo: #history_request>
 	
 	| session historyMsg result from to pattern |
@@ -140,7 +143,7 @@ IPShellProcessor >> executeHistoryRequest: aMessage [
 ]
 
 { #category : #'message-handling' }
-IPShellProcessor >> executeInspectRequest: aMessage [
+IPShellRouterProcessor >> executeInspectRequest: aMessage [
 	<ipharo: #inspect_request>
 	
 	| session inspectReplyMsg code|
@@ -158,7 +161,7 @@ IPShellProcessor >> executeInspectRequest: aMessage [
 ]
 
 { #category : #'message-handling' }
-IPShellProcessor >> executeIsCompleteRequest: aMessage [
+IPShellRouterProcessor >> executeIsCompleteRequest: aMessage [
 	<ipharo: #is_complete_request>
 	
 	| session isCompleteReplyMsg |
@@ -171,7 +174,7 @@ IPShellProcessor >> executeIsCompleteRequest: aMessage [
 ]
 
 { #category : #'message-handling' }
-IPShellProcessor >> executeKernelInfoRequest: aMessage [
+IPShellRouterProcessor >> executeKernelInfoRequest: aMessage [
 	<ipharo: #kernel_info_request>
 	
 	| session|
@@ -181,7 +184,7 @@ IPShellProcessor >> executeKernelInfoRequest: aMessage [
 ]
 
 { #category : #'message-handling-comm' }
-IPShellProcessor >> executeRequestState: aMessage [ 
+IPShellRouterProcessor >> executeRequestState: aMessage [ 
 	<ipharo: #request_state>
 	
 	(aMessage session commManager commChannelAt:(aMessage content at:#comm_id)) 
@@ -191,7 +194,7 @@ IPShellProcessor >> executeRequestState: aMessage [
 ]
 
 { #category : #'message-handling-comm' }
-IPShellProcessor >> executeUpdateState: aMessage [ 
+IPShellRouterProcessor >> executeUpdateState: aMessage [ 
    <ipharo:#update_state>
 
 	| response | 
@@ -201,7 +204,7 @@ IPShellProcessor >> executeUpdateState: aMessage [
 ]
 
 { #category : #utils }
-IPShellProcessor >> inspectablePart: aStringWithSourCode pos: cursorPos [
+IPShellRouterProcessor >> inspectablePart: aStringWithSourCode pos: cursorPos [
 	| stopBackCharacters stopForwardCharacters pos start end |
 	stopBackCharacters := { $=. $[. $(. ${. $.. $|. }.
 	stopForwardCharacters := { $.. Character space }.
@@ -218,7 +221,14 @@ IPShellProcessor >> inspectablePart: aStringWithSourCode pos: cursorPos [
 	^ aStringWithSourCode copyFrom: start to: end 
 ]
 
+{ #category : #utils }
+IPShellRouterProcessor >> interrupt [ 
+	"interrupt the evaluation in an executionRequest"
+	currentEvaluatedProcess ifNotNil:
+	[ currentEvaluatedProcess isTerminated ifFalse:[ currentEvaluatedProcess terminate ] ]
+]
+
 { #category : #accessing }
-IPShellProcessor >> threadName [
+IPShellRouterProcessor >> threadName [
 	^ 'ipharo-shell' 
 ]

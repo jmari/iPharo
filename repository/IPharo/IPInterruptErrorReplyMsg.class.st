@@ -1,20 +1,20 @@
 Class {
-	#name : #IPExecutionErrorMsg,
-	#superclass : #IPExecuteRequestReplyMsg,
+	#name : #IPInterruptErrorReplyMsg,
+	#superclass : #IPInterruptReplyMsg,
 	#instVars : [
 		'exceptionObject'
 	],
-	#category : #'IPharo-Messages-Shell'
+	#category : #'IPharo-Messages-Control'
 }
 
 { #category : #'instance creation' }
-IPExecutionErrorMsg class >> newWithSequenceNumber: aSeqNum [ 
+IPInterruptErrorReplyMsg class >> newWithSequenceNumber: aSeqNum [ 
 		self error:'use newWithSequenceNumber:anInteger error:anExceptionObject'
 				
 ]
 
 { #category : #'instance creation' }
-IPExecutionErrorMsg class >> newWithSequenceNumber: aSeqNum error: AnException [
+IPInterruptErrorReplyMsg class >> newWithSequenceNumber: aSeqNum error: AnException [
 	^ self basicNew 
 				executionCount: aSeqNum;
 				exceptionObject: AnException;
@@ -23,18 +23,18 @@ IPExecutionErrorMsg class >> newWithSequenceNumber: aSeqNum error: AnException [
 ]
 
 { #category : #initialization }
-IPExecutionErrorMsg >> exceptionObject [
+IPInterruptErrorReplyMsg >> exceptionObject [
 	^ exceptionObject 
 ]
 
 { #category : #initialization }
-IPExecutionErrorMsg >> exceptionObject: anException [
+IPInterruptErrorReplyMsg >> exceptionObject: anException [
 	exceptionObject := anException.
 	self fillContent 
 ]
 
 { #category : #accessing }
-IPExecutionErrorMsg >> fillContent [
+IPInterruptErrorReplyMsg >> fillContent [
 
 	self content at:#ename put: self exceptionObject className.
 	self content at:#evalue put: self exceptionObject messageText asString.
@@ -43,12 +43,12 @@ IPExecutionErrorMsg >> fillContent [
 ]
 
 { #category : #accessing }
-IPExecutionErrorMsg >> status [
+IPInterruptErrorReplyMsg >> status [
 	^ #error
 ]
 
 { #category : #'as yet unclassified' }
-IPExecutionErrorMsg >> traceback [
+IPInterruptErrorReplyMsg >> traceback [
 	|aStream|
 	aStream := ReadWriteStream on:String new.
 	aStream 

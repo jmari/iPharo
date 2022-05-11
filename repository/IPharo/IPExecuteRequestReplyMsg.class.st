@@ -1,5 +1,5 @@
 Class {
-	#name : #IPExecuteRequestReplayMsg,
+	#name : #IPExecuteRequestReplyMsg,
 	#superclass : #IPMsg,
 	#instVars : [
 		'sequenceNumber'
@@ -8,24 +8,24 @@ Class {
 }
 
 { #category : #'instance creation' }
-IPExecuteRequestReplayMsg class >> newWithSequenceNumber: aSeqNum [
+IPExecuteRequestReplyMsg class >> newWithSequenceNumber: aSeqNum [
 	^ self basicNew 
 				executionCount: aSeqNum;
 				initialize
 ]
 
 { #category : #accessing }
-IPExecuteRequestReplayMsg >> executionCount [
+IPExecuteRequestReplyMsg >> executionCount [
 	^ self content execution_count
 ]
 
 { #category : #accessing }
-IPExecuteRequestReplayMsg >> executionCount: anInteger [
+IPExecuteRequestReplyMsg >> executionCount: anInteger [
 	self content execution_count: anInteger
 ]
 
 { #category : #initialization }
-IPExecuteRequestReplayMsg >> initialize [
+IPExecuteRequestReplyMsg >> initialize [
 	super initialize.
 	self msgType: #execute_reply.
 	self parentHeader: '{}' asByteArray .
@@ -41,6 +41,6 @@ IPExecuteRequestReplayMsg >> initialize [
 ]
 
 { #category : #accessing }
-IPExecuteRequestReplayMsg >> status [
+IPExecuteRequestReplyMsg >> status [
 	self subclassResponsibility 	
 ]

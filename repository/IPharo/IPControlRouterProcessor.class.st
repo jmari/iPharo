@@ -4,7 +4,7 @@ I am responsible for debugger and shutdown messages.
  
 "
 Class {
-	#name : #IPControlProcessor,
+	#name : #IPControlRouterProcessor,
 	#superclass : #IPMessageProcessor,
 	#instVars : [
 		'debuggerServer',
@@ -20,7 +20,7 @@ Class {
 }
 
 { #category : #execution }
-IPControlProcessor >> execute: aWireMessage [
+IPControlRouterProcessor >> execute: aWireMessage [
 	| message session|
 	
 	message := IPMsg newFromWireMessage: aWireMessage.
@@ -33,7 +33,7 @@ IPControlProcessor >> execute: aWireMessage [
 ]
 
 { #category : #'message-handling' }
-IPControlProcessor >> executeDebugRequest: aMessage [
+IPControlRouterProcessor >> executeDebugRequest: aMessage [
 	<ipharo: #debug_request>
 	| clnSocket response data dapRequest session |
 
@@ -73,7 +73,24 @@ IPControlProcessor >> executeDebugRequest: aMessage [
 ]
 
 { #category : #'message-handling' }
-IPControlProcessor >> executeShutdown: aMessage [
+IPControlRouterProcessor >> executeInterruptRequest: aMessage [
+	<ipharo: #interrupt_request>
+	| session response |
+	session := aMessage session.
+	
+	[	IPharoKernel instance shellProcessor interrupt. 
+		response := session interruptReplyMsg.
+		self sendMessage: response ] 
+	on:Exception do:[ :e | 
+			response := session interruptErrorReplyMsg.
+			response := (response	exceptionObject: e).
+			self publish: (session executeErrorMessage content: response content).
+			self sendMessage: response ].
+
+]
+
+{ #category : #'message-handling' }
+IPControlRouterProcessor >> executeShutdown: aMessage [
 	<ipharo: #shutdown_request>
 	| session response |
 	session := aMessage session.
@@ -84,6 +101,6 @@ IPControlProcessor >> executeShutdown: aMessage [
 ]
 
 { #category : #accessing }
-IPControlProcessor >> threadName [
+IPControlRouterProcessor >> threadName [
 	^ 'ipharo-control' 
 ]

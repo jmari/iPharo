@@ -79,7 +79,7 @@ IPMessageProcessor >> execute: anIPMessage [
 { #category : #'message-handlers' }
 IPMessageProcessor >> handleRequest: anIPMsg [
    | collectionOfHandlers |
-	[collectionOfHandlers := self handlerFor: anIPMsg.
+	[collectionOfHandlers := self handlerFor: anIPMsg msgType.
 	 collectionOfHandlers do:[ :aHandler |
 		aHandler executeWithArguments: anIPMsg ] ]
 		on: Error
@@ -87,11 +87,11 @@ IPMessageProcessor >> handleRequest: anIPMsg [
 ]
 
 { #category : #'message-handlers' }
-IPMessageProcessor >> handlerFor: aIPMsg [
+IPMessageProcessor >> handlerFor: msgType [
 	| collectionOfHandlers |
 	collectionOfHandlers := handlers
-		select:  [ :handler | handler methodName = aIPMsg msgType ].
-	collectionOfHandlers isEmpty ifTrue: [ IPNonExistentHandler signal: aIPMsg msgType ].
+		select:  [ :handler | handler methodName =  msgType ].
+	collectionOfHandlers isEmpty ifTrue: [ IPNonExistentHandler signal: msgType ].
 	^ collectionOfHandlers
 ]
 
@@ -125,6 +125,7 @@ IPMessageProcessor >> processMessage [
 
 { #category : #'comm handlers' }
 IPMessageProcessor >> publish: aResult [
+aResult inspect.
 	IPharoKernel instance publisher publish:  aResult 
 ]
 

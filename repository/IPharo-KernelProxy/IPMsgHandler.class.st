@@ -4,10 +4,13 @@ Class {
 	#instVars : [
 		'messageListeners'
 	],
-	#category : #'IPharo-KernelProxy-Core'
+	#classVars : [
+		'EventQueue'
+	],
+	#category : #'IPharo-KernelProxy-MessageHandling'
 }
 
-{ #category : #convenience }
+{ #category : #'event handling - private' }
 IPMsgHandler >> evaluateListenersFor: anIPMessage [
 	(messageListeners select:[ :pair | pair key = anIPMessage msgType ]) do:[:pair |
 		pair value value: anIPMessage ]
@@ -24,8 +27,14 @@ IPMsgHandler >> initialize [
 	messageListeners := OrderedCollection new.
 ]
 
-{ #category : #convenience }
-IPMsgHandler >> on: msgType do: oneParameterBlock [
-	(self handlers includes: msgType) ifFalse:[ Error signal:'This object can not handle a message type:', msgType asString].  
+{ #category : #'event handling' }
+IPMsgHandler >> onMessage: msgType do: oneParameterBlock [
+	(self handlers includes: msgType) ifFalse:[ IPNonExistentHandler signal:'This object can not handle a message type:', msgType asString].  
 	messageListeners add: (msgType->oneParameterBlock)
+]
+
+{ #category : #'event handling' }
+IPMsgHandler >> removeListenerFor: msgType [
+	(self handlers includes: msgType) ifFalse:[ IPNonExistentHandler signal:'This object can not handle a message type:', msgType asString].  
+	messageListeners removeAllSuchThat:[:association|  association key = msgType ]
 ]
