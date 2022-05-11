@@ -34,7 +34,7 @@ IPXPython3ProxyTest >> tearDown [
 IPXPython3ProxyTest >> testClientWidget [
 	| widget handler|
 	handler := IPWidgetMsgHandler new. 
-	kernelProxy addHandler:  handler.
+	kernelProxy addHandlerToIOSubscriber:  handler.
 	widget := kernelProxy widgetFactory floatProgress. 
 	widget setProperty: #value value: 5.0.
 
@@ -61,8 +61,8 @@ IPXPython3ProxyTest >> testKernelInfoRequest [
 IPXPython3ProxyTest >> testKernelWidget [
 	| widget handler |
 	handler := IPWidgetMsgHandler new. 
-	handler on:#comm_msg do:[:aMessage | aMessage inspect ].
-	kernelProxy addHandler:  handler.
+	handler onMessage:#comm_msg do:[:aMessage | aMessage inspect ].
+	kernelProxy addHandlerToIOSubscriber:  handler.
 	kernelProxy executeRequest: 'import ipywidgets as widgets
 w = widgets.IntSlider(
 	value = 7,
@@ -78,8 +78,7 @@ w = widgets.IntSlider(
 )
 w.value=5
 w.disabled = True
-display(w)'
-onSucceed:[ :am | am inspect ].
+display(w)'.
 (Delay forMilliseconds: 2000) wait.
 	
 	
