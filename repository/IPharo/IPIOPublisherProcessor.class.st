@@ -34,7 +34,7 @@ IPIOPublisherProcessor >> publish: anIPMessage [
 	in the correct sequencial order. This message overrides the default publish call
 	who actually calls this same message but always on the same publisher instance"
 	| aMessage |
-	anIPMessage inspect.
+
 	aMessage := IPWireMessage newFromMessage: anIPMessage.
 	mutex critical:[
 	self zmqSocket  

@@ -125,7 +125,7 @@ IPMessageProcessor >> processMessage [
 
 { #category : #'comm handlers' }
 IPMessageProcessor >> publish: aResult [
-aResult inspect.
+
 	IPharoKernel instance publisher publish:  aResult 
 ]
 
