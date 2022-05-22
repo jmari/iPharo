@@ -24,7 +24,7 @@ IPWidgetMsgHandler >> commCloseHandler: anIPMessage [
 IPWidgetMsgHandler >> commMessageHandler: anIPMessage [
 	<ipharo: #comm_msg>
 	| comm data |
-	anIPMessage inspect.
+
 	comm :=(anIPMessage session commManager commChannelAt:(anIPMessage content at:#comm_id)). 
 	(anIPMessage content at:#target_name ifAbsent:[ nil ]) = self targetName ifFalse:[ ^ nil ].
 	data := anIPMessage content at:#data.

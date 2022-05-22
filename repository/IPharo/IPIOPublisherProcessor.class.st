@@ -50,8 +50,8 @@ IPIOPublisherProcessor >> publish: anIPMessage [
 { #category : #'as yet unclassified' }
 IPIOPublisherProcessor >> receiveWireMessage [
 	"Do nothing, it is the publisher"
-		Processor yield.
-		(Delay forMilliseconds: 500) wait.
+	Processor yield.
+		
 ]
 
 { #category : #'as yet unclassified' }

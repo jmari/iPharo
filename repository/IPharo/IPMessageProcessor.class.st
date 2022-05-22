@@ -15,7 +15,8 @@ Class {
 		'stop',
 		'wireMessage',
 		'handlers',
-		'sharedKey'
+		'sharedKey',
+		'process'
 	],
 	#category : #'IPharo-Core'
 }
@@ -149,7 +150,7 @@ IPMessageProcessor >> receiveWireMessage [
 							messageData isEmpty 
 							ifTrue:[							
 									Processor yield.
-									(Delay forMilliseconds: 500) wait ]
+									(Delay forMilliseconds: 50) wait ]
 							ifFalse:[ self pushMessageFrame:messageData ].
 							more = 0 ifTrue: [ self processMessage ] ].	
 ]
@@ -181,7 +182,7 @@ IPMessageProcessor >> sharedKey: sharedKeyString [
 
 { #category : #'as yet unclassified' }
 IPMessageProcessor >> startThread [
-	[	|more|
+	process := [	|more|
 		self wireMessage: IPWireMessage new.
 		self threadStarted.
 		more := 1.
@@ -193,7 +194,10 @@ IPMessageProcessor >> startThread [
 
 { #category : #accessing }
 IPMessageProcessor >> stop [
-	stop := true
+	stop := true.
+	(Delay forMilliseconds: 500) wait.
+	process terminate.
+	 
 ]
 
 { #category : #accessing }

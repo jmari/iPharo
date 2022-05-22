@@ -25,7 +25,8 @@ Class {
 		'controlProcessor',
 		'stdinProcessor',
 		'mutex',
-		'stop'
+		'stop',
+		'echoProcess'
 	],
 	#category : #'IPharo-KernelProxy-Core'
 }
@@ -268,6 +269,12 @@ IPKernelProxy >> defaultKernelFileContents [
 	}'
 ]
 
+{ #category : #'private-messaging' }
+IPKernelProxy >> defaultTimeOut [ 
+	"in ms"
+	^ 2000
+]
+
 { #category : #'kernel-management' }
 IPKernelProxy >> displayName [
 	"display name can be used by the front to display the kernel name"
@@ -287,16 +294,30 @@ IPKernelProxy >> executableOptions [
 ]
 
 { #category : #'public-api-shell-dealer' }
-IPKernelProxy >> executeRequest: aStringWithCode [
-	| queryMessage |
+IPKernelProxy >> executeDebugRequest: aStringWithCode [
+	| queryMessage ioSubResponse  |
 	queryMessage := IPExecuteRequestMsg new.
 	queryMessage code: aStringWithCode.
-	^ [ self sendMessage: queryMessage  onSocket: shell.
-		 self receiveMessageOnProcessor: ioSubProcessor  replyingTo: queryMessage ofType: #execute_result ] future
+	queryMessage := ioSubResponse := nil. 
+	^  self sendMessage: queryMessage  onSocket: shell.
 	
-	
+]
 
-	
+{ #category : #'public-api-shell-dealer' }
+IPKernelProxy >> executeRequest: aStringWithCode [
+	| queryMessage ioSubResponse controlResponse p1 p2 |
+	queryMessage := IPExecuteRequestMsg new.
+	queryMessage code: aStringWithCode.
+	controlResponse := ioSubResponse := nil. 
+	^ [ self sendMessage: queryMessage  onSocket: shell.
+		p1:=[ ioSubResponse := self receiveMessageOnProcessor: ioSubProcessor  replyingTo: queryMessage ofType: #execute_result ] fork.
+		p2:=[ controlResponse := self receiveMessageOnProcessor: ioSubProcessor  replyingTo: queryMessage ofType: #debug_event] fork. 
+		[ ioSubResponse isNil & controlResponse isNil ] whileTrue:[
+								( Delay forMilliseconds: 10 ) wait].
+		p1 terminate.
+		p2 terminate.
+		ioSubResponse notNil ifTrue:[ ioSubResponse ] ifFalse:[ controlResponse ]
+		] future
 ]
 
 { #category : #'public-api-shell-dealer' }
@@ -419,7 +440,7 @@ IPKernelProxy >> kernelInfoRequest [
 	
 ]
 
-{ #category : #'public-api' }
+{ #category : #'public-api-control-dealer' }
 IPKernelProxy >> kernelShutdown [
 	| message shutdownMsg |
 	message := IPKernelShutdownMsg new.
@@ -475,18 +496,21 @@ IPKernelProxy >> pushMessageFrame:messageData [
 
 { #category : #'private-messaging' }
 IPKernelProxy >> receiveMessageOnProcessor: aMessageProcessor replyingTo: aRequestMessage ofType: msgType [
-	| myReply receiver|
+	| myReply receiver timeOut |
 	"This is so complex but you send a msg trough a socket and you receive asynchronously by other
 	so the solution is to evaluate each message and check if it is the reply for our message.
 	#handleFor returns a collection of (method) handlers, first handler receiver should be the 
 	assigned IPMsgHandler in the #initialize of the processor, so the first handler added to the 
 	processor is the correct one...this design sucks"
 	myReply := nil.
+	timeOut:= 0.
 	receiver := ((aMessageProcessor handlerFor:msgType) first) receiver.
 	receiver onMessage:msgType do:[ :replyMsg |
 	 (((replyMsg parentHeader at:#msg_id) = aRequestMessage uuid) and:[
 		(replyMsg header at:#msg_type) = msgType ]) ifTrue:[ myReply := replyMsg] ].
-	[ myReply isNil ] whileTrue:[ (Delay forMilliseconds: 50) wait ].
+	[ myReply isNil and:[timeOut < self defaultTimeOut ] ]  whileTrue:[ 
+		(Delay forMilliseconds: 10) wait. 
+		timeOut := timeOut + 10  ].
 	receiver removeListenerFor: msgType.
 	^ myReply 
 ]
@@ -566,7 +590,7 @@ IPKernelProxy >> startControlProcessor [
 { #category : #initialization }
 IPKernelProxy >> startHeartbeatThread [
 
-	[	|echoData  error|
+	echoProcess := [	|echoData  error|
 		echoData := #[1 2 3]. 
 		stop := false.
 		error:=false.
@@ -585,7 +609,7 @@ IPKernelProxy >> startKernel [
 	"starts the Kernel"
 	kernelStatus := #starting.
 	self buildConnectionConfigFile.
-"	OSEnvironment current setEnv: 'PYTHONPATH' value:'/Users/Cat/anaconda3/lib/python3.6/'."
+	OSEnvironment current setEnv: 'PYTHONPATH' value:'/Users/Cat/anaconda3/lib/python3.6/'.
 	kernelPipe := LibC pipe: self buildKernelStartCommand mode: 'r'.
 ]
 
@@ -642,6 +666,7 @@ IPKernelProxy >> stop [
 	shell close.
 	stdin close.
 	control close.
+	heartbeat close.
 ]
 
 { #category : #accessing }

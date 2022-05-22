@@ -1,7 +1,7 @@
-Extension { #name : #IPKernelProxyTest }
+Extension { #name : #IPPython3KernelProxyTest }
 
 { #category : #'*IPharo-DAP' }
-IPKernelProxyTest >> testDebugInfoRequest [
+IPPython3KernelProxyTest >> testDebugInfoRequest [
 	| dapMsg debugInfoMessage response |
 	dapMsg := DAPDebugInfoRequest new.
 	debugInfoMessage := kernelProxy debugRequest: dapMsg.
@@ -17,7 +17,7 @@ IPKernelProxyTest >> testDebugInfoRequest [
 ]
 
 { #category : #'*IPharo-DAP' }
-IPKernelProxyTest >> testFullDebugSeqRequest [
+IPPython3KernelProxyTest >> testFullDebugSeqRequest [
 	| dapMsg debugInfoMessage path stackFrame response |
 	dapMsg := DAPDebugInfoRequest new.
 	debugInfoMessage := kernelProxy debugRequest: dapMsg.

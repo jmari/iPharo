@@ -301,9 +301,9 @@ ZmqSocket >> waitTilReceive [
 							ifTrue:[msg := messageData]
 							ifFalse:[							
 									Processor yield.
-									tm := tm - 100.
+									tm := tm - 10.
 									tm < 0 ifTrue:[ ZmqTimeoutError new signal ].
-									(Delay forMilliseconds: 100) wait].
+									(Delay forMilliseconds: 10) wait].
 							]].
 	^ msg
 		

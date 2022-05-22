@@ -672,9 +672,11 @@ IPSession >> startDapResponder [
 				ifTrue:[ 
 					event := self debugEventMsg.
 					event content: message.
+					event inspect.
 					IPharoKernel instance publisher publish: event ]
 				ifFalse:[	
 					response := self debugReplyMsg.
+					response inspect.
 					response content: message.
 					IPharoKernel instance control sendMessage: response ] ] ] ] 
 	forkAt: Processor systemBackgroundPriority named:'ipharo-dapResponder'

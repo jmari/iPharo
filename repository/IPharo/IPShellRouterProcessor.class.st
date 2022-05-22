@@ -96,14 +96,12 @@ IPShellRouterProcessor >> executeExecuteRequest: aMessage [
 	<ipharo: #execute_request>
 	
 	| response session  |
-
 	session :=  aMessage session.
 	self publish: (session executeInputMessage	code:aMessage content code).	
 	[ 
-	currentEvaluatedProcess := [session compileAndEvaluate: aMessage.  
-	  self sendMessage: session executionOkMessage.
-	  session increaseExecutionCounter] forkAndWait .
-	
+		currentEvaluatedProcess := [session compileAndEvaluate: aMessage.  
+	  	self sendMessage: session executionOkMessage.
+	  	session increaseExecutionCounter] forkAndWait .
 	] on: Exception do:[ :e | 
 			response := (session executionErrorMessage 	exceptionObject: e).
 			self publish: (session executeErrorMessage content: response content).
@@ -168,7 +166,7 @@ IPShellRouterProcessor >> executeIsCompleteRequest: aMessage [
 	
 	session := aMessage session.
 	isCompleteReplyMsg := session isCompleteReplayMessage.
-	[ self class compiler source: aMessage content code;parseExpression  ] on:Exception do:[ :e| e inspect.isCompleteReplyMsg content status: 'invalid' ].
+	[ self class compiler source: aMessage content code;parseExpression  ] on:Exception do:[ :e | isCompleteReplyMsg content status: 'invalid' ].
 	self sendMessage: isCompleteReplyMsg
 	
 ]
