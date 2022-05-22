@@ -52,6 +52,20 @@ IPPython3KernelProxyTest >> testClientWidget [
 ]
 
 { #category : #tests }
+IPPython3KernelProxyTest >> testExecuteRequest [
+	| ipMsgResp code response|
+	code :='a=0
+print(a)'.
+	ipMsgResp := kernelProxy executeRequest: code.
+	ipMsgResp 
+		onSuccessDo:[:r | response := r ];
+		onFailureDo: [:e | e inspect].
+	[ ipMsgResp isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+		
+	self assert: (response content data at:'text/plain') equals: '0'.
+]
+
+{ #category : #tests }
 IPPython3KernelProxyTest >> testKernelInfoRequest [
 	| futureInfo response |
 	futureInfo := kernelProxy kernelInfoRequest.

@@ -1,11 +1,11 @@
 Class {
-	#name : #IPIOPubSubscriberMsgHandler,
+	#name : #IPIOSubscriberMsgHandler,
 	#superclass : #IPMsgHandler,
 	#category : #'IPharo-KernelProxy-MessageHandling'
 }
 
 { #category : #'message-handlers' }
-IPIOPubSubscriberMsgHandler >> clearOutputHandler: anIPMessage [
+IPIOSubscriberMsgHandler >> clearOutputHandler: anIPMessage [
 	<ipharo: #clear_output>
 	self evaluateListenersFor: anIPMessage 
 
@@ -14,7 +14,7 @@ IPIOPubSubscriberMsgHandler >> clearOutputHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPIOPubSubscriberMsgHandler >> debugEventHandler: anIPMessage [
+IPIOSubscriberMsgHandler >> debugEventHandler: anIPMessage [
 	<ipharo: #debug_event>
 	self evaluateListenersFor: anIPMessage 
 
@@ -23,7 +23,7 @@ IPIOPubSubscriberMsgHandler >> debugEventHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPIOPubSubscriberMsgHandler >> displayDataHanler: anIPMessage [
+IPIOSubscriberMsgHandler >> displayDataHanler: anIPMessage [
 	<ipharo: #display_data>
 	self evaluateListenersFor: anIPMessage 
 
@@ -32,7 +32,7 @@ IPIOPubSubscriberMsgHandler >> displayDataHanler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPIOPubSubscriberMsgHandler >> errorHandler: anIPMessage [
+IPIOSubscriberMsgHandler >> errorHandler: anIPMessage [
 	<ipharo: #error>
 	self evaluateListenersFor: anIPMessage 
 	
@@ -40,7 +40,7 @@ IPIOPubSubscriberMsgHandler >> errorHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPIOPubSubscriberMsgHandler >> executeInputHandler: anIPMessage [
+IPIOSubscriberMsgHandler >> executeInputHandler: anIPMessage [
 	<ipharo: #execute_input>
 	self evaluateListenersFor: anIPMessage 
 	
@@ -48,7 +48,7 @@ IPIOPubSubscriberMsgHandler >> executeInputHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPIOPubSubscriberMsgHandler >> executeResultHandler: anIPMessage [
+IPIOSubscriberMsgHandler >> executeResultHandler: anIPMessage [
 	<ipharo: #execute_result>
 	self evaluateListenersFor: anIPMessage 
 
@@ -57,7 +57,7 @@ IPIOPubSubscriberMsgHandler >> executeResultHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPIOPubSubscriberMsgHandler >> kernelSatatusHandler: anIPMessage [
+IPIOSubscriberMsgHandler >> kernelSatatusHandler: anIPMessage [
 	<ipharo: #status>
 	self evaluateListenersFor: anIPMessage 
 
@@ -66,7 +66,7 @@ IPIOPubSubscriberMsgHandler >> kernelSatatusHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPIOPubSubscriberMsgHandler >> streamHandler: anIPMessage [
+IPIOSubscriberMsgHandler >> streamHandler: anIPMessage [
 	<ipharo: #stream>
 	self evaluateListenersFor: anIPMessage 
 
@@ -75,7 +75,7 @@ IPIOPubSubscriberMsgHandler >> streamHandler: anIPMessage [
 ]
 
 { #category : #'message-handlers' }
-IPIOPubSubscriberMsgHandler >> updateDisplayDataHandler: anIPMessage [
+IPIOSubscriberMsgHandler >> updateDisplayDataHandler: anIPMessage [
 	<ipharo: #update_display_data>
 	self evaluateListenersFor: anIPMessage 
 

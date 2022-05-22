@@ -3,13 +3,13 @@ I'm a message processor for the iopub subscriber channel, I process messages com
 
 "
 Class {
-	#name : #IPIOPubSubscriberProcessor,
+	#name : #IPIOSubscriberProcessor,
 	#superclass : #IPMessageProcessor,
 	#category : #'IPharo-KernelProxy-Core-Processors'
 }
 
 { #category : #hooks }
-IPIOPubSubscriberProcessor >> execute: aWireMessage [
+IPIOSubscriberProcessor >> execute: aWireMessage [
 	| message session|
 	message := IPMsg newFromWireMessage: aWireMessage.
 	session := message session.
@@ -19,12 +19,12 @@ IPIOPubSubscriberProcessor >> execute: aWireMessage [
 ]
 
 { #category : #initialization }
-IPIOPubSubscriberProcessor >> initialize [ 
+IPIOSubscriberProcessor >> initialize [ 
 	super initialize. 	
-	self addHandlersFromPragmasIn: IPIOPubSubscriberMsgHandler new.
+	self addHandlersFromPragmasIn: IPIOSubscriberMsgHandler new.
 ]
 
 { #category : #accessing }
-IPIOPubSubscriberProcessor >> threadName [
+IPIOSubscriberProcessor >> threadName [
 	^'ipharo-proxy-subscriber'
 ]

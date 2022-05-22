@@ -633,7 +633,7 @@ IPKernelProxy >> startStdInProcessor [
 
 { #category : #initialization }
 IPKernelProxy >> startSubscriberProcessor [
-	ioSubProcessor := IPIOPubSubscriberProcessor new: ioSub sharedKey: sharedKey.
+	ioSubProcessor := IPIOSubscriberProcessor new: ioSub sharedKey: sharedKey.
 	"I am the responsible for reply message handling in iopub
 	and also a subclass can handle a reply message
 	You should add your habler class, I only respond to status msg"
