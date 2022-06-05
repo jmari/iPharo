@@ -644,7 +644,7 @@ IPKernelProxy >> startHeartbeatThread [
 			(Delay forMilliseconds: 5000) wait.
 			heartbeat receiveIfAvailable: [ :echo|  
 				(echoData = echo) ifFalse:[
-					error := true ] ] ].
+					stop ifFalse:[error := true ] ] ] ].
 		error ifTrue:[ IPHeartbeatError signal]. 
 	] forkNamed:'ipharo-proxy-echo' 
 ]

@@ -29,7 +29,7 @@ IPXpythonKernelProxyTest >> sourceCode [
 IPXpythonKernelProxyTest >> tearDown [
 	kernelProxy stop.
 	"give him time to receive the shutDown message"
-	(Delay forMilliseconds: 3000) wait.	
+	(Delay forMilliseconds: 300) wait.	
 ]
 
 { #category : #tests }
