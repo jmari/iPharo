@@ -30,6 +30,7 @@ IPKernelProxyTest >> tearDown [
 	kernelProxy stop.
 	"give him time to receive the shutDown message"
 	(Delay forMilliseconds: 300) wait.	
+	
 ]
 
 { #category : #tests }
@@ -57,15 +58,19 @@ IPKernelProxyTest >> testClientWidget [
 { #category : #tests }
 IPKernelProxyTest >> testExecuteRequest [
 	| ipMsgResp code response|
-	code :='a:=0'.
+	code := self sourceCode.
+	kernelProxy 
+		onExecuteResultPublishedDo: [ :aMessage| Transcript crShow:aMessage content asString ];
+		onStreamPublishedDo: [ :aMessage| Transcript crShow:aMessage content asString ].
 	ipMsgResp := kernelProxy executeRequest: code.
 	ipMsgResp 
 		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e | e inspect].
+		onFailureDo: [:e | e inspect ].
 	[ ipMsgResp isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
-		
-	self assert: (response content data at:'text/plain') equals: '0'.
 	
+	(Delay forMilliseconds:500) wait.
+	self assert: response content status equals: #ok.
+
 ]
 
 { #category : #tests }

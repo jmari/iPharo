@@ -305,18 +305,21 @@ IPKernelProxy >> executeDebugRequest: aStringWithCode [
 
 { #category : #'public-api-shell-dealer' }
 IPKernelProxy >> executeRequest: aStringWithCode [
-	| queryMessage ioSubResponse controlResponse p1 p2 |
+	| queryMessage shellResponse controlResponse p1 p2  |
+	"response could come from control if we are debugging, "
 	queryMessage := IPExecuteRequestMsg new.
 	queryMessage code: aStringWithCode.
-	controlResponse := ioSubResponse := nil. 
+	controlResponse := shellResponse := nil. 
 	^ [ self sendMessage: queryMessage  onSocket: shell.
-		p1:=[ ioSubResponse := self receiveMessageOnProcessor: ioSubProcessor  replyingTo: queryMessage ofType: #execute_result ] fork.
-		p2:=[ controlResponse := self receiveMessageOnProcessor: ioSubProcessor  replyingTo: queryMessage ofType: #debug_event] fork. 
-		[ ioSubResponse isNil & controlResponse isNil ] whileTrue:[
+		p1:=[ shellResponse := self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #execute_reply ] fork.
+		p2:=[ controlResponse := self receiveMessageOnProcessor: ioSubProcessor  replyingTo: queryMessage ofType: #debug_event] fork.  
+		[ shellResponse isNil & controlResponse isNil ] whileTrue:[
 								( Delay forMilliseconds: 10 ) wait].
 		p1 terminate.
 		p2 terminate.
-		ioSubResponse notNil ifTrue:[ ioSubResponse ] ifFalse:[ controlResponse ]
+
+		shellResponse notNil ifTrue:[ shellResponse ] ifFalse:[ 
+			 controlResponse   ]
 		] future
 ]
 
@@ -446,7 +449,8 @@ IPKernelProxy >> kernelShutdown [
 	message := IPKernelShutdownMsg new.
 	self sendMessage: message onSocket: control.
 	shutdownMsg :=self receiveMessageOnSocket: control.
-	IPSession finalizeSession: shutdownMsg header session .
+	
+	IPSession finalizeSession: shutdownMsg header session.
 	^ shutdownMsg
 ]
 
@@ -472,6 +476,42 @@ IPKernelProxy >> metadata [
 	^ self subclassResponsibility 
 ]
 
+{ #category : #'public-api-iosub-display' }
+IPKernelProxy >> onDebugEventPublishedDo: oneParameterBlock [
+
+	ioSubProcessor handlers first receiver onMessage: #debug_event do: oneParameterBlock
+]
+
+{ #category : #'public-api-iosub-display' }
+IPKernelProxy >> onDisplayDataPublishedDo: oneParameterBlock [
+
+	ioSubProcessor handlers first receiver onMessage: #display_data do: oneParameterBlock
+]
+
+{ #category : #'public-api-iosub-display' }
+IPKernelProxy >> onErrorPublishedDo: oneParameterBlock [
+
+	ioSubProcessor handlers first receiver onMessage: #error do: oneParameterBlock
+]
+
+{ #category : #'public-api-iosub-display' }
+IPKernelProxy >> onExecuteResultPublishedDo: oneParameterBlock [
+
+	ioSubProcessor handlers first receiver onMessage: #execute_result do: oneParameterBlock
+]
+
+{ #category : #'public-api-iosub-display' }
+IPKernelProxy >> onStreamPublishedDo: oneParameterBlock [
+
+	ioSubProcessor handlers first receiver onMessage: #stream do: oneParameterBlock
+]
+
+{ #category : #'public-api-iosub-display' }
+IPKernelProxy >> onUpdateDisplayDataPublishedDo: oneParameterBlock [
+
+	ioSubProcessor handlers first receiver onMessage: #update_display_data do: oneParameterBlock
+]
+
 { #category : #finalization }
 IPKernelProxy >> publish: anIPMessage [
 	"kernel proxy send the message trough the shell socket, kernel reply on iopub"
@@ -495,23 +535,28 @@ IPKernelProxy >> pushMessageFrame:messageData [
 ]
 
 { #category : #'private-messaging' }
-IPKernelProxy >> receiveMessageOnProcessor: aMessageProcessor replyingTo: aRequestMessage ofType: msgType [
-	| myReply receiver timeOut |
+IPKernelProxy >> receiveMessageOnProcessor: aMessageProcessor replyingTo: aRequestMessage ofType: aMsgTypeCollection [
+	| myReply receiver timeOut msgTypeCollection |
 	"This is so complex but you send a msg trough a socket and you receive asynchronously by other
 	so the solution is to evaluate each message and check if it is the reply for our message.
 	#handleFor returns a collection of (method) handlers, first handler receiver should be the 
 	assigned IPMsgHandler in the #initialize of the processor, so the first handler added to the 
-	processor is the correct one...this design sucks"
+	processor is what we are looking for"
+	msgTypeCollection := aMsgTypeCollection isString 
+															ifTrue:[ {aMsgTypeCollection} ] 
+															ifFalse:[ aMsgTypeCollection ].
 	myReply := nil.
 	timeOut:= 0.
-	receiver := ((aMessageProcessor handlerFor:msgType) first) receiver.
-	receiver onMessage:msgType do:[ :replyMsg |
-	 (((replyMsg parentHeader at:#msg_id) = aRequestMessage uuid) and:[
-		(replyMsg header at:#msg_type) = msgType ]) ifTrue:[ myReply := replyMsg] ].
+	receiver := aMessageProcessor handlers first receiver.
+	[
+	msgTypeCollection do:[ :msgType |	
+			receiver onMessage:msgType do:[ :replyMsg |
+	 			(((replyMsg parentHeader at:#msg_id) = aRequestMessage uuid) and:[
+				(replyMsg header at:#msg_type) = msgType ]) ifTrue:[ myReply := replyMsg] ] ].
 	[ myReply isNil and:[timeOut < self defaultTimeOut ] ]  whileTrue:[ 
 		(Delay forMilliseconds: 10) wait. 
-		timeOut := timeOut + 10  ].
-	receiver removeListenerFor: msgType.
+		timeOut := timeOut + 10  ]
+	] ensure:[ msgTypeCollection do:[ :msgType |receiver removeListenerFor: msgType ] ].
 	^ myReply 
 ]
 
@@ -566,10 +611,10 @@ IPKernelProxy >> session [
 							startTime: DateAndTime now.
 		
 		aFutureMsg := self kernelInfoRequest.
-		
 		aFutureMsg 
 			onSuccessDo:[ :aMsg |
-				session := IPSession getSessionForMessage: aMsg.
+				"aMsg should not be nil...but sometimes it is and is not because a timeout"
+				aMsg ifNotNil:[ session := aMsg session ].
 				session publisher: self ];
 			onFailureDo:[ :err | err signal ].
 		[aFutureMsg isFinished] whileFalse: [(Delay forMilliseconds: 50) wait].
@@ -641,7 +686,7 @@ IPKernelProxy >> startSubscriberProcessor [
 	ioSubProcessor addHandlersFromPragmasInClass: self class handlerInstance: self  
 ]
 
-{ #category : #'public-api-iopub-sub' }
+{ #category : #'public-api-iosub' }
 IPKernelProxy >> statusReply: anIPMessage [
 	<ipharo: #status>
 	

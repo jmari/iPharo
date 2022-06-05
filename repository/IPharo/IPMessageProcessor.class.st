@@ -96,6 +96,11 @@ IPMessageProcessor >> handlerFor: msgType [
 	^ collectionOfHandlers
 ]
 
+{ #category : #'message-handlers' }
+IPMessageProcessor >> handlers [
+	^ handlers 
+]
+
 { #category : #initialize }
 IPMessageProcessor >> initialize [ 
 	super initialize.
