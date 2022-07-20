@@ -155,7 +155,7 @@ IPKernelProxy >> buildKernelStartCommand [
 
 { #category : #'public-api-shell-dealer' }
 IPKernelProxy >> commCloseRequest: uuid [
-	^ self commCloseRequest: uuid data: SCJsonObject new. 
+	self commCloseRequest: uuid data: SCJsonObject new. 
 ]
 
 { #category : #'public-api-shell-dealer' }
@@ -164,7 +164,7 @@ IPKernelProxy >> commCloseRequest: uuid data: aJsonDict [
 	message := IPCommCloseMsg new.
 	message content at:#comm_id put: uuid.
 	message content at:#data put: aJsonDict.
-	[ self sendMessage: message  onSocket: shell ] future.
+	self sendMessage: message  onSocket: shell.
 	
 ]
 
@@ -178,8 +178,8 @@ IPKernelProxy >> commInfoRequest: targetName [
 	| queryMessage |
 	queryMessage := IPCommInfoRequestMsg new.
 	targetName ifNotNil:[ queryMessage content at:#target_name put: targetName].
-	^ [ self sendMessage: queryMessage onSocket: shell.
-		 self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #comm_info_reply ] future
+	self sendMessage: queryMessage onSocket: shell.
+	^ self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #comm_info_reply 
 	
 	
 
@@ -187,7 +187,7 @@ IPKernelProxy >> commInfoRequest: targetName [
 
 { #category : #'public-api-shell-dealer' }
 IPKernelProxy >> commMessageRequest: uuid [
-	^ self commMessageRequest: uuid data: SCJsonObject new 
+	self commMessageRequest: uuid data: SCJsonObject new 
 ]
 
 { #category : #'public-api-shell-dealer' }
@@ -196,13 +196,13 @@ IPKernelProxy >> commMessageRequest: uuid data: aJsonDict [
 	message := IPCommMsg new.
 	message content at:#comm_id put: uuid.
 	message content at:#data put: aJsonDict.
-	^ [ self sendMessage: message  onSocket: shell ] future.
+	self sendMessage: message  onSocket: shell.
 
 ]
 
 { #category : #'public-api-shell-dealer' }
 IPKernelProxy >> commOpenRequest: uuid [
-	^ self commOpenRequest: uuid targetName: nil 
+	self commOpenRequest: uuid targetName: nil 
 ]
 
 { #category : #'public-api-shell-dealer' }
@@ -211,7 +211,7 @@ IPKernelProxy >> commOpenRequest: uuid targetName: targetName [
 	message := IPCommOpenMsg new.
 	message content at:#comm_id put: uuid.
 	targetName ifNotNil:[ message content at:#target_name put: targetName].
-	^ [self sendMessage: message  onSocket: shell] future.
+	self sendMessage: message  onSocket: shell.
 
 ]
 
@@ -220,8 +220,8 @@ IPKernelProxy >> completeRequest: aStringWithCode cursorPos: anInteger [
 	| queryMessage |
 	queryMessage := IPCompleteRequestMsg new.
 	queryMessage code: aStringWithCode cursorPos: anInteger. 
-	^ [self sendMessage: queryMessage onSocket: shell.
-		self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #complete_reply ] future
+	self sendMessage: queryMessage onSocket: shell.
+	^ self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #complete_reply
 
 	
 ]
@@ -248,8 +248,8 @@ IPKernelProxy >> debugRequest: dapContent [
 	| queryMessage |
 	queryMessage := IPDebugRequestMsg new.
 	queryMessage content: dapContent.
-	^ [ self sendMessage: queryMessage onSocket: control.
-		 self receiveMessageOnProcessor: controlProcessor  replyingTo: queryMessage ofType: #debug_reply ] future
+	self sendMessage: queryMessage onSocket: control.
+	^ self receiveMessageOnProcessor: controlProcessor  replyingTo: queryMessage ofType: #debug_reply 
 	
 ]
 
@@ -310,17 +310,17 @@ IPKernelProxy >> executeRequest: aStringWithCode [
 	queryMessage := IPExecuteRequestMsg new.
 	queryMessage code: aStringWithCode.
 	controlResponse := shellResponse := nil. 
-	^ [ self sendMessage: queryMessage  onSocket: shell.
-		p1:=[ shellResponse := self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #execute_reply ] fork.
-		p2:=[ controlResponse := self receiveMessageOnProcessor: ioSubProcessor  replyingTo: queryMessage ofType: #debug_event] fork.  
-		[ shellResponse isNil & controlResponse isNil ] whileTrue:[
+	self sendMessage: queryMessage  onSocket: shell.
+	p1:=[ shellResponse := self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #execute_reply ] fork.
+	p2:=[ controlResponse := self receiveMessageOnProcessor: ioSubProcessor  replyingTo: queryMessage ofType: #debug_event] fork.  
+	[ shellResponse isNil & controlResponse isNil ] whileTrue:[
 								( Delay forMilliseconds: 10 ) wait].
-		p1 terminate.
-		p2 terminate.
+	p1 terminate.
+	p2 terminate.
 
-		shellResponse notNil ifTrue:[ shellResponse ] ifFalse:[ 
-			 controlResponse   ]
-		] future
+	^ shellResponse notNil 
+		ifTrue:[ shellResponse ] 
+		ifFalse:[ controlResponse ]
 ]
 
 { #category : #'public-api-shell-dealer' }
@@ -329,8 +329,8 @@ IPKernelProxy >> historyLast: anInteger [
 	queryMessage := IPHistoryRequestMsg  new.
 	queryMessage content at:#hist_access_type put:#tail.
 	queryMessage content at:#n put: anInteger.
-	^ [self sendMessage: queryMessage onSocket: shell.
-		self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #history_reply ] future
+	self sendMessage: queryMessage onSocket: shell.
+	^ self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #history_reply 
 ]
 
 { #category : #initialization }
@@ -338,7 +338,6 @@ IPKernelProxy >> initialize [
 	super initialize.
 	mutex := Mutex new.
 	ZmqContext current.
-	TKTConfiguration runner reset.
 	self initializeClientPorts. 
 	self startHeartbeatThread.
 	self startSubscriberProcessor. 
@@ -403,8 +402,8 @@ IPKernelProxy >> inspectRequest: aStringWithCode cursorPos: anInteger [
 	| queryMessage |
 	queryMessage := IPInspectRequestMsg new.
 	queryMessage code: aStringWithCode cursorPos: anInteger. 
-	^ [ self sendMessage: queryMessage onSocket: shell.
-		 self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #inspect_reply ] future
+	self sendMessage: queryMessage onSocket: shell.
+	^ self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #inspect_reply 
 
 
 	
@@ -414,8 +413,8 @@ IPKernelProxy >> inspectRequest: aStringWithCode cursorPos: anInteger [
 IPKernelProxy >> interruptRequest [
 	| queryMessage |
 	queryMessage := IPInterruptRequestMsg new.
-	^ [ self sendMessage: queryMessage onSocket: control.
-		 self receiveMessageOnProcessor: controlProcessor  replyingTo: queryMessage ofType: #interrupt_reply ] future
+	self sendMessage: queryMessage onSocket: control.
+	^ self receiveMessageOnProcessor: controlProcessor  replyingTo: queryMessage ofType: #interrupt_reply
 	
 ]
 
@@ -424,8 +423,8 @@ IPKernelProxy >> isCompleteRequest: code [
 	| queryMessage |
 	queryMessage := IPIsCompleteRequestMsg new.
 	queryMessage content code: code.
-	^ [ self sendMessage: queryMessage onSocket: shell.
-		 self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #is_complete_reply ] future
+	self sendMessage: queryMessage onSocket: shell.
+	^ self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #is_complete_reply 
 	
 
 	
@@ -435,8 +434,8 @@ IPKernelProxy >> isCompleteRequest: code [
 IPKernelProxy >> kernelInfoRequest [
 	| queryMessage |
 	queryMessage := IPKernelInfoRequestMsg new.
-	^ [ self sendMessage: queryMessage onSocket: shell.
-		self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #kernel_info_reply ] future
+	self sendMessage: queryMessage onSocket: shell.
+	^ self receiveMessageOnProcessor: shellProcessor  replyingTo: queryMessage ofType: #kernel_info_reply
 	
 	
 
@@ -602,7 +601,7 @@ IPKernelProxy >> sendMessage: anIPRequest onSocket: aZmqSocket [
 
 { #category : #accessing }
 IPKernelProxy >> session [
-	| aFutureMsg |
+	| aMsg |
 	^ session ifNil:[
 		"need to get the id session from the kernel"
 		session := IPSession new 
@@ -610,14 +609,9 @@ IPKernelProxy >> session [
 							id: UUID new hex asString asUppercase;
 							startTime: DateAndTime now.
 		
-		aFutureMsg := self kernelInfoRequest.
-		aFutureMsg 
-			onSuccessDo:[ :aMsg |
-				"aMsg should not be nil...but sometimes it is and is not because a timeout"
-				aMsg ifNotNil:[ session := aMsg session ].
-				session publisher: self ];
-			onFailureDo:[ :err | err signal ].
-		[aFutureMsg isFinished] whileFalse: [(Delay forMilliseconds: 50) wait].
+		aMsg := self kernelInfoRequest.
+		aMsg ifNotNil:[ session := aMsg session ].
+		session publisher: self. 
 		session  ]
 ]
 
@@ -654,7 +648,9 @@ IPKernelProxy >> startKernel [
 	"starts the Kernel"
 	kernelStatus := #starting.
 	self buildConnectionConfigFile.
-	OSEnvironment current setEnv: 'PYTHONPATH' value:'/Users/Cat/anaconda3/lib/python3.6/'.
+	"how to set the correct path to find widgets lib?¿?"
+	self halt.
+	"OSEnvironment current setEnv: 'PYTHONPATH' value:'/Users/Cat/anaconda3/lib/python3.6/'."
 	kernelPipe := LibC pipe: self buildKernelStartCommand mode: 'r'.
 ]
 

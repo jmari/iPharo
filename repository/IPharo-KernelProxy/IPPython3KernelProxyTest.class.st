@@ -29,62 +29,51 @@ IPPython3KernelProxyTest >> sourceCode [
 IPPython3KernelProxyTest >> tearDown [
 	kernelProxy stop.
 	"give him time to receive the shutDown message"
-	(Delay forMilliseconds: 3000) wait.	
+	(Delay forMilliseconds: 300) wait.	
 ]
 
 { #category : #tests }
 IPPython3KernelProxyTest >> testClientWidget [
-	| widget handler futureMsg response |
+	| widget handler response |
 	handler := IPWidgetMsgHandler new. 
 	kernelProxy addHandlerToIOSubscriber:  handler.
 	widget := kernelProxy widgetFactory floatProgress. 
 	widget setProperty: #value value: 5.0.
 
-	futureMsg :=kernelProxy commMessageRequest: widget comm uuid  data: 
+	response :=kernelProxy commMessageRequest: widget comm uuid  data: 
 					{ #method-> #request_state.
 						#target->'jupyter.widget' } asSCJsonObject.
-	futureMsg 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ futureMsg isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+
 	"still 5"
 	self assert: widget value equals:5.
 ]
 
 { #category : #tests }
 IPPython3KernelProxyTest >> testExecuteRequest [
-	| ipMsgResp code response|
+	| code response|
 	code :='a=0'.
-	ipMsgResp := kernelProxy executeRequest: code.
-	ipMsgResp 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e | e inspect].
-	[ ipMsgResp isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	response := kernelProxy executeRequest: code.
 		
 	self assert: (response content status ) equals: #ok.
 ]
 
 { #category : #tests }
 IPPython3KernelProxyTest >> testKernelInfoRequest [
-	| futureInfo response |
-	futureInfo := kernelProxy kernelInfoRequest.
-	futureInfo 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ futureInfo isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	| response |
+	response := kernelProxy kernelInfoRequest.
 	self assert: response uuid notNil
 ]
 
 { #category : #tests }
 IPPython3KernelProxyTest >> testKernelWidget [
-	| handler aFutureMsg response receivedMessages|
+	| handler response receivedMessages|
 	receivedMessages := OrderedCollection new.
 	handler := IPWidgetMsgHandler new. 
 	handler onMessage:#comm_msg do:[:aMessage|
 		receivedMessages add:aMessage.
 		aMessage inspect  ].
 	kernelProxy addHandlerToIOSubscriber:  handler.
-	aFutureMsg := kernelProxy executeRequest: 'import ipywidgets as widgets
+	response := kernelProxy executeRequest: 'import ipywidgets as widgets
 w = widgets.IntSlider(
 	value = 7,
 	min = 0,
@@ -100,11 +89,7 @@ w = widgets.IntSlider(
 w.value=5
 w.disabled = True
 display(w)'.
-	aFutureMsg  
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e signal].
-	[ aFutureMsg isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
-(Delay forMilliseconds: 1000) wait.
+	(Delay forMilliseconds: 1000) wait.
 	self assert: receivedMessages isNotEmpty.
 
 	
@@ -114,28 +99,20 @@ display(w)'.
 
 { #category : #tests }
 IPPython3KernelProxyTest >> testisCompleteInvalidRequest [
-	| isCompleteMessage code response|
+	| code response|
 		
 	code :='a=10.
 	while a >= 0:'.
-	isCompleteMessage := kernelProxy isCompleteRequest: code.
-	isCompleteMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e | e inspect ].
-	[ isCompleteMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	response := kernelProxy isCompleteRequest: code.
+
 	self assert: response content status equals: #incomplete
 ]
 
 { #category : #tests }
 IPPython3KernelProxyTest >> testisCompleteRequest [
-	| isCompleteMessage code response|
+	| code response|
 	code :='a=0'.
-	isCompleteMessage := kernelProxy isCompleteRequest: code.
-	isCompleteMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ isCompleteMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
-	
+	response := kernelProxy isCompleteRequest: code.
 		
 	self assert: response content status equals: #complete.
 	

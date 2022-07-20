@@ -2,16 +2,9 @@ Extension { #name : #IPKernelProxyTest }
 
 { #category : #'*IPharo-DAP' }
 IPKernelProxyTest >> testDebugInfoRequest [
-	| dapMsg debugInfoMessage response |
+	| dapMsg  response |
 	dapMsg := DAPDebugInfoRequest new.
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-	
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
-	
-	
+	response := kernelProxy debugRequest: dapMsg.
 	self assert: response content success equals: true.
 	
 ]

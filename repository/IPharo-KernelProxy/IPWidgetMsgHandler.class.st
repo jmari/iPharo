@@ -26,7 +26,8 @@ IPWidgetMsgHandler >> commMessageHandler: anIPMessage [
 	| comm data |
 
 	comm :=(anIPMessage session commManager commChannelAt:(anIPMessage content at:#comm_id)). 
-	(anIPMessage content at:#target_name ifAbsent:[ nil ]) = self targetName ifFalse:[ ^ nil ].
+	"(anIPMessage content at:#target_name ifAbsent:[ nil ]) = self targetName ifFalse:[ ^ nil ] 
+	do not check target name...".
 	data := anIPMessage content at:#data.
 	comm data: data.
  	(data at:#method) = 'update' ifFalse:[ ^ self ].
@@ -39,7 +40,7 @@ IPWidgetMsgHandler >> commMessageHandler: anIPMessage [
 IPWidgetMsgHandler >> commOpenHandler: anIPMessage [
 	<ipharo: #comm_open>
 	anIPMessage content at:#data ifAbsent:[ ^ nil ].
-	(anIPMessage content at:#target_name ifAbsent:[ nil ]) = self targetName ifFalse:[ ^ nil ].
+	"(anIPMessage content at:#target_name ifAbsent:[ nil ]) = self targetName ifFalse:[ ^ nil ]."
 	self register 
 				at: (anIPMessage content at:#comm_id)
 				put:

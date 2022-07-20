@@ -73,7 +73,7 @@ IPDisplay >> buildDisplayDataModel: data [
 							ifFalse:[data asJupyterDataWithExtent: self extent].	
 	dataModel data addAll: aJupyterData.
 	dataModel metadata: (
-		SCJsonObject newFromAssociations: (
+		SCJsonObject fromAssociations: (
  						aJupyterData keys collect:[:k|
 							k-> {'width' -> self extent x.
     								'height' -> self extent y } asSCJsonObject ]
