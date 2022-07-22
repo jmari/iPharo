@@ -195,7 +195,10 @@ BaselineOfJupyterTalk >> postLoadIt [
 
 	Smalltalk os isWindows 
 		ifFalse: [ self createKernelFile ]
-		ifTrue: [ Smalltalk tools workspace openContents: self windowsUnsupportedSteps  ]
+		ifTrue: [ Smalltalk tools workspace openContents: self windowsUnsupportedSteps  ].
+	Smalltalk tools workspace openContents: '"Now you can save and quit this image and run from your CLI: 
+	
+	jupyter notebook"'
 ]
 
 { #category : #private }
