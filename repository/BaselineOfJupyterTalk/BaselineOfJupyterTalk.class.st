@@ -10,7 +10,7 @@ BaselineOfJupyterTalk >> baseline: spec [
 
 	spec for: #common do: [ 
 		self installDependencies: spec.
-		spec postLoad: #postLoadIt.
+		spec postLoadDoIt: #postLoadIt.
 		spec
 			package: 'ZeroMQ';
 			package: 'JupyterTalk' with: [ spec requires: #('ZeroMQ') ];
