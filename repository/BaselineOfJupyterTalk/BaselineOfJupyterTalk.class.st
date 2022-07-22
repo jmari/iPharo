@@ -32,7 +32,7 @@ BaselineOfJupyterTalk >> createKernelFile [
 	| kernelFile |
 
 	(kernelFile := self getKernelFileReference) size = 0
-		ifTrue: [ kernelFile writeStreamDo: [ : stream | stream nextPutAll: self defaultKernelFileContents ] ]
+		ifTrue: [ kernelFile writeStreamDo: [ : stream | stream nextPutAll: self defaultKernelFileContents ] ].
 
 ]
 
@@ -43,7 +43,7 @@ BaselineOfJupyterTalk >> defaultKernelFileContents [
 	^ '\{
   "argv": [
 		"{vmBinaryFullName}",
-		"--nodisplay", 
+		"--headless", 
 		"{imageFullName}",
 		"ipharo",
 		"\{connection_file\}"
@@ -86,7 +86,9 @@ BaselineOfJupyterTalk >> getKernelFileReference [
 			Smalltalk tools workspace openContents: fileRef contents.
 			(UIManager default confirm: 'An existing kernel.json for IPharo was detected,
  do you want to overwrite it with a new one?')
-				ifTrue: [ fileRef := fileRef ensureCreateFile ] ]
+				ifTrue: [
+					fileRef ensureDelete.
+					fileRef := (kernelsDir asFileReference / 'kernel.json') ensureCreateFile ] ]
 		ifFalse: [ fileRef := fileRef ensureCreateFile ].
 	^ fileRef
 ]
