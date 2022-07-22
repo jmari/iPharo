@@ -648,8 +648,7 @@ IPKernelProxy >> startKernel [
 	"starts the Kernel"
 	kernelStatus := #starting.
 	self buildConnectionConfigFile.
-	"how to set the correct path to find widgets lib?¿?"
-	self halt.
+	"how to set the correct path to find widgets lib in Xpython kernel"
 	"OSEnvironment current setEnv: 'PYTHONPATH' value:'/Users/Cat/anaconda3/lib/python3.6/'."
 	kernelPipe := LibC pipe: self buildKernelStartCommand mode: 'r'.
 ]

@@ -13,6 +13,7 @@ BaselineOfIPharo >> baseline: spec [
 		self createKernelFile.
 
 		spec
+		 	postLoadDoIt: #postLoadIt;
 			package: 'ZeroMQ';
 			package: 'IPharo' with: [ 
 				spec requires: #('ZeroMQ' 'SCouchDB' 'NonCryptographicHashes')];
@@ -32,40 +33,63 @@ BaselineOfIPharo >> baseline: spec [
 		self groups: spec ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 BaselineOfIPharo >> createKernelFile [
-	| listOfKernels first last  kernelPath kernelsDir fileRef outString stream |
-	
-	outString := LibC resultOfCommand: 'jupyter kernelspec list'.
-	listOfKernels := outString findTokens: Character lf.
-	2 to:listOfKernels size do:[ :index |
-		first := (listOfKernels at: index) findString: ' ' startingAt: 12.
-		last := (listOfKernels at: index) findString: 'kernels'.
-		kernelPath := ((listOfKernels at:index) copyFrom: first +2 to: last + 7) trimBoth.
-		[	kernelsDir := (FileSystem root / kernelPath / 'pharo') createDirectory.  
-			fileRef := kernelsDir / 'kernel.json'.  
-			fileRef := fileRef ensureCreateFile.
-			stream := fileRef writeStream.
-			stream nextPutAll: self kernelFileContents.
-			stream close ] 
-	on:Error 
-	do:[ Transcript crShow:('Pharo Could not create the file on ',kernelPath,' not enough permissions' ) ] ]
+	"Create a kernel.json file if not was previously created"
+	| kernelFile |
 
+ 	(kernelFile := self getKernelFileReference) size = 0
+ 		ifTrue: [ kernelFile writeStreamDo: [ : stream | stream nextPutAll: self kernelFileContents ] ]
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #defaults }
+BaselineOfIPharo >> defaultKernelFileContents [ 
+ 	"Answer a <String> with the default kernel.json contents for IPharo kernels"
+
+ 	^ '\{
+	 "argv": [
+		"{vmBinaryFullName}",
+ 		"--headless", 
+ 		"{imageFullName}",
+ 		"ipharo",
+ 		"\{connection_file\}"
+ 	],
+	"display_name": "Pharo Smalltalk",
+ 	"language": "smalltalk"
+ 	\}' format: { 
+ 		'vmBinaryFullName' -> FileLocator vmBinary fullName .
+ 		'imageFullName' ->  FileLocator image fullName } asDictionary.
+
+]
+
+{ #category : #private }
+BaselineOfIPharo >> defaultKernelPathname [ 
+ 	"Answer a <String> with the location where the kernel.json file will be stored"
+
+ 	^ 'IPharo'
+		
+
+]
+
+{ #category : #private }
 BaselineOfIPharo >> getKernelFileReference [
-	| listOfKernels first last  kernelPath kernelsDir fileRef outString |
+	| kernelPath outString kernelsDir fileRef |
 	outString := LibC resultOfCommand: 'jupyter kernelspec list'.
-	listOfKernels := outString findTokens: Character lf.
-	2 to:listOfKernels size do:[ :index |
-		first := (listOfKernels at: index) findString: ' ' startingAt: 12.
-		last := (listOfKernels at: index) findString: 'kernels'.
-		kernelPath := (listOfKernels at:index) copyFrom: first +2 to: last + 7.
-		kernelsDir := (FileSystem root / kernelPath / 'pharo') createDirectory.  
-		fileRef := kernelsDir / 'kernel.json'.  
-		fileRef := fileRef ensureCreateFile ]
+	kernelPath := self parseKernelPath: outString.
+	kernelsDir := kernelPath 
+ 		ifEmpty: [ (FileSystem workingDirectory / self defaultKernelPathname) ensureCreateDirectory ]
+ 		ifNotEmpty: [ kernelPath ].
+	(fileRef := kernelsDir asFileReference / 'kernel.json' ) exists
+ 		ifTrue: [ 
+ 			Smalltalk tools workspace openContents: fileRef contents.
+ 			(UIManager default confirm: 'An existing kernel.json for IPharo was detected,
+  do you want to overwrite it with a new one?')
+ 				ifTrue: [
+ 					fileRef ensureDelete.
+ 					fileRef := (kernelsDir asFileReference / 'kernel.json') ensureCreateFile ] ]
+ 		ifFalse: [ fileRef := fileRef ensureCreateFile ].
+ 	^ fileRef
 		
 
 ]
@@ -81,13 +105,13 @@ BaselineOfIPharo >> groups: spec [
 		group: 'all' with: #('JupyterTalk-Roassal')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 BaselineOfIPharo >> installRoassal [
 	"ROASSAL 3 is not supported"
 	| installRoassal |
 	(Smalltalk globals includesKey:#RTBuilder ) ifTrue:[ ^ self ].
 	
-	installRoassal :=(UIManager default questionWithoutCancel: 'Roassal is required, do you want to Install Roassal 2 in your Image?').
+	installRoassal :=(UIManager default questionWithoutCancel: 'Roassal 2 is required, do you want to Install Roassal 2 in your Image?').
 	(installRoassal)
 			ifTrue:[
 						SystemVersion current major >= 7
@@ -104,7 +128,7 @@ BaselineOfIPharo >> installRoassal [
 			]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 BaselineOfIPharo >> installRoassal3Exporters [
 	
 	Metacello new
@@ -113,55 +137,52 @@ BaselineOfIPharo >> installRoassal3Exporters [
 	    load.
 ]
 
-{ #category : #'instance creation' }
+{ #category : #installation }
 BaselineOfIPharo >> json: spec [
 	spec 
 		baseline: 'SCouchDB' with: [ spec repository: 'github://jmari/SCouchDB/repository' ];
 		import: 'json'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #defaults }
 BaselineOfIPharo >> kernelFileContents [
+	"if we find pharo file in this path we assume that we are installing on docker"
 	| fr |
 	fr := '/opt/pharo/pharo' asFileReference.
 	^ fr exists
 		ifTrue:[ self kernelFileContentsForDocker ]
-		ifFalse:[ self kernelFileDefaultContents ]
+		ifFalse:[ self defaultKernelFileContents  ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #defaults }
 BaselineOfIPharo >> kernelFileContentsForDocker [
 	
-	^ '{
-  "argv": [
-  "/opt/pharo/pharo",
-  "', FileLocator image fullName, '",
-  "ipharo",
-  "{connection_file}"
-	],
+ 	^ '\{
+	 "argv": [
+		"{vmBinaryFullName}",
+ 		"{imageFullName}",
+ 		"ipharo",
+ 		"\{connection_file\}"
+ 	],
 	"display_name": "Pharo Smalltalk",
-	"language": "smalltalk",
+ 	"language": "smalltalk",
 	"metadata": { "debugger": true }
-	}'
-]
-
-{ #category : #'as yet unclassified' }
-BaselineOfIPharo >> kernelFileDefaultContents [
+ 	\}' format: { 
+ 		'vmBinaryFullName' -> '/opt/pharo/pharo'.
+ 		'imageFullName' ->  FileLocator image fullName } asDictionary.
+		
 	
-	^ '{
-  "argv": [
-  "', FileLocator vmBinary fullName,'",
-  "--headless", "', FileLocator image fullName, '",
-  "ipharo",
-  "{connection_file}"
-	],
-	"display_name": "Pharo Smalltalk",
-	"language": "smalltalk",
-	"metadata": { "debugger": true }
-	}'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
+BaselineOfIPharo >> kernelNames [ 
+
+ 	^ #('bash' 'ir' 'julia' 'octave' 'python' 'sagemath')
+
+
+]
+
+{ #category : #installation }
 BaselineOfIPharo >> nonCryptoHashes: spec [
     spec
     	baseline: #NonCryptographicHashes
@@ -172,7 +193,61 @@ BaselineOfIPharo >> nonCryptoHashes: spec [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
+BaselineOfIPharo >> parseGenericKernelPathCandidates: aCollection [ 
+ 	"Answer a <String> with the first path which does not look like a standard kernel for other programming languages than Pharo.
+ 	If none, answer an empty <Collection>"
+
+ 	aCollection pairsDo: [ : kernelName : kernelPath |
+ 		(self kernelNames includes: kernelName) 
+ 			ifFalse: [ ^ kernelPath ] ].
+ 	^ String empty
+
+]
+
+{ #category : #private }
+BaselineOfIPharo >> parseKernelPath: outString [ 
+ 	"Answer a <String> with the path where to install the IPharo kernel.
+ 	Sample output to parse from command:
+ $ jupyter kernelspec list
+ Available kernels:
+   python3    				/usr/local/Cellar/jupyterlab/3.4.3/libexec/lib/python3.10/site-packages/ipykernel/resources
+   ipharo     				/usr/local/share/jupyter/kernels/ipharo
+   global-tf-python-3    /home/felipe/.local/share/jupyter/kernels/global-tf-python-3
+   local_venv2           /home/felipe/.local/share/jupyter/kernels/local_venv2
+   python2               /home/felipe/.local/share/jupyter/kernels/python2
+   python36              /home/felipe/.local/share/jupyter/kernels/python36
+   scala                 /home/felipe/.local/share/jupyter/kernels/scala	
+ "
+
+ 	(outString asLowercase beginsWith: 'available')
+ 		ifTrue: [ 
+ 			| listOfKernels candidateKernelSpecs |
+ 			(listOfKernels := outString lines allButFirst) 
+ 				ifEmpty: [ ^ Array empty ].
+ 			candidateKernelSpecs := (listOfKernels collect: #trimBoth) collect: [ : kernelSpec | kernelSpec findTokens: ' ' ].
+ 			^ self parsePharoKernelPathCandidates: candidateKernelSpecs ].
+ 	^ String empty
+
+
+]
+
+{ #category : #private }
+BaselineOfIPharo >> parsePharoKernelPathCandidates: aCollection [ 
+ 	"Answer a <String> with a suitable location where to store the kernel.json file for IPharo, or empty if not found"
+
+ 	^ aCollection 
+ 		detect: [ : locationSpecArray | 
+ 			| specName |
+ 			specName := locationSpecArray first asLowercase.
+ 			(specName beginsWith: 'pharo') or: [ specName endsWith: 'pharo' ]  ]
+ 		ifFound: [ : found | found second ]
+ 		ifNone: [ self parseGenericKernelPathCandidates: aCollection ]
+
+
+]
+
+{ #category : #installation }
 BaselineOfIPharo >> pharoDAP [
 		Metacello new
 			baseline: 'PharoLanguageServer';
@@ -182,7 +257,7 @@ BaselineOfIPharo >> pharoDAP [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 BaselineOfIPharo >> pharoDAP:spec [
 
 	spec 
@@ -192,10 +267,37 @@ BaselineOfIPharo >> pharoDAP:spec [
 
 ]
 
-{ #category : #'instance creation' }
+{ #category : #installation }
 BaselineOfIPharo >> pharoNonCryptographicHashes: spec [
     spec
     	baseline: #NonCryptographicHashes
     	with: [ spec repository: 'github://osoco/pharo-non-cryptographic-hashes:master/src' ];
 		import: 'Core'
+]
+
+{ #category : #private }
+BaselineOfIPharo >> postLoadIt [ 
+
+ 	Smalltalk os isWindows 
+ 		ifFalse: [ self createKernelFile ]
+ 		ifTrue: [ Smalltalk tools workspace openContents: self windowsUnsupportedSteps  ].
+ 	Smalltalk tools workspace openContents: '"Now you can save and quit this image and run from your CLI: 
+ 	
+ 	jupyter notebook"'
+
+]
+
+{ #category : #private }
+BaselineOfIPharo >> windowsUnsupportedSteps [ 
+
+ 	^ String streamContents: [ : stream |
+ 		stream
+ 			<< '"OSSubProcess does not work currently on Windows. Please type the following command in your CLI:';
+ 			cr; cr;
+ 			<< 'jupyter kernelspec list';
+ 			cr; cr;
+ 			<< 'and create manually the kernel.json file in your preferred location, with the following contents: ';
+ 			cr; cr;
+ 			<< self defaultKernelFileContents;
+ 			<< '"' ]
 ]
