@@ -7,22 +7,18 @@ Class {
 { #category : #baselines }
 BaselineOfJupyterTalk >> baseline: spec [
 	<baseline>
+
 	spec for: #common do: [ 
-		self installJson.
-		Smalltalk os isWindows ifFalse:[ 
-			"OSSubprocess does not support Windows"
-			self installOSSubprocess.
-			self createKernelFile].
+		self installDependencies: spec.
+		spec postLoad: #postLoadIt.
 		spec
 			package: 'ZeroMQ';
 			package: 'JupyterTalk' with: [ spec requires: #('ZeroMQ') ];
 			package: 'JupyterTalk-Roassal' with: [
 				spec 
 					requires: #('JupyterTalk');
-					preLoadDoIt: #installRoassal
-				].
-		self groups: spec
-	]
+					preLoadDoIt: #installRoassal ].
+		self groups: spec ]
 ]
 
 { #category : #private }
@@ -102,26 +98,22 @@ BaselineOfJupyterTalk >> groups: spec [
 		group: 'all' with: #('JupyterTalk-Roassal')
 ]
 
-{ #category : #private }
-BaselineOfJupyterTalk >> installJson [
-	Metacello new 
-		baseline: 'SCouchDB';
-		repository: 'github://jmari/SCouchDB/repository';
-		load:'json'
-]
+{ #category : #baselines }
+BaselineOfJupyterTalk >> installDependencies: spec [
 
-{ #category : #private }
-BaselineOfJupyterTalk >> installOSSubprocess [
+	spec
+		baseline: 'SCouchDB'	
+		with: [ 
+			spec 
+				repository: 'github://jmari/SCouchDB/repository';		
+				loads:'json' ];
+		"OSSubprocess does not support Windows"
+		baseline: 'OSSubprocess' 
+		with: [ 
+			spec 
+				repository: 'github://pharo-contributions/OSSubprocess:master/repository';
+				loads: 'all' ].
 
-	EpMonitor disableDuring: [ 
-		Metacello new
-	 	baseline: 'OSSubprocess';
-	 	repository: 'github://pharo-contributions/OSSubprocess:master/repository';
-		load ]
-	
-"should be changed by 	spec 
-		baseline: 'OSSubprocess' with: [ spec repository: 'github://pharo-contributions/OSSubprocess:master/repository ];
-		import: 'all'"
 ]
 
 { #category : #private }
@@ -199,4 +191,27 @@ BaselineOfJupyterTalk >> parsePharoKernelPathCandidates: aCollection [
 			(specName beginsWith: 'pharo') or: [ specName endsWith: 'pharo' ]  ]
 		ifFound: [ : found | found second ]
 		ifNone: [ self parseGenericKernelPathCandidates: aCollection ]
+]
+
+{ #category : #baselines }
+BaselineOfJupyterTalk >> postLoadIt [
+
+	Smalltalk os isWindows 
+		ifFalse: [ self createKernelFile ]
+		ifTrue: [ Smalltalk tools workspace openContents: self windowsUnsupportedSteps  ]
+]
+
+{ #category : #private }
+BaselineOfJupyterTalk >> windowsUnsupportedSteps [
+
+	^ String streamContents: [ : stream |
+		stream
+			<< '"OSSubProcess does not work currently on Windows. Please type the following command in your CLI:';
+			cr; cr;
+			<< 'jupyter kernelspec list';
+			cr; cr;
+			<< 'and create manually the kernel.json file in your preferred location, with the following contents: ';
+			cr; cr;
+			<< self defaultKernelFileContents;
+			<< '"' ]
 ]
