@@ -13,7 +13,7 @@ BaselineOfJupyterTalk >> baseline: spec [
 		spec postLoadDoIt: #postLoadIt.
 		spec
 			package: 'ZeroMQ';
-			package: 'JupyterTalk' with: [ spec requires: #('ZeroMQ') ];
+			package: 'JupyterTalk' with: [ spec requires: #('ZeroMQ' 'OSSubProcess') ];
 			package: 'JupyterTalk-Roassal' with: [
 				spec 
 					requires: #('JupyterTalk');
