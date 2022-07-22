@@ -109,10 +109,7 @@ BaselineOfJupyterTalk >> installDependencies: spec [
 				loads:'json' ];
 		"OSSubprocess does not support Windows"
 		baseline: 'OSSubprocess' 
-		with: [ 
-			spec 
-				repository: 'github://pharo-contributions/OSSubprocess:master/repository';
-				loads: 'all' ].
+		with: [ spec repository: 'github://pharo-contributions/OSSubprocess:master/repository' ].
 
 ]
 
