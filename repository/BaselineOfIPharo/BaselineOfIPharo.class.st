@@ -10,8 +10,6 @@ BaselineOfIPharo >> baseline: spec [
 	spec for: #common do: [ 
 		self json: spec.
 		self nonCryptoHashes: spec.		
-		self createKernelFile.
-
 		spec
 		 	postLoadDoIt: #postLoadIt;
 			package: 'ZeroMQ';
@@ -83,8 +81,9 @@ BaselineOfIPharo >> getKernelFileReference [
 	(fileRef := kernelsDir asFileReference / 'kernel.json' ) exists
  		ifTrue: [ 
  			Smalltalk tools workspace openContents: fileRef contents.
- 			(UIManager default confirm: 'An existing kernel.json for IPharo was detected,
-  do you want to overwrite it with a new one?')
+ 			(UIManager default confirm: 
+				'An existing kernel.json was found at ' , fileRef fullName ,
+  				' do you want to overwrite it with a new one?')
  				ifTrue: [
  					fileRef ensureDelete.
  					fileRef := (kernelsDir asFileReference / 'kernel.json') ensureCreateFile ] ]
