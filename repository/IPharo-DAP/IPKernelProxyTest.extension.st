@@ -4,7 +4,10 @@ Extension { #name : #IPKernelProxyTest }
 IPKernelProxyTest >> testDebugInfoRequest [
 	| dapMsg  response |
 	dapMsg := DAPDebugInfoRequest new.
-	response := kernelProxy debugRequest: dapMsg.
+	kernelProxy 
+		onDebugReplyDo: [ :msg | response := msg ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:100) wait].
 	self assert: response content success equals: true.
 	
 ]
@@ -12,56 +15,55 @@ IPKernelProxyTest >> testDebugInfoRequest [
 { #category : #'*IPharo-DAP' }
 IPKernelProxyTest >> testFullDebugSeqRequest [
 	| dapMsg debugInfoMessage path stackFrame response |
+	response := nil.
 	dapMsg := DAPDebugInfoRequest new.
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-	
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
 	self assert: response content success equals: true.
 	"-------------------------------"
+	response := nil.
 	dapMsg := DAPInitializeRequest new.
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-	
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
 	self assert: response content success equals: true.
 	"-------------------------------"
+	response := nil.
 	dapMsg := DAPAttachRequest new.
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-	
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
 	self assert: response content success equals: true.
 	"-------------------------------"
 	
 	"inspect variables will start the DAP server"
+	response := nil.
 	dapMsg := DAPInspectVariablesRequest new.
 	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-	
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
 	self assert: response content success equals: true.
-	
+	"-------------------------------"
+	response := nil.
 	dapMsg := DAPDumpCellRequest new.
 	dapMsg arguments:{
 		#code-> self sourceCode} asDictionary .
 	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-	
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
+
 	self assert:  response content body sourcePath notNil.
 
 	"------------------------------"
+	response := nil.
 	path := response content body sourcePath.
 	dapMsg := DAPSetBreakpointsRequest new.
 	dapMsg arguments:{
@@ -69,62 +71,56 @@ IPKernelProxyTest >> testFullDebugSeqRequest [
 			#path-> path.
 		} asDictionary.
 		#breakpoints ->{{#line->1} asDictionary} } asDictionary.
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-	
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
-
-	
+	kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
+	"-------------------------------------------------"
+	response:=nil.	
 	dapMsg := DAPConfigurationDoneRequest new.
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-	
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
 	self assert: response content success equals: true.
 	"-------------------------------------------------"
 	response:=nil.	
-	debugInfoMessage := kernelProxy executeRequest: self sourceCode.
-
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+		
+	kernelProxy 
+		onDebugEventPublishedDo: [:r | response := r ];
+		executeRequest: self sourceCode.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
 	self assert:  response content event equals:#stopped.
-
+	"-------------------------------------------------"
+	response:=nil.	
 	"inspect variables two times....behaviour of jupyterLab is so strange"
 	dapMsg := DAPInspectVariablesRequest new.
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-	
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+		kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
 	self assert: response content success equals: true.
-
+	"-------------------------------------------------"
+	response:=nil.	
 	dapMsg := DAPInspectVariablesRequest new.
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-	
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
 	self assert: response content success equals: true.
-
+	"-------------------------------------------------"
+	response:=nil.	
 	dapMsg := DAPStackTraceRequest new arguments: {#threadId->1} asDictionary.
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
 	
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
-
+	kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
 	self assert: response content success equals: true.
 	stackFrame := response content body stackFrames first id.
-
+	
+	"-------------------------------------------------"
+	response:=nil.	
 	dapMsg := DAPSourceRequest new arguments: 
 	{#sourceReference->0. 
 	 #source->{
@@ -133,50 +129,42 @@ IPKernelProxyTest >> testFullDebugSeqRequest [
 		} asSCJsonObject 
 	} asSCJsonObject .
 	
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-			
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
 	"----------------------------------------------"
+	response:=nil.	
 	dapMsg := DAPScopesRequest new arguments:  {#frameId->stackFrame} asDictionary.
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-			
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
 	"-------------------------------------------"
+	response:=nil.	
 	dapMsg := DAPStepOutRequest  new arguments:  {#threadId->0} asDictionary.
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-			
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
 	"------------------------------------------"
+	response:=nil.	
 	dapMsg := DAPSourceRequest new arguments: 
 	{#sourceReference->0. 
 	#source->{
 		#path-> path
 		} asSCJsonObject 
 	} asSCJsonObject.
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-			
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
+	kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
 	"----------------------------------"
+	response:=nil.	
 	dapMsg := DAPDisconnectResquest  new .
-	debugInfoMessage := kernelProxy debugRequest: dapMsg.
-		
-	debugInfoMessage 
-		onSuccessDo:[:r | response := r ];
-		onFailureDo: [:e| e inspect].
-	[ debugInfoMessage isFinished ] whileFalse: [(Delay forMilliseconds:50) wait].
-		
-	
+	kernelProxy 
+		onDebugReplyDo: [:r | response := r ];
+		debugRequest: dapMsg.
+	[ response isNil ] whileTrue: [(Delay forMilliseconds:50) wait].
 
 ]

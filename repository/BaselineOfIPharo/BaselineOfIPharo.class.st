@@ -96,12 +96,13 @@ BaselineOfIPharo >> getKernelFileReference [
 { #category : #protocol }
 BaselineOfIPharo >> groups: spec [
 	spec 
-		group: 'default' with: #('IPharo' 'IPharo-KernelProxy');
+		group: 'default' with: #('IPharo');
+		group: 'proxy' with: #('IPharo-KernelProxy');
 		group: 'zmq' with: #('ZeroMQ');
 		group: 'dap' with: #('IPharo-DAP');
 		group: 'roassal3' with: #('IPharo-Roassal3'); 
-		group: 'roassalSupport' with: #('JupyterTalk-Roassal');
-		group: 'all' with: #('JupyterTalk-Roassal')
+		group: 'roassal2' with: #('JupyterTalk-Roassal');
+		group: 'all' with: #('IPharo-Roassal3')
 ]
 
 { #category : #installation }
