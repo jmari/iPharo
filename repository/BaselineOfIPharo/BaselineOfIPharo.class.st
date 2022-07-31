@@ -102,7 +102,7 @@ BaselineOfIPharo >> groups: spec [
 		group: 'dap' with: #('IPharo-DAP');
 		group: 'roassal3' with: #('IPharo-Roassal3'); 
 		group: 'roassal2' with: #('JupyterTalk-Roassal');
-		group: 'all' with: #('IPharo-Roassal3')
+		group: 'all' with: #('IPharo-Roassal3' 'IPharo-KernelProxy')
 ]
 
 { #category : #installation }
